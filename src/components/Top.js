@@ -2,13 +2,13 @@ import styled from 'styled-components'
 
 const Top = () => {
   return (
-    <Wrapper>
+    <TopWrapper>
       Top
-    </Wrapper>
+    </TopWrapper>
   )
 }
 
-const Wrapper = styled.div`
+const TopWrapper = styled.div`
     flex : 1 1 0;
     border: 1px solid black;
 `
