@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import Weather from '../utils/weather'
 
 const RightSideBar = () => {
   return (
@@ -16,16 +17,9 @@ const Wrapper = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
-    border : 1px solid gray;
 `
 
 const Box = styled.div`
-  border : 1px solid gray;
-  height : 30%;
-  width : 80%;
-`
-
-const Weather = styled.div`
   border : 1px solid gray;
   height : 30%;
   width : 80%;
