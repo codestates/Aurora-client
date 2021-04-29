@@ -1,10 +1,14 @@
 import styled from 'styled-components'
+import FilterBar from './FilterBar'
+import UserInfo from './UserInfo'
 
 const Top = ({ filter }) => {
   return (
     <TopWrapper>
       <Logo src='/images/logo.png' />
-      <FilterBar />
+      <Filter>
+        {filter && <FilterBar />}
+      </Filter>
       <UserInfo />
     </TopWrapper>
   )
@@ -23,16 +27,9 @@ const Logo = styled.img`
     padding : 2%;
 `
 
-const FilterBar = styled.div`
-    width: 30rem;
-    border : 1px solid gray;
-    height : 80%;
-`
-
-const UserInfo = styled.div`
-  width: 10rem;
-  border : 1px solid gray;
-  height : 80%;
+const Filter = styled.div`
+    width: 35rem;
+    
 `
 
 export default Top

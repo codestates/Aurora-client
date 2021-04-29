@@ -2,7 +2,7 @@ import AppLayout from '../src/components/AppLayout'
 
 const Home = () => {
   return (
-    <AppLayout>
+    <AppLayout filter>
       <div>Home</div>
     </AppLayout>
   )
