@@ -1,5 +1,17 @@
+import Head from 'next/head'
+import AppLayout from '../src/components/AppLayout'
+
 const Profile = () => {
-  return <div>Profile</div>
+  return (
+    <>
+      <Head>
+        <title>프로필 | Aurora</title>
+      </Head>
+      <AppLayout>
+        <div>Profile</div>
+      </AppLayout>
+    </>
+  )
 }
 
 export default Profile
