@@ -1,7 +1,10 @@
+import AppLayout from '../src/components/AppLayout'
 
 const Home = () => {
   return (
-    <div>Hello World</div>
+    <AppLayout>
+      <div>Home</div>
+    </AppLayout>
   )
 }
 
