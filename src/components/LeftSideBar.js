@@ -16,7 +16,8 @@ const Wrapper = styled.div`
     display : flex;
     flex-direction : column;
     align-items : center;
-    border : 1px solid gray;
+    margin-top : 2rem;
+    box-sizing: border-box;
 `
 
 export default LeftSideBar
