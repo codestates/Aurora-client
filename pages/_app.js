@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types'
 import Head from 'next/head'
 
+import wrapper from '../store/configureStore'
+
 const Aurora = ({ Component, pageProps }) => {
   return (
     <>
@@ -17,4 +19,4 @@ Aurora.prototype = {
   pageProps: PropTypes.object
 }
 
-export default Aurora
+export default wrapper.withRedux(Aurora)
