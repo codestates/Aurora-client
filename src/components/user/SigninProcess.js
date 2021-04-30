@@ -35,8 +35,7 @@ const Input = styled.input`
 `
 
 const SigninButton = styled.button`
-  margin-left: 0.4rem;
-    margin-top: 2.6rem;
+  margin-top: 2.6rem;
   border-style: none;
   border-radius: 1.5rem;
   height: 2.4rem;

@@ -10,7 +10,7 @@ const Signin = () => {
       <SigninBox>
         <Logo src='/images/logo.png' />
         <SigninProcess />
-        <Link href='signup-email'><MoveToSigninPage>계정이 없으신가요?</MoveToSigninPage></Link>
+        <Link href='signup'><MoveToSigninPage>계정이 없으신가요?</MoveToSigninPage></Link>
         <GoogleOAuthSignin />
         <FacebookOAuthSignin />
       </SigninBox>
