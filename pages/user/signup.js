@@ -1,12 +1,12 @@
 import styled from 'styled-components'
-import SignupProcess from '../../src/components/user/SignupProcess'
+import Signup from '../../src/components/user/Signup'
 
 const SignupEmailVerification = () => {
   return (
     <SignupContainer>
       <SignupBox>
         <Logo src='/images/logo.png' />
-        <SignupProcess />
+        <Signup />
       </SignupBox>
     </SignupContainer>
   )
