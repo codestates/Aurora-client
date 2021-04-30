@@ -1,12 +1,12 @@
 import AppLayout from '../src/components/AppLayout'
-import Card from '../src/components/Card'
+import PostList from '../src/components/post/PostList'
 import PostBar from '../src/components/PostBar'
 
 const Home = () => {
   return (
     <AppLayout filter>
       <PostBar />
-      <Card />
+      <PostList />
     </AppLayout>
   )
 }

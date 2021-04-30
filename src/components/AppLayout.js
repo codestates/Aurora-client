@@ -64,7 +64,6 @@ const MainComponent = styled.div`
   flex : 4 1 0;
   display : flex;
   flex-direction: column;
-  justify-content: space-evenly;
   align-items: center;
 `
 

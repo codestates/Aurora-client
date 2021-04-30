@@ -37,6 +37,7 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   padding: 0 1rem;
+  margin: 2rem 0;
   &:hover{
     background-color: rgba(128, 128, 128, 0.2);
   }
