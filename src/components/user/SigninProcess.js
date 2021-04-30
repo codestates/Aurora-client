@@ -1,15 +1,55 @@
 import styled from 'styled-components'
 import Link from 'next/link'
+import { useDispatch, useSelector } from 'react-redux'
+import { loginAction } from '../../../reducers/user'
+import { useEffect, useState, useCallback } from 'react'
+import useInput from '../../../hooks/useInput'
 
 const SigninProcess = () => {
+  const dispatch = useDispatch()
+  const { loginError } = useSelector((state) => state.user)
+  const [email, onChangeEmail] = useInput('')
+  const [password, onChangePassword] = useInput('')
+  const [loginErrorMsg, setLoginErrorMsg] = useState('')
+
+  useEffect(() => {
+    if (loginError) {
+      setLoginErrorMsg(loginError)
+    }
+  }, [loginError])
+
+  const handleLogin = useCallback((e) => {
+    e.preventDefault()
+    dispatch(loginAction({ email, password }))
+    console.log(email, password)
+    console.log(dispatch(loginAction({ email, password })))
+  }, [email, password])
+
   return (
     <InputContainer>
       <GreetingMessage>로그인</GreetingMessage>
-      <Input id='email' name='email' type='text' placeholder='이메일' required />
-      <Input id='password' name='password' type='password' placeholder='비밀번호' required />
-      <Link href='../'>
-        <SigninButton>로그인</SigninButton>
-      </Link>
+      <form onSubmit={handleLogin}>
+        <Input
+          name='email'
+          type='email'
+          placeholder='이메일'
+          value={email}
+          onChange={onChangeEmail} required
+        />
+        <Input
+          name='password'
+          type='password'
+          placeholder='비밀번호'
+          value={password}
+          onChange={onChangePassword} required
+        />
+        {loginErrorMsg
+          ? <LoginErrorMessage>{loginErrorMsg}</LoginErrorMessage>
+          : ''}
+        <SigninButton type='submit' value='로그인' />
+      </form>
+
+      <Link href='../user/signup'><MoveToSigninPage>계정이 없으신가요?</MoveToSigninPage></Link>
     </InputContainer>
   )
 }
@@ -19,7 +59,6 @@ const GreetingMessage = styled.div`
   color: #464646;
   font-weight: 500;
 `
-
 const InputContainer = styled.div`
   display : flex;
   flex-direction: column;
@@ -33,8 +72,12 @@ const Input = styled.input`
   width: 23rem;
   font-size: .9rem;
 `
-
-const SigninButton = styled.button`
+const LoginErrorMessage = styled.div`
+  padding-top: 0.2rem;
+  color: #755BDB;
+  font-size: 0.9rem;
+`
+const SigninButton = styled.input`
   margin-top: 2.6rem;
   border-style: none;
   border-radius: 1.5rem;
@@ -48,6 +91,14 @@ const SigninButton = styled.button`
     background-color: #B29EFF;
     opacity: 1;
   }
+`
+const MoveToSigninPage = styled.a`
+  margin-top: 1rem;
+  color: #767676;
+  text-decoration: underline;
+  cursor: pointer;
+  height: 4rem;
+  align-self: center;
 `
 
 export default SigninProcess
