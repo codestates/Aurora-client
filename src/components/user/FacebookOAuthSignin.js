@@ -18,6 +18,7 @@ const FacebookSigninContainer = styled.div`
 `
 
 const FacebookSigninButton = styled.button`
+  margin-left: -1rem;
   border-style: none;
   border: 1px solid #3780DF;
   border-radius: 1.5rem;

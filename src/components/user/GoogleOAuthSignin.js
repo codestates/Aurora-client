@@ -19,6 +19,7 @@ const GoogleSigninContainer = styled.div`
 `
 
 const GoogleSigninButton = styled.button`
+  margin-left: -1rem;
   border-style: none;
   border: 1px solid #52A05A;
   border-radius: 1.5rem;
