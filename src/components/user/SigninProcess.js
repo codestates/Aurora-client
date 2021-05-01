@@ -22,8 +22,6 @@ const SigninProcess = () => {
   const handleLogin = useCallback((e) => {
     e.preventDefault()
     dispatch(signinAction({ email, password }))
-    console.log(email, password)
-    console.log(dispatch(signinAction({ email, password })))
   }, [email, password])
 
   return (
