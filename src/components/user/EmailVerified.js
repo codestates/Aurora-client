@@ -1,14 +1,35 @@
+// **이메일 인증버튼 클릭 후 activation token 비교하는 프로세스**
+
+// import { useDispatch, useSelector } from 'react-redux'
+// import { signupSuccessAction } from '../../../reducers/user'
+
+// const EmailVerifyProcess = () => {
+// token 인증
+// const dispatch = useDispatch()
+// const { activationToken } = useSelector((state) => state.user)
+
+// 올바른 activation token을 가지고 있으면 성공, 없으면 실패
+// const handleVerifyEmail = () => {
+//   dispatch(signupSuccessAction(activationToken))
+//   console.log(activationToken)
+//   console.log(dispatch(signupSuccessAction(activationToken)))
+// }
+// }
+// return (
+//  {activationToken ? '' : ''}
+// )
+// export default EmailVerifyProcess
+
 import { useSelector } from 'react-redux'
 import Link from 'next/link'
 import styled from 'styled-components'
 
 const EmailVerified = () => {
-  // token 인증
-  const { activationToken } = useSelector((state) => state.user)
+  const { singedUp } = useSelector((state) => state.user)
 
   return (
     <>
-      {activationToken
+      {singedUp
         ? (
           <>
             <Message>회원가입에 성공했습니다!<br />이제 Aurora에서 마음껏 기분을 표현해보세요 :)</Message>

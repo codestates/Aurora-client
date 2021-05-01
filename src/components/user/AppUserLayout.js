@@ -46,7 +46,6 @@ const Wrapper = styled.div`
   display : flex;
   align-items: center;
   height: 100%;
-  max-width: 75rem;
 `
 
 const UserBox = styled.div`
