@@ -1,102 +1,89 @@
-import { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
-import axios from 'axios'
+import { useDispatch, useSelector } from 'react-redux'
+import { signupRequestAction } from '../../../reducers/user'
+import { useEffect, useState, useCallback } from 'react'
+import useInput from '../../../hooks/useInput'
 
 const SignupProcess = () => {
-  const [userInfo, setuserInfo] = useState({
-    email: '',
-    username: '',
-    password: '',
-    passwordConfirm: '',
-    errorMessage: ''
-  })
-  const [passwordConfirmMsg, setPasswordConfirmMsg] = useState('')
-  // **** signup-success test용
-  // const [signup, setSignup] = useState(true)
-  const [signup, setSignup] = useState(false)
+  const dispatch = useDispatch()
+  const { signupError, signupLoading } = useSelector((state) => state.user)
+  const [email, onChangeEmail] = useInput('')
+  const [username, onChangeUsername] = useInput('')
+  const [password, onChangePassword] = useInput('')
+  const [signupErrorMsg, setSignupErrorMsg] = useState('')
 
-  const handleInputValue = (e) => {
-    setuserInfo({ ...userInfo, [e.target.name]: e.target.value })
-  }
+  const [passwordConfirm, setPasswordConfirm] = useState('')
+  const [passwordConfirmMsg, setPasswordConfirmMsg] = useState('')
 
   useEffect(() => {
-    console.log('비동기: ', userInfo.password, userInfo.passwordConfirm)
-    if (!userInfo.password || !userInfo.passwordConfirm) {
-      setPasswordConfirmMsg('')
-    } else if (userInfo.password !== userInfo.passwordConfirm) {
-      setPasswordConfirmMsg('비밀번호가 일치하지 않아요!')
-    } else {
-      setPasswordConfirmMsg('비밀번호가 일치합니다 :)')
+    if (signupError) {
+      setSignupErrorMsg(signupError)
     }
-  }, [userInfo])
+  }, [signupError])
 
-  const handleSignup = async () => {
-    const { email, username, password } = userInfo
+  // **** signup-success test용
+  // const [signup, setSignup] = useState(true)
+  // const [signup, setSignup] = useState(false)
+
+  const onChangePasswordConfirm = useCallback((e) => {
+    setPasswordConfirm(e.target.value)
+    setPasswordConfirmMsg(e.target.value !== password)
+  }, [password])
+
+  const handleSignup = useCallback((e) => {
+    e.preventDefault()
+    dispatch(signupRequestAction({ email, username, password }))
     console.log(email, username, password)
-    console.log(userInfo)
-    if (!email || !password || !username) {
-      setuserInfo({
-        errorMessage: '모든 항목을 채워주세요!'
-      })
-    } else {
-      try {
-        // const result =
-        await axios.post('https://localhost:5000/signup', { email, username, password })
-        setSignup(true)
-      } catch (err) {
-        console.log(err)
-        setuserInfo({
-          // *****error message test용
-          errorMessage: '이미 가입된 아이디입니다'
-          // errorMessage: result.message
-        })
-      }
-    }
-  }
+    console.log(dispatch(signupRequestAction({ email, username, password })))
+  }, [email, username, password, passwordConfirm])
 
   return (
     <>
-      {signup
+      {signupLoading
         ? <SuccessMessage>이메일 인증을 위한 메일이 전송되었습니다!<br />전송된 이메일을 통해 인증을 마무리해주세요 :)</SuccessMessage>
         : (
           <>
             <Link href='signin'><MoveToSigninPage>이미 회원이신가요?</MoveToSigninPage></Link>
             <InputContainer>
               <GreetingMessage>만나서 반가워요!</GreetingMessage>
-              <Input
-                name='email'
-                type='text'
-                placeholder='이메일'
-                autoComplete='email'
-                onChange={handleInputValue} required
-              />
-              <Input
-                name='username'
-                type='text'
-                placeholder='유저네임'
-                onChange={handleInputValue} required
-              />
-              <Input
-                name='password'
-                type='password'
-                placeholder='비밀번호'
-                onChange={handleInputValue} required
-              />
-              <Input
-                name='passwordConfirm'
-                type='password'
-                placeholder='비밀번호 확인'
-                onChange={handleInputValue} required
-              />
-              {passwordConfirmMsg
-                ? <PasswordConfirmMessage>{passwordConfirmMsg}</PasswordConfirmMessage>
-                : ''}
-              {userInfo.errorMessage
-                ? <ErrorMessage>{userInfo.errorMessage}</ErrorMessage>
-                : ''}
+              <form onSubmit={handleSignup}>
+                <Input
+                  name='email'
+                  type='email'
+                  placeholder='이메일'
+                  autoComplete='email'
+                  onChange={onChangeEmail} required
+                />
+                <Input
+                  name='username'
+                  type='text'
+                  placeholder='유저네임'
+                  onChange={onChangeUsername} required
+                />
+                <Input
+                  name='password'
+                  type='password'
+                  placeholder='비밀번호'
+                  onChange={onChangePassword} required
+                />
+                <Input
+                  name='passwordConfirm'
+                  type='password'
+                  placeholder='비밀번호 확인'
+                  value={passwordConfirm}
+                  onChange={onChangePasswordConfirm} required
+                />
+                {passwordConfirmMsg
+                  ? <PasswordConfirmMessage>비밀번호가 일치하지 않아요!</PasswordConfirmMessage>
+                  : ''}
+                {signupErrorMsg
+                  ? <ErrorMessage>{signupErrorMsg}</ErrorMessage>
+                  : ''}
+                <NextButton type='submit' value='가입하기' />
+              </form>
             </InputContainer>
-            <NextButton onClick={handleSignup}>가입하기</NextButton>
+
           </>
           )}
     </>
@@ -136,13 +123,15 @@ const Input = styled.input`
   width: 23rem;
   font-size: .9rem;
 `
-const NextButton = styled.button`
+const NextButton = styled.input`
   position: absolute;
+  display: flex;
+  justify-content: center;
   bottom: 8rem;
   border-style: none;
   border-radius: 1.5rem;
   height: 2.4rem;
-  width: 25rem;
+  width: 24rem;
   background-color: #B29EFF ;
   opacity: 1;
   color: #fff;
