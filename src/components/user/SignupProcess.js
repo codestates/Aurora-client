@@ -13,8 +13,8 @@ const SignupProcess = () => {
   const [password, onChangePassword] = useInput('')
   const [signupErrorMsg, setSignupErrorMsg] = useState('')
 
-  const [passwordConfirm, setPasswordConfirm] = useState('')
-  const [passwordConfirmMsg, setPasswordConfirmMsg] = useState('')
+  const [passwordconfirm, setpasswordconfirm] = useState('')
+  const [passwordconfirmMsg, setpasswordconfirmMsg] = useState('')
 
   useEffect(() => {
     if (signupError) {
@@ -22,21 +22,15 @@ const SignupProcess = () => {
     }
   }, [signupError])
 
-  // **** signup-success test용
-  // const [signup, setSignup] = useState(true)
-  // const [signup, setSignup] = useState(false)
-
-  const onChangePasswordConfirm = useCallback((e) => {
-    setPasswordConfirm(e.target.value)
-    setPasswordConfirmMsg(e.target.value !== password)
+  const onChangepasswordconfirm = useCallback((e) => {
+    setpasswordconfirm(e.target.value)
+    setpasswordconfirmMsg(e.target.value !== password)
   }, [password])
 
   const handleSignup = useCallback((e) => {
     e.preventDefault()
-    dispatch(signupRequestAction({ email, username, password }))
-    console.log(email, username, password)
-    console.log(dispatch(signupRequestAction({ email, username, password })))
-  }, [email, username, password, passwordConfirm])
+    dispatch(signupRequestAction({ email, username, password, passwordconfirm }))
+  }, [email, username, password, passwordconfirm])
 
   return (
     <>
@@ -68,14 +62,14 @@ const SignupProcess = () => {
                   onChange={onChangePassword} required
                 />
                 <Input
-                  name='passwordConfirm'
+                  name='passwordconfirm'
                   type='password'
                   placeholder='비밀번호 확인'
-                  value={passwordConfirm}
-                  onChange={onChangePasswordConfirm} required
+                  value={passwordconfirm}
+                  onChange={onChangepasswordconfirm} required
                 />
-                {passwordConfirmMsg
-                  ? <PasswordConfirmMessage>비밀번호가 일치하지 않아요!</PasswordConfirmMessage>
+                {passwordconfirmMsg
+                  ? <PasswordconfirmMessage>비밀번호가 일치하지 않아요!</PasswordconfirmMessage>
                   : ''}
                 {signupErrorMsg
                   ? <ErrorMessage>{signupErrorMsg}</ErrorMessage>
@@ -137,7 +131,7 @@ const NextButton = styled.input`
   color: #fff;
   cursor: pointer;
 `
-const PasswordConfirmMessage = styled.div`
+const PasswordconfirmMessage = styled.div`
   padding-top: 0.2rem;
   color: #755BDB;
   font-size: 0.9rem;

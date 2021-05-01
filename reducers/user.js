@@ -1,5 +1,4 @@
-// import axios from 'axios'
-import faker from 'faker'
+import axios from 'axios'
 
 /* ------- initial state ------ */
 export const initialState = {
@@ -7,8 +6,6 @@ export const initialState = {
   signedUp: false,
   signupError: null,
   activationToken: null,
-  // test용
-  // isLoggedIn: true,
   isLoggedIn: false,
   loginError: null,
   userInfo: null,
@@ -23,56 +20,52 @@ const SIGN_OUT = 'LOG_OUT'
 
 /* ------- dispatch 함수 ------ */
 // signup request
-// export const signupRequestAction = (data) => async (dispatch) => {
-//   const response = await axios.post('https://localhost:5000/user/signup/request', data)
-//   dispatch({type: SIGN_UP_REQUEST, response})
-// }
-
-// signup request test용
-export const signupRequestAction = (data) => {
-  return {
-    type: SIGN_UP_REQUEST,
-    data
+export const signupRequestAction = (data) => async (dispatch) => {
+  try {
+    const response = await axios.post('http://localhost:5000/api/signup', data)
+    dispatch({ type: SIGN_UP_REQUEST, payload: response })
+  } catch (err) {
+    dispatch({ type: SIGN_UP_REQUEST, payload: err.response.data })
   }
 }
 
 // signup success
-// export const signupSuccessAction = (token) => async (dispatch) => {
-//   // headers에 activationToken 정보 담아서 get 요청
-//   const response = await axios.get('https://localhost:5000/user/signup/activation/token', {
-//     headers: {
-//       'Authorization': `token ${token}`
-//     }
-//   })
-//   dispatch({type: SIGN_UP_SUCCESS, response})
-// }
-
-// signup success test용
-export const signupSuccessAction = (data) => {
-  return {
-    type: SIGN_UP_SUCCESS,
-    // activation token 보여주기
-    data
+export const signupSuccessAction = (token) => async (dispatch) => {
+  // headers에 activationToken 정보 담아서 post 요청
+  try {
+    const response = await axios.post('http://localhost:5000/api/activation', {}, {
+      headers: {
+        Authorization: `${token}`
+      }
+    })
+    dispatch({ type: SIGN_UP_SUCCESS, payload: response.data })
+  } catch (err) {
+    dispatch({ type: SIGN_UP_SUCCESS, payload: err.response.data })
   }
 }
 
-// login
-// export const loginAction = (data) => async (dispatch) => {
-//   const response = await axios.post('https://localhost:5000/user/signin', data)
-//   dispatch({ type: SIGN_IN, response })
+// signup success test용
+// export const signupSuccessAction = (data) => {
+//   return {
+//     type: SIGN_UP_SUCCESS,
+//     // activation token 보여주기
+//     data
+//   }
 // }
 
-// login test용
-export const signinAction = (data) => {
-  return {
-    type: SIGN_IN,
-    data
+// login
+export const signinAction = (data) => async (dispatch) => {
+  try {
+    const response = await axios.post('http://localhost:5000/api/signin', data)
+    dispatch({ type: SIGN_IN, payload: response })
+  } catch (err) {
+    dispatch({ type: SIGN_IN, payload: err.response.data })
   }
 }
 
 // logout
 // export const logoutAction = (data) => async (dispatch) => {
-//   const response = await axios.get('https://localhost:5000/user/signout', {
+//   const response = await axios.get('http://localhost:5000/api/signout', {
 //         headers: {
 //           'Authorization': `token ${token}`
 //         }
@@ -89,36 +82,48 @@ export const logoutAction = (data) => {
 
 /* ------- reducer ------ */
 const reducer = (state = initialState, action) => {
-  console.log(state)
+  const { statusText, message, accessToken, data } = action.payload
   switch (action.type) {
     case SIGN_UP_REQUEST:
-      return {
-        // error test
-        // signupLoading: false,
-        signupLoading: true,
-        // error message test
-        // signupError: '이미 가입된 이메일입니다',
-        signupError: action.message,
-        // activation token test
-        activationToken: faker.random.uuid()
-        // activationToken: action.activationToken
+      if (statusText === 'OK') {
+        return {
+          ...state,
+          signupLoading: true
+        }
+      } else {
+        return {
+          ...state,
+          signupLoading: false,
+          signupError: message
+          // activation token test
+          // activationToken: faker.random.uuid()
+        }
       }
     case SIGN_UP_SUCCESS:
       return {
+        ...state,
         signupLoading: false,
         signedUp: true,
         // error message
-        signupError: action.message
+        signupError: message
       }
     case SIGN_IN:
-      return {
-        isLoggedIn: true,
-        // error message
-        loginError: action.message,
-        // user info
-        userInfo: action.data,
-        // access token
-        accessToken: action.accessToken
+      if (action.status === 200) {
+        return {
+          ...state,
+          isLoggedIn: true,
+          // user info
+          userInfo: data,
+          // access token
+          accessToken: accessToken
+        }
+      } else {
+        return {
+          ...state,
+          isLoggedIn: false,
+          // error message
+          loginError: message
+        }
       }
     case SIGN_OUT:
       return {
