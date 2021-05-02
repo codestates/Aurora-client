@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 import Link from 'next/link'
-import Router from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
 import { signinAction } from '../../../reducers/user'
 import { useEffect, useState, useCallback } from 'react'
@@ -8,7 +7,7 @@ import useInput from '../../../hooks/useInput'
 
 const SigninProcess = () => {
   const dispatch = useDispatch()
-  const { loginError, isLoggedIn } = useSelector((state) => state.user)
+  const { loginError } = useSelector((state) => state.user)
   const [email, onChangeEmail] = useInput('')
   const [password, onChangePassword] = useInput('')
   const [loginErrorMsg, setLoginErrorMsg] = useState('')
@@ -25,37 +24,31 @@ const SigninProcess = () => {
   }, [email, password])
 
   return (
-    <>
-      {isLoggedIn
-        ? Router.push('../')
-        : (
-          <InputContainer>
-            <GreetingMessage>로그인</GreetingMessage>
-            <form onSubmit={handleLogin}>
-              <Input
-                name='email'
-                type='email'
-                placeholder='이메일'
-                value={email}
-                onChange={onChangeEmail} required
-              />
-              <Input
-                name='password'
-                type='password'
-                placeholder='비밀번호'
-                value={password}
-                onChange={onChangePassword} required
-              />
-              {loginErrorMsg
-                ? <LoginErrorMessage>{loginErrorMsg}</LoginErrorMessage>
-                : ''}
-              <SigninButton type='submit' value='로그인' />
-            </form>
+    <InputContainer>
+      <GreetingMessage>로그인</GreetingMessage>
+      <form onSubmit={handleLogin}>
+        <Input
+          name='email'
+          type='email'
+          placeholder='이메일'
+          value={email}
+          onChange={onChangeEmail} required
+        />
+        <Input
+          name='password'
+          type='password'
+          placeholder='비밀번호'
+          value={password}
+          onChange={onChangePassword} required
+        />
+        {loginErrorMsg
+          ? <LoginErrorMessage>{loginErrorMsg}</LoginErrorMessage>
+          : ''}
+        <SigninButton type='submit' value='로그인' />
+      </form>
 
-            <Link href='../user/signup'><MoveToSigninPage>계정이 없으신가요?</MoveToSigninPage></Link>
-          </InputContainer>
-          )}
-    </>
+      <Link href='../user/signup'><MoveToSigninPage>계정이 없으신가요?</MoveToSigninPage></Link>
+    </InputContainer>
   )
 }
 
