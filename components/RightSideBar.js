@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import Weather from '../utils/weather'
+import Weather from './weather'
 
 const RightSideBar = () => {
   return (

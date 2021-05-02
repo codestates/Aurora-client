@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import FilterBar from './FilterBar'
+import FilterBar from './home/FilterBar'
 import UserInfo from './UserInfo'
 
 const Top = ({ filter }) => {
