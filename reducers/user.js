@@ -2,10 +2,9 @@ import axios from 'axios'
 
 /* ------- initial state ------ */
 export const initialState = {
-  signupLoading: false, // 회원가입 시도중
+  signupRequest: false, // 회원가입 시도중
   signedUp: false,
   signupError: null,
-  activationToken: null,
   isLoggedIn: false,
   loginError: null,
   userInfo: null,
@@ -33,25 +32,12 @@ export const signupRequestAction = (data) => async (dispatch) => {
 export const signupSuccessAction = (token) => async (dispatch) => {
   // headers에 activationToken 정보 담아서 post 요청
   try {
-    const response = await axios.post('http://localhost:5000/api/activation', {}, {
-      headers: {
-        Authorization: `${token}`
-      }
-    })
-    dispatch({ type: SIGN_UP_SUCCESS, payload: response.data })
+    const response = await axios.post('http://localhost:5000/api/activation', { activationToken: `${token}` })
+    dispatch({ type: SIGN_UP_SUCCESS, payload: response })
   } catch (err) {
     dispatch({ type: SIGN_UP_SUCCESS, payload: err.response.data })
   }
 }
-
-// signup success test용
-// export const signupSuccessAction = (data) => {
-//   return {
-//     type: SIGN_UP_SUCCESS,
-//     // activation token 보여주기
-//     data
-//   }
-// }
 
 // login
 export const signinAction = (data) => async (dispatch) => {
@@ -82,47 +68,54 @@ export const logoutAction = (data) => {
 
 /* ------- reducer ------ */
 const reducer = (state = initialState, action) => {
-  const { statusText, message, accessToken, data } = action.payload
+  // const { statusText, message, accessToken, data } = action.payload
   switch (action.type) {
     case SIGN_UP_REQUEST:
-      if (statusText === 'OK') {
+      if (action.payload.statusText === 'OK') {
         return {
           ...state,
-          signupLoading: true
+          signupRequest: true
         }
       } else {
         return {
           ...state,
-          signupLoading: false,
-          signupError: message
-          // activation token test
-          // activationToken: faker.random.uuid()
+          signupRequest: false,
+          signupError: action.payload.message
         }
       }
     case SIGN_UP_SUCCESS:
-      return {
-        ...state,
-        signupLoading: false,
-        signedUp: true,
-        // error message
-        signupError: message
+      if (action.payload.statusText === 'OK') {
+        return {
+          ...state,
+          signupRequest: false,
+          signupLoading: false,
+          signedUp: true
+        }
+      } else {
+        return {
+          ...state,
+          signupRequest: false,
+          // error message
+          signupError: action.payload.message
+        }
       }
     case SIGN_IN:
-      if (action.status === 200) {
+      console.log(action.payload)
+      if (action.payload.statusText === 'OK') {
         return {
           ...state,
           isLoggedIn: true,
           // user info
-          userInfo: data,
+          userInfo: action.payload.data.message,
           // access token
-          accessToken: accessToken
+          accessToken: action.payload.data.accessToken
         }
       } else {
         return {
           ...state,
           isLoggedIn: false,
           // error message
-          loginError: message
+          loginError: action.payload.message
         }
       }
     case SIGN_OUT:

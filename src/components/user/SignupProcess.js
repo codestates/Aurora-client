@@ -7,7 +7,7 @@ import useInput from '../../../hooks/useInput'
 
 const SignupProcess = () => {
   const dispatch = useDispatch()
-  const { signupError, signupLoading } = useSelector((state) => state.user)
+  const { signupError, signupRequest } = useSelector((state) => state.user)
   const [email, onChangeEmail] = useInput('')
   const [username, onChangeUsername] = useInput('')
   const [password, onChangePassword] = useInput('')
@@ -34,7 +34,7 @@ const SignupProcess = () => {
 
   return (
     <>
-      {signupLoading
+      {signupRequest
         ? <SuccessMessage>이메일 인증을 위한 메일이 전송되었습니다!<br />전송된 이메일을 통해 인증을 마무리해주세요 :)</SuccessMessage>
         : (
           <>
