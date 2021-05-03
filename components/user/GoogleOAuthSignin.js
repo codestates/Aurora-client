@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
-import { getGoogleAuthURLAction } from '../../../reducers/user'
+import { getGoogleAuthURLAction } from '../../reducers/user'
 
 import { useEffect } from 'react'
 

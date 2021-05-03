@@ -1,14 +1,18 @@
-import AppLayout from '../src/components/AppLayout'
-import PostList from '../src/components/post/PostList'
-import PostBar from '../src/components/PostBar'
-import { signinSuccessAction, getAccessTokenAction } from '../reducers/user'
-import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import styled from 'styled-components'
+
+import AppLayout from '../components/AppLayout'
+import PostRegisterBar from '../components/home/postRegister/PostRegisterBar'
+import PostCard from '../components/home/postCard/PostCard'
 import Signin from './user/signin'
+import { loadPost } from '../reducers/post'
+import { signinSuccessAction, getAccessTokenAction } from '../reducers/user'
 
 const Home = () => {
-  const { googleLoading, loginLoading, isLoggedIn, accessToken } = useSelector((state) => state.user)
   const dispatch = useDispatch()
+  const { googleLoading, loginLoading, isLoggedIn, accessToken } = useSelector((state) => state.user)
+  const { Posts, loadPostsDone, filterWeather } = useSelector(state => state.post)
 
   useEffect(() => {
     dispatch(getAccessTokenAction())
@@ -20,18 +24,54 @@ const Home = () => {
     }
   }, [accessToken])
 
+  let filterPosts = []
+
+  if (filterWeather.length > 0) {
+    filterPosts = Posts.filter((ele) => (filterWeather.includes(ele.mood)))
+  }
+
+  useEffect(() => {
+    // postlaod()
+    dispatch(loadPost())
+  }, [])
+
   return (
     <>
       {!isLoggedIn
         ? <Signin />
         : (
           <AppLayout filter>
-            <PostBar />
-            <PostList />
+            <PostRegisterBar />
+            <PostCardList>
+              {loadPostsDone &&
+                (
+                  filterWeather.length > 0
+                    ? (
+                        filterPosts.map(post => <PostCard key={post.id} post={post} />)
+                      )
+                    : (
+                        Posts.map(post => <PostCard key={post.id} post={post} />)
+                      )
+                )}
+            </PostCardList>
           </AppLayout>
           )}
     </>
   )
 }
+
+const PostCardList = styled.div`
+  width : 100%;
+  height: 45rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 10px;
+  overflow: auto;
+  -ms-overflow-style:none;
+  &::-webkit-scrollbar{ 
+    display:none;
+  }
+`
 
 export default Home

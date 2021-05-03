@@ -1,96 +1,223 @@
 import faker from 'faker'
-// 임시 데이터
-const dummyPost1 = {
-  id: 2,
-  User: {
-    id: 2,
-    username: '어피치',
-    avatar: faker.image.avatar()
-  },
-  mood: 'sun',
-  content: '두번째 게시물',
-  Images: [{
-    src: 'https://placeimg.com/300/500/people'
-  },
-  {
-    src: 'https://placeimg.com/300/500/architecture'
-  }],
-  Comments: [{
-    User: {
-      id: 1,
-      username: '라이언'
-    },
-    content: '첫번째 댓글'
-  }]
+import shortId from 'shortid'
+// import axios from 'axios'
+
+// 배열 무작위 추출
+const randomItem = (a) => {
+  return a[Math.floor(Math.random() * a.length)]
 }
 
-const dummyPost2 = {
-  id: 3,
-  User: {
-    id: 3,
-    username: '무지',
-    avatar: faker.image.avatar()
-  },
-  mood: 'rain',
-  content: '세번째 게시물',
-  Images: [{
-    src: 'https://placeimg.com/300/500/nature'
-  },
-  {
-    src: 'https://placeimg.com/300/500/animals'
-  },
-  {
-    src: 'https://placeimg.com/300/500/tech'
+// 샘플 이미지 생성
+const generateImage = () => {
+  const res = []
+  const cnt = Math.floor(Math.random() * 4 + 1)
+  for (let i = 0; i < cnt; i++) {
+    res.push({
+      src: faker.image.image()
+    })
   }
-  ],
-  Comments: [{
+  return res
+}
+
+// 샘플 포스트 데이터 생성
+const generateDummyPost = (number) => {
+  const res = []
+  for (let i = 0; i < number; i++) {
+    res.push(dummyPost())
+  }
+  return res
+}
+
+const dummyPost = () => {
+  return {
+    id: shortId.generate(),
     User: {
-      id: 1,
-      username: '라이언'
+      id: shortId.generate(),
+      username: faker.name.findName(),
+      avatar: faker.image.avatar()
     },
-    content: '첫번째 댓글'
-  }]
+    mood: randomItem(['sun', 'cloud', 'rain', 'moon']),
+    content: faker.lorem.paragraph(),
+    Images: generateImage(),
+    Comments: [{
+      User: {
+        id: shortId.generate(),
+        nickname: faker.name.findName()
+      },
+      content: faker.lorem.sentence()
+    }]
+  }
 }
 
 // 초기 데이터 구조
 export const initialState = {
-  Posts: [{
+  me: {
     id: 1,
-    User: {
-      id: 1,
-      username: '라이언',
-      avatar: faker.image.avatar()
-    },
-    mood: 'sun',
-    content: '첫번째 게시물',
-    Images: [{
-      src: 'https://placeimg.com/300/500/any'
-    }],
-    Comments: [{
-      User: {
-        id: 1,
-        username: '어피치'
-      },
-      content: '첫번째 댓글'
-    }]
-  }, dummyPost1, dummyPost2]
+    username: '라이언',
+    avatar: 'https://cdn.fakercloud.com/avatars/nateschulte_128.jpg'
+  },
+  Posts: [],
+  loadPostsDone: false,
+  loadPostsError: null,
+  addPostDone: false,
+  addPostError: null,
+  removePostDone: false,
+  removePostError: null,
+  filterWeather: []
 }
 
 // 액션 상수
-const ADD_POST = 'ADD_POST'
+export const LOAD_POST_SUCCESS = 'LOAD_POST_SUCCESS'
+export const LOAD_POST_FAILURE = 'LOAD_POST_FAILURE'
+export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS'
+export const ADD_POST_FAILURE = 'ADD_POST_FAILURE'
+export const REMOVE_POST_SUCCESS = 'REMOVE_POST_SUCCESS'
+export const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE'
+export const FILTER_WEATHER = 'FILTER_WEATHER'
 
-// dispatch 함수
-export const addPost = {
-  type: ADD_POST
+// 액션 크리에이터
+export const loadPost = () => {
+  try {
+    const data = generateDummyPost(5)
+    return {
+      type: LOAD_POST_SUCCESS,
+      payload: data
+    }
+  } catch (err) {
+    return {
+      type: LOAD_POST_FAILURE,
+      payload: err
+    }
+  }
 }
+
+// export const loadPost = () => async (dispatch) => {
+//   try {
+//     const response = await axios.get('url')
+//     dispatch({
+//       type: LOAD_POST_SUCCESS,
+//       payload: response
+//     })
+//   } catch (err) {
+//     dispatch({
+//       type: LOAD_POST_FAILURE,
+//       payload: err.response.data
+//     })
+//   }
+// }
+
+export const addPost = (data) => {
+  try {
+    const newPost = {
+      id: shortId.generate(),
+      User: data.me,
+      mood: data.weather,
+      content: data.text,
+      Images: data.images,
+      Comments: []
+    }
+    return {
+      type: ADD_POST_SUCCESS,
+      payload: newPost
+    }
+  } catch (err) {
+    return {
+      type: ADD_POST_FAILURE,
+      payload: err
+    }
+  }
+}
+
+// export const addPost = (data) => async (dispatch) => {
+//   try {
+//     const response = await axios.post('url',data)
+//     dispatch({
+//       type: ADD_POST_SUCCESS,
+//       payload: response
+//     })
+//   } catch (err) {
+//     dispatch({
+//       type: ADD_POST_FAILURE,
+//       payload: err.response.data
+//     })
+//   }
+// }
+
+export const removePost = (id) => {
+  try {
+    return {
+      type: REMOVE_POST_SUCCESS,
+      payload: id
+    }
+  } catch (err) {
+    return {
+      type: REMOVE_POST_FAILURE,
+      payload: err
+    }
+  }
+}
+
+// export const removePost = (id) => async (dispatch) => {
+//   try {
+//     const response = await axios.post('url',data)
+//     dispatch({
+//       type: REMOVE_POST_SUCCESS,
+//       payload: response
+//     })
+//   } catch (err) {
+//     dispatch({
+//       type: REMOVE_POST_FAILURE,
+//       payload: err.response.data
+//     })
+//   }
+// }
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case ADD_POST:
+    case LOAD_POST_SUCCESS:
       return {
         ...state,
-        Posts: [action.data, ...state.Posts]
+        loadPostsDone: true,
+        Posts: [...state.Posts, ...action.payload]
       }
+    case LOAD_POST_FAILURE:
+      return {
+        ...state,
+        loadPostsDone: false,
+        loadPostsError: action.payload.message
+      }
+    case ADD_POST_SUCCESS:
+      return {
+        ...state,
+        addPostDone: true,
+        Posts: [action.payload, ...state.Posts]
+      }
+    case ADD_POST_FAILURE:
+      return {
+        ...state,
+        addPostDone: false,
+        addPostError: action.payload.message
+      }
+    case REMOVE_POST_SUCCESS: {
+      const newPost = state.Posts.filter((ele) => ele.id !== action.payload)
+      return {
+        ...state,
+        removePostDone: true,
+        Posts: newPost
+      }
+    }
+    case REMOVE_POST_FAILURE:
+      return {
+        ...state,
+        removePostDone: false,
+        removePostError: action.payload.message
+      }
+    case FILTER_WEATHER:
+      return {
+        ...state,
+        filterWeather: action.payload
+      }
+
     default:
       return state
   }

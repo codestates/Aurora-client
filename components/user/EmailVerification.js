@@ -2,7 +2,7 @@ import Link from 'next/link'
 import styled from 'styled-components'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { signupSuccessAction } from '../../../reducers/user'
+import { signupSuccessAction } from '../../reducers/user'
 
 const EmailVerification = ({ token }) => {
   const dispatch = useDispatch()

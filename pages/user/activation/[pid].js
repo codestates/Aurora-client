@@ -4,8 +4,8 @@ import { useEffect } from 'react'
 import Link from 'next/link'
 import styled from 'styled-components'
 import { signupSuccessAction } from '../../../reducers/user'
-import AppUserLayout from '../../../src/components/user/AppUserLayout'
-import EmailVerification from '../../../src/components/user/EmailVerification'
+import AppUserLayout from '../../../components/user/AppUserLayout'
+import EmailVerification from '../../../components/user/EmailVerification'
 
 const EmailActivation = () => {
   const router = useRouter()

@@ -1,9 +1,9 @@
 import styled from 'styled-components'
 import Link from 'next/link'
 import { useDispatch, useSelector } from 'react-redux'
-import { signinRequestAction } from '../../../reducers/user'
+import { signinRequestAction } from '../../reducers/user'
 import { useEffect, useState, useCallback } from 'react'
-import useInput from '../../../hooks/useInput'
+import useInput from '../../hooks/useInput'
 
 const SigninProcess = () => {
   const dispatch = useDispatch()
