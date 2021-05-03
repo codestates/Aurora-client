@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import Link from 'next/link'
 import { useDispatch, useSelector } from 'react-redux'
-import { signinAction } from '../../reducers/user'
+import { signinRequestAction } from '../../reducers/user'
 import { useEffect, useState, useCallback } from 'react'
 import useInput from '../../hooks/useInput'
 
@@ -20,7 +20,7 @@ const SigninProcess = () => {
 
   const handleLogin = useCallback((e) => {
     e.preventDefault()
-    dispatch(signinAction({ email, password }))
+    dispatch(signinRequestAction({ email, password }))
   }, [email, password])
 
   return (
