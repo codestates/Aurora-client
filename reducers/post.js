@@ -1,9 +1,9 @@
 import faker from 'faker'
 import shortId from 'shortid'
-import axios from 'axios'
+// import axios from 'axios'
 
 // 배열 무작위 추출
-function randomItem (a) {
+const randomItem = (a) => {
   return a[Math.floor(Math.random() * a.length)]
 }
 
@@ -60,7 +60,9 @@ export const initialState = {
   loadPostsDone: false,
   loadPostsError: null,
   addPostDone: false,
-  addPostDoneError: null,
+  addPostError: null,
+  removePostDone: false,
+  removePostError: null,
   filterWeather: []
 }
 
@@ -69,6 +71,8 @@ export const LOAD_POST_SUCCESS = 'LOAD_POST_SUCCESS'
 export const LOAD_POST_FAILURE = 'LOAD_POST_FAILURE'
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS'
 export const ADD_POST_FAILURE = 'ADD_POST_FAILURE'
+export const REMOVE_POST_SUCCESS = 'REMOVE_POST_SUCCESS'
+export const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE'
 export const FILTER_WEATHER = 'FILTER_WEATHER'
 
 // 액션 크리에이터
@@ -139,6 +143,35 @@ export const addPost = (data) => {
 //   }
 // }
 
+export const removePost = (id) => {
+  try {
+    return {
+      type: REMOVE_POST_SUCCESS,
+      payload: id
+    }
+  } catch (err) {
+    return {
+      type: REMOVE_POST_FAILURE,
+      payload: err
+    }
+  }
+}
+
+// export const removePost = (id) => async (dispatch) => {
+//   try {
+//     const response = await axios.post('url',data)
+//     dispatch({
+//       type: REMOVE_POST_SUCCESS,
+//       payload: response
+//     })
+//   } catch (err) {
+//     dispatch({
+//       type: REMOVE_POST_FAILURE,
+//       payload: err.response.data
+//     })
+//   }
+// }
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case LOAD_POST_SUCCESS:
@@ -163,13 +196,28 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         addPostDone: false,
-        addPostDoneError: action.payload.message
+        addPostError: action.payload.message
+      }
+    case REMOVE_POST_SUCCESS: {
+      const newPost = state.Posts.filter((ele) => ele.id !== action.payload)
+      return {
+        ...state,
+        removePostDone: true,
+        Posts: newPost
+      }
+    }
+    case REMOVE_POST_FAILURE:
+      return {
+        ...state,
+        removePostDone: false,
+        removePostError: action.payload.message
       }
     case FILTER_WEATHER:
       return {
         ...state,
         filterWeather: action.payload
       }
+
     default:
       return state
   }
