@@ -1,11 +1,11 @@
 import styled from 'styled-components'
 import Weather from './weather'
+import WeatherStatistics from './WeatherStatistics'
 
 const RightSideBar = () => {
   return (
     <Wrapper>
-      <Box>미정</Box>
-      <Box>미정</Box>
+      <WeatherStatistics />
       <Weather />
     </Wrapper>
   )
@@ -17,12 +17,6 @@ const Wrapper = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
-`
-
-const Box = styled.div`
-  border : 1px solid gray;
-  height : 30%;
-  width : 80%;
 `
 
 export default RightSideBar

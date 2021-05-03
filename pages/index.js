@@ -10,7 +10,13 @@ import { useEffect } from 'react'
 const Home = () => {
   const dispatch = useDispatch()
   // const { userInfo } = useSelector((state) => state.user)
-  const { Posts, loadPostsDone } = useSelector(state => state.post)
+  const { Posts, loadPostsDone, filterWeather } = useSelector(state => state.post)
+
+  let filterPosts = []
+
+  if (filterWeather.length > 0) {
+    filterPosts = Posts.filter((ele) => (filterWeather.includes(ele.mood)))
+  }
 
   useEffect(() => {
     // postlaod()
@@ -21,7 +27,14 @@ const Home = () => {
     <AppLayout filter>
       <PostRegisterBar />
       <PostCardList>
-        {loadPostsDone && Posts.map(post => <PostCard key={post.id} post={post} />)}
+        {loadPostsDone &&
+          (
+            filterWeather.length > 0 ? (
+              filterPosts.map(post => <PostCard key={post.id} post={post} />)
+            ) : (
+              Posts.map(post => <PostCard key={post.id} post={post} />)
+            )
+          )}
       </PostCardList>
     </AppLayout>
   )

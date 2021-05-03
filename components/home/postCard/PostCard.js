@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 
 import styled from 'styled-components'
 import PostImages from './PostImages'
-import Thema from './Thema'
+import Thema from '../../Thema'
 import CommentForm from './CommentForm'
 
 const PostCard = ({ post, onClick }) => {
