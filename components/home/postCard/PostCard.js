@@ -2,16 +2,23 @@ import { Button, Card, Popover, List, Comment } from 'antd'
 import { HeartTwoTone, HeartOutlined, MessageOutlined, EllipsisOutlined } from '@ant-design/icons'
 
 import { useCallback, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 
 import styled from 'styled-components'
 import PostImages from './PostImages'
 import Thema from '../../Thema'
 import CommentForm from './CommentForm'
+import { removePost } from '../../../reducers/post'
 
 const PostCard = ({ post, onClick }) => {
+  const dispatch = useDispatch()
   // 옵셔널체이닝 id or undefined
   const id = useSelector(state => state.post.me?.id)
+
+  // 포스트 삭제
+  const onRemovePost = useCallback(() => {
+    dispatch(removePost(post.id))
+  }, [])
 
   // 좋아요 기능
   const [liked, setLiked] = useState(false)
@@ -54,7 +61,7 @@ const PostCard = ({ post, onClick }) => {
                 key='more' content={(
                   <Button.Group>
                     <Button>수정</Button>
-                    <Button type='danger'>삭제</Button>
+                    <Button type='danger' onClick={onRemovePost}>삭제</Button>
                   </Button.Group>
                 )}
               >
