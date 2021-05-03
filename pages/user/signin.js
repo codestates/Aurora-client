@@ -1,7 +1,7 @@
-import SigninProcess from '../../src/components/user/SigninProcess'
-import GoogleOAuthSignin from '../../src/components/user/GoogleOAuthSignin'
-import FacebookOAuthSignin from '../../src/components/user/FacebookOAuthSignin'
-import AppUserLayout from '../../src/components/user/AppUserLayout'
+import SigninProcess from '../../components/user/SigninProcess'
+import GoogleOAuthSignin from '../../components/user/GoogleOAuthSignin'
+import FacebookOAuthSignin from '../../components/user/FacebookOAuthSignin'
+import AppUserLayout from '../../components/user/AppUserLayout'
 import Home from '../'
 import { useSelector } from 'react-redux'
 
@@ -17,7 +17,7 @@ const Signin = () => {
             <GoogleOAuthSignin />
             <FacebookOAuthSignin />
           </AppUserLayout>
-          )
+        )
         : <Home />}
     </>
   )

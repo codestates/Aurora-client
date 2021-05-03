@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import AppLayout from '../src/components/AppLayout'
+import AppLayout from '../components/AppLayout'
 
 const Notification = () => {
   return (

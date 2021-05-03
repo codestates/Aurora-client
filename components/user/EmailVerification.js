@@ -2,7 +2,7 @@ import Link from 'next/link'
 import styled from 'styled-components'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { signupSuccessAction } from '../../../reducers/user'
+import { signupSuccessAction } from '../../reducers/user'
 
 const EmailVerification = ({ token }) => {
   console.log(token)
@@ -25,13 +25,13 @@ const EmailVerification = ({ token }) => {
             <Message>회원가입에 성공했습니다!<br />이제 Aurora에서 마음껏 기분을 표현해보세요 :)</Message>
             <Link href='../signin'><SigninButton>로그인하러 가기</SigninButton></Link>
           </>
-          )
+        )
         : (
           <>
             <Message>회원가입에 실패했습니다 :(<br />인증을 다시 시도해주세요.</Message>
             <Link href='../signup'><MoveToSignupPage>재시도</MoveToSignupPage></Link>
           </>
-          )}
+        )}
     </>
 
   )

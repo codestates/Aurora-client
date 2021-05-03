@@ -1,15 +1,11 @@
 import styled from 'styled-components'
-import faker from 'faker'
-import Modal from './Modal'
-import { useEffect, useState } from 'react'
+import PostRegisterModal from './PostRegisterModal'
+import { useState } from 'react'
+import { useSelector } from 'react-redux'
 
 const PostBar = () => {
+  const { me } = useSelector(state => state.post)
   const [showModal, setShowModal] = useState(false)
-  const [avatar, setAvatar] = useState('')
-
-  useEffect(() => {
-    setAvatar(faker.image.avatar())
-  }, [])
 
   return (
     <>
@@ -17,13 +13,15 @@ const PostBar = () => {
         setShowModal(true)
       }}
       >
-        <Avatar src={avatar} alt='avatar' />
-        <span>오늘 당신의 날씨는 어떤가요?</span>
+        <Avatar src={me.avatar} alt='avatar' />
+        <span>{me.username}님, 오늘 당신의 날씨는 어떤가요?</span>
       </Wrapper>
-      <Modal
-        onClose={() => setShowModal(false)}
-        show={showModal}
-      />
+      {showModal && (
+        <PostRegisterModal
+          onClose={() => setShowModal(false)}
+          User={me}
+        />
+      )}
     </>
   )
 }
@@ -37,6 +35,7 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   padding: 0 1rem;
+  margin: 1rem 0;
   &:hover{
     background-color: rgba(128, 128, 128, 0.2);
   }
