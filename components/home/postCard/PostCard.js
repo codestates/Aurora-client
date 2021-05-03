@@ -15,6 +15,8 @@ const PostCard = ({ post, onClick }) => {
   // 옵셔널체이닝 id or undefined
   const id = useSelector(state => state.post.me?.id)
 
+  console.log('post : ', post)
+
   // 포스트 삭제
   const onRemovePost = useCallback(() => {
     dispatch(removePost(post.id))
@@ -36,9 +38,10 @@ const PostCard = ({ post, onClick }) => {
     <Wrapper ThemaColor={Thema[post.mood].color}>
       <Header>
         <Auth>
-          <img src={post.User.avatar} />
+          {/* <img src={post.User.avatar} /> */}
           <div>
-            <span>{post.User.username}</span>
+            {/* <span>{post.User.username}</span> */}
+            <span>TEST1</span>
             <span>22 minutes ago</span>
           </div>
         </Auth>
@@ -49,14 +52,15 @@ const PostCard = ({ post, onClick }) => {
       </Body>
       <Footer>
         <Card
-          cover={post.Images[0] && <PostImages images={post.Images} />}
+          cover={<PostImages images={post.images} />}
           actions={[
             liked
               ? <HeartTwoTone twoToneColor='#eb2f96' key='heart' onClick={onToggleLike} />
               : <HeartOutlined key='heart' onClick={onToggleLike} />,
             <MessageOutlined key='comment' onClick={onToggleComment} />,
 
-            post.User.id === id && (
+            // post.User.id === id && (
+            (
               <Popover
                 key='more' content={(
                   <Button.Group>

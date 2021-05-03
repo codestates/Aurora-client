@@ -24,8 +24,8 @@ const ImagesZoom = ({ images, onClose }) => {
             slidesToScroll={1}
           >
             {images.map((v) => (
-              <ImgWrapper key={v.src}>
-                <img src={v.src} alt={v.src} />
+              <ImgWrapper key={v._id}>
+                <img src={`data:image/png;base64,${Buffer.from(v.data.data).toString('base64')}`} />
               </ImgWrapper>
             ))}
           </Slick>
