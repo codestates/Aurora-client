@@ -12,7 +12,6 @@ const PostImages = ({ images }) => {
   }, [])
 
   const onClose = useCallback(() => {
-    console.log('AAA')
     setShowImagesZoom(false)
   }, [])
 
@@ -21,8 +20,7 @@ const PostImages = ({ images }) => {
       <Wrapper>
         <img
           style={{ width: '100%', height: '100%' }}
-          src={images[0].src}
-          alt={images[0].src}
+          src={`data:image/png;base64,${Buffer.from(images[0].data.data).toString('base64')}`}
           onClick={onZoom}
         />
         {showImagesZoom && <ImagesZoom images={images} onClose={onClose} />}
@@ -34,14 +32,12 @@ const PostImages = ({ images }) => {
       <Wrapper>
         <img
           style={{ width: '50%', height: '100%' }}
-          src={images[0].src}
-          alt={images[0].src}
+          src={`data:image/png;base64,${Buffer.from(images[0].data.data).toString('base64')}`}
           onClick={onZoom}
         />
         <img
           style={{ width: '50%', height: '100%' }}
-          src={images[1].src}
-          alt={images[1].src}
+          src={`data:image/png;base64,${Buffer.from(images[1].data.data).toString('base64')}`}
           onClick={onZoom}
         />
         {showImagesZoom && <ImagesZoom images={images} onClose={onClose} />}
@@ -53,21 +49,18 @@ const PostImages = ({ images }) => {
       <Wrapper>
         <img
           style={{ width: '50%', height: '100%' }}
-          src={images[0].src}
-          alt={images[0].src}
+          src={`data:image/png;base64,${Buffer.from(images[0].data.data).toString('base64')}`}
           onClick={onZoom}
         />
         <div style={{ display: 'inline-block', width: '50%' }}>
           <img
             style={{ display: 'block', width: '100%', height: '50%' }}
-            src={images[1].src}
-            alt={images[1].src}
+            src={`data:image/png;base64,${Buffer.from(images[1].data.data).toString('base64')}`}
             onClick={onZoom}
           />
           <img
             style={{ display: 'block', width: '100%', height: '50%' }}
-            src={images[2].src}
-            alt={images[2].src}
+            src={`data:image/png;base64,${Buffer.from(images[2].data.data).toString('base64')}`}
             onClick={onZoom}
           />
         </div>
@@ -79,15 +72,13 @@ const PostImages = ({ images }) => {
     <Wrapper>
       <img
         style={{ width: '50%', height: '100%' }}
-        src={images[0].src}
-        alt={images[0].src}
+        src={`data:image/png;base64,${Buffer.from(images[0].data.data).toString('base64')}`}
         onClick={onZoom}
       />
       <div style={{ display: 'inline-block', width: '50%' }}>
         <img
           style={{ display: 'block', width: '100%', height: '50%' }}
-          src={images[1].src}
-          alt={images[1].src}
+          src={`data:image/png;base64,${Buffer.from(images[1].data.data).toString('base64')}`}
           onClick={onZoom}
         />
         <div

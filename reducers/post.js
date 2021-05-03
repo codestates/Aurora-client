@@ -1,6 +1,6 @@
 import faker from 'faker'
 import shortId from 'shortid'
-// import axios from 'axios'
+import axios from 'axios'
 
 // 배열 무작위 추출
 const randomItem = (a) => {
@@ -106,42 +106,40 @@ export const loadPost = () => {
 //   }
 // }
 
-export const addPost = (data) => {
-  try {
-    const newPost = {
-      id: shortId.generate(),
-      User: data.me,
-      mood: data.weather,
-      content: data.text,
-      Images: data.images,
-      Comments: []
-    }
-    return {
-      type: ADD_POST_SUCCESS,
-      payload: newPost
-    }
-  } catch (err) {
-    return {
-      type: ADD_POST_FAILURE,
-      payload: err
-    }
-  }
-}
-
-// export const addPost = (data) => async (dispatch) => {
+// export const addPost = (data) => {
 //   try {
-//     const response = await axios.post('url',data)
-//     dispatch({
+//     return {
 //       type: ADD_POST_SUCCESS,
-//       payload: response
-//     })
+//       payload: data
+//     }
 //   } catch (err) {
-//     dispatch({
+//     return {
 //       type: ADD_POST_FAILURE,
-//       payload: err.response.data
-//     })
+//       payload: err
+//     }
 //   }
 // }
+
+export const addPost = (data) => async (dispatch) => {
+  try {
+    console.log('요청전')
+    const response = await axios({
+      method: 'post',
+      url: 'http://localhost:5000/api/post/new',
+      data: data
+    })
+    console.log('응답 : ', response.data)
+    dispatch({
+      type: ADD_POST_SUCCESS,
+      payload: response.data
+    })
+  } catch (err) {
+    dispatch({
+      type: ADD_POST_FAILURE,
+      payload: err.response.data
+    })
+  }
+}
 
 export const removePost = (id) => {
   try {
