@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { signupSuccessAction } from '../../../reducers/user'
 
 const EmailVerification = ({ token }) => {
-  console.log(token)
   const dispatch = useDispatch()
   const { signedUp } = useSelector((state) => state.user)
 

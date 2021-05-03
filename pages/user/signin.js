@@ -2,24 +2,33 @@ import SigninProcess from '../../src/components/user/SigninProcess'
 import GoogleOAuthSignin from '../../src/components/user/GoogleOAuthSignin'
 import FacebookOAuthSignin from '../../src/components/user/FacebookOAuthSignin'
 import AppUserLayout from '../../src/components/user/AppUserLayout'
-import Home from '../'
 import { useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 const Signin = () => {
-  const { isLoggedIn, userInfo } = useSelector((state) => state.user)
-  console.log(userInfo)
+  const router = useRouter()
+  const { loginLoading, tokenError } = useSelector((state) => state.user)
+
+  useEffect(() => {
+    if (loginLoading) {
+      router.push('../')
+    }
+  }, [loginLoading])
+
   return (
-    <>
-      {!isLoggedIn
-        ? (
-          <AppUserLayout>
+    <AppUserLayout>
+      {tokenError
+        ? <p>{tokenError}</p>
+        : (
+          <>
             <SigninProcess />
             <GoogleOAuthSignin />
             <FacebookOAuthSignin />
-          </AppUserLayout>
-          )
-        : <Home />}
-    </>
+          </>
+          )}
+
+    </AppUserLayout>
   )
 }
 

@@ -10,14 +10,6 @@ import EmailVerification from '../../../src/components/user/EmailVerification'
 const EmailActivation = () => {
   const router = useRouter()
   const { pid } = router.query
-  // const dispatch = useDispatch()
-  // const { singedUp } = useSelector((state) => state.user)
-  console.log(pid)
-
-  // useEffect(() => {
-  //   dispatch(signupSuccessAction(pid))
-  //   console.log(pid)
-  // }, [pid])
 
   return (
     <AppUserLayout>
