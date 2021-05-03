@@ -60,7 +60,8 @@ export const initialState = {
   loadPostsDone: false,
   loadPostsError: null,
   addPostDone: false,
-  addPostDoneError: null
+  addPostDoneError: null,
+  filterWeather: []
 }
 
 // 액션 상수
@@ -68,6 +69,7 @@ export const LOAD_POST_SUCCESS = 'LOAD_POST_SUCCESS'
 export const LOAD_POST_FAILURE = 'LOAD_POST_FAILURE'
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS'
 export const ADD_POST_FAILURE = 'ADD_POST_FAILURE'
+export const FILTER_WEATHER = 'FILTER_WEATHER'
 
 // 액션 크리에이터
 export const loadPost = () => {
@@ -162,6 +164,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         addPostDone: false,
         addPostDoneError: action.payload.message
+      }
+    case FILTER_WEATHER:
+      return {
+        ...state,
+        filterWeather: action.payload
       }
     default:
       return state
