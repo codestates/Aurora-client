@@ -1,9 +1,30 @@
 import styled from 'styled-components'
+import { useRouter } from 'next/router'
+import { useDispatch, useSelector } from 'react-redux'
+import { getGoogleAuthURLAction } from '../../reducers/user'
+
+import { useEffect } from 'react'
 
 const GoogleOAuthSignin = () => {
+  const dispatch = useDispatch()
+  const router = useRouter()
+
+  const { googleAuthURL } = useSelector((state) => state.user)
+
+  const getGoogleAuthURL = (e) => {
+    e.preventDefault()
+    dispatch(getGoogleAuthURLAction())
+  }
+
+  useEffect(() => {
+    if (googleAuthURL) {
+      router.push(googleAuthURL)
+    }
+  }, [googleAuthURL])
+
   return (
     <GoogleSigninContainer>
-      <GoogleSigninButton>
+      <GoogleSigninButton onClick={getGoogleAuthURL}>
         <GoogleIcon src='/images/google-icon.png' />
         <GoogleText>Google 계정으로 계속하기</GoogleText>
       </GoogleSigninButton>

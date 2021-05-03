@@ -1,4 +1,5 @@
 import axios from 'axios'
+axios.defaults.withCredentials = true
 
 /* ------- initial state ------ */
 export const initialState = {
@@ -6,15 +7,23 @@ export const initialState = {
   signedUp: false,
   signupError: null,
   isLoggedIn: false,
+  loginLoading: false,
+  googleLoading: false,
   loginError: null,
-  userInfo: null,
-  accessToken: null
+  accessTokenError: null,
+  signoutError: null,
+  me: null,
+  accessToken: null,
+  googleAuthURL: ''
 }
 
 /* ------- action 상수 ------ */
 const SIGN_UP_REQUEST = 'SIGN_UP_REQUEST'
 const SIGN_UP_SUCCESS = 'SIGN_UP_SUCCESS'
-const SIGN_IN = 'SIGN_IN'
+const GOOGLE_AUTH_URL_REQUEST = 'GOOGLE_AUTH_URL_REQUEST'
+const SIGN_IN_REQUEST = 'SIGN_IN_REQUEST'
+const GET_ACCESS_TOKEN = 'GET_ACCESS_TOKEN'
+const GET_USER = 'GET_USER'
 const SIGN_OUT = 'LOG_OUT'
 
 /* ------- dispatch 함수 ------ */
@@ -30,7 +39,7 @@ export const signupRequestAction = (data) => async (dispatch) => {
 
 // signup success
 export const signupSuccessAction = (token) => async (dispatch) => {
-  // headers에 activationToken 정보 담아서 post 요청
+  // body에 activationToken 정보 담아서 post 요청
   try {
     const response = await axios.post('http://localhost:5000/api/activation', { activationToken: `${token}` })
     dispatch({ type: SIGN_UP_SUCCESS, payload: response })
@@ -39,13 +48,43 @@ export const signupSuccessAction = (token) => async (dispatch) => {
   }
 }
 
-// login
-export const signinAction = (data) => async (dispatch) => {
+// google OAuth
+export const getGoogleAuthURLAction = () => async (dispatch) => {
+  const response = await axios.get('http://localhost:5000/api/auth/google/url')
+  dispatch({ type: GOOGLE_AUTH_URL_REQUEST, payload: response.data })
+}
+
+// login request
+export const signinRequestAction = (data) => async (dispatch) => {
   try {
     const response = await axios.post('http://localhost:5000/api/signin', data)
-    dispatch({ type: SIGN_IN, payload: response })
+    dispatch({ type: SIGN_IN_REQUEST, payload: response })
   } catch (err) {
-    dispatch({ type: SIGN_IN, payload: err.response.data })
+    dispatch({ type: SIGN_IN_REQUEST, payload: err.response.data })
+  }
+}
+
+// get access token
+export const getAccessTokenAction = () => async (dispatch) => {
+  try {
+    const response = await axios.get('http://localhost:5000/api/access-token')
+    dispatch({ type: GET_ACCESS_TOKEN, payload: response })
+  } catch (err) {
+    dispatch({ type: GET_ACCESS_TOKEN, payload: err.response.data })
+  }
+}
+
+// signin success (get user info)
+export const signinSuccessAction = (token) => async (dispatch) => {
+  try {
+    const response = await axios.get('http://localhost:5000/api/user', {
+      headers: {
+        Authorization: `${token}`
+      }
+    })
+    dispatch({ type: GET_USER, payload: response })
+  } catch (err) {
+    dispatch({ type: GET_USER, payload: err.response.data })
   }
 }
 
@@ -99,29 +138,65 @@ const reducer = (state = initialState, action) => {
           signupError: action.payload.message
         }
       }
-    case SIGN_IN:
-      console.log(action.payload)
+    case GOOGLE_AUTH_URL_REQUEST:
+      return {
+        ...state,
+        googleAuthURL: `${action.payload}`,
+        googleLoading: true
+      }
+    case SIGN_IN_REQUEST:
       if (action.payload.statusText === 'OK') {
         return {
           ...state,
-          isLoggedIn: true,
-          // user info
-          userInfo: action.payload.data.message,
-          // access token
+          loginLoading: true
+        }
+      } else {
+        return {
+          ...state,
+          // error message
+          loginError: action.payload.message
+        }
+      }
+    case GET_ACCESS_TOKEN:
+      if (action.payload.statusText === 'OK') {
+        return {
+          ...state,
           accessToken: action.payload.data.accessToken
         }
       } else {
         return {
           ...state,
-          isLoggedIn: false,
           // error message
-          loginError: action.payload.message
+          accessTokenError: action.payload.message
+        }
+      }
+    case GET_USER:
+      console.log(action.payload)
+      if (action.payload.statusText === 'OK') {
+        return {
+          ...state,
+          isLoggedIn: true,
+          me: action.payload.data
+        }
+      } else {
+        return {
+          ...state,
+          // error message
+          loginError: action.payload
         }
       }
     case SIGN_OUT:
-      return {
-        isLoggedIn: false,
-        userInfo: null
+      if (action.payload.statusText === 'OK') {
+        return {
+          ...state,
+          isLoggedIn: false,
+          me: null
+        }
+      } else {
+        return {
+          ...state,
+          signoutError: action.payload.message
+        }
       }
     default:
       return state
