@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import styled from 'styled-components'
 import FilterBar from './home/FilterBar'
 import UserInfo from './UserInfo'
@@ -5,7 +6,11 @@ import UserInfo from './UserInfo'
 const Top = ({ filter }) => {
   return (
     <TopWrapper>
-      <Logo src='/images/logo.png' />
+      <Link href='/'>
+        <a>
+          <Logo src='/images/logo.png' />
+        </a>
+      </Link>
       <Filter>
         {filter && <FilterBar />}
       </Filter>

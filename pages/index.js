@@ -31,27 +31,10 @@ const Home = () => {
   }
   console.log('HOME Posts : ', Posts)
   useEffect(() => {
-    // postlaod()
     // dispatch(loadPost())
   }, [])
 
   return (
-<<<<<<< HEAD
-    <AppLayout filter>
-      <PostRegisterBar />
-      <PostCardList>
-        {
-          (
-            filterWeather.length > 0 ? (
-              filterPosts.map((post, idx) => <PostCard key={idx} post={post} />)
-            ) : (
-                Posts.map((post, idx) => <PostCard key={idx} post={post} />)
-              )
-          )
-        }
-      </PostCardList>
-    </AppLayout>
-=======
     <>
       {!isLoggedIn
         ? <Signin />
@@ -59,21 +42,22 @@ const Home = () => {
           <AppLayout filter>
             <PostRegisterBar />
             <PostCardList>
-              {loadPostsDone &&
+              {/* {loadPostsDone && */}
+              {
                 (
                   filterWeather.length > 0
                     ? (
-                        filterPosts.map(post => <PostCard key={post.id} post={post} />)
-                      )
+                      filterPosts.map(post => <PostCard key={post.id} post={post} />)
+                    )
                     : (
-                        Posts.map(post => <PostCard key={post.id} post={post} />)
-                      )
-                )}
+                      Posts.map(post => <PostCard key={post.id} post={post} />)
+                    )
+                )
+              }
             </PostCardList>
           </AppLayout>
-          )}
+        )}
     </>
->>>>>>> 4fbf58ca43ba491049142cdb2e976be1184ee8c5
   )
 }
 

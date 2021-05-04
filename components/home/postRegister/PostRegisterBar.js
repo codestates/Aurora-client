@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useSelector } from 'react-redux'
 
 const PostBar = () => {
-  const { me } = useSelector(state => state.post)
+  const { me } = useSelector(state => state.user)
   const [showModal, setShowModal] = useState(false)
 
   return (
@@ -13,7 +13,7 @@ const PostBar = () => {
         setShowModal(true)
       }}
       >
-        <Avatar src={me.avatar} alt='avatar' />
+        <Avatar src='' alt='avatar' />
         <span>{me.username}님, 오늘 당신의 날씨는 어떤가요?</span>
       </Wrapper>
       {showModal && (

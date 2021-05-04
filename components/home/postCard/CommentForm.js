@@ -1,22 +1,51 @@
+import PropTypes from 'prop-types'
 import { Form, Input, Button } from 'antd'
-import { useCallback } from 'react'
-import { useSelector } from 'react-redux'
+import { useEffect, useCallback } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import useInput from '../../../hooks/useInput'
+import { addComment } from '../../../reducers/post'
 
 const CommentForm = ({ post }) => {
-  const id = useSelector(state => state.post.me?.id)
-  const [commentText, onChangeCommentText] = useInput('')
+  const dispatch = useDispatch()
+  const { addCommentDone } = useSelector((state) => state.post)
+  const { id, username } = useSelector((state) => state.user)
+  const [commentText, onChangeCommentText, setCommentText] = useInput('')
+
+  useEffect(() => {
+    if (addCommentDone) {
+      setCommentText('')
+    }
+  }, [addCommentDone])
 
   const onSubmitComment = useCallback(() => {
-    console.log(post.id, commentText)
-  }, [commentText])
+    const data = {
+      content: commentText,
+      user: {
+        id,
+        username
+      },
+      postId: post.id
+    }
+    dispatch(addComment(data))
+  }, [commentText, id])
 
   return (
     <Form onFinish={onSubmitComment}>
-      <Input.TextArea value={commentText} onChange={onChangeCommentText} rows={4} />
-      <Button type='primary' htmlType='submit'>댓글달기</Button>
+      <Form.Item style={{ position: 'relative', margin: 0 }}>
+        <Input.TextArea rows={4} value={commentText} onChange={onChangeCommentText} />
+        <Button
+          style={{ position: 'absolute', right: 0, bottom: -40, zIndex: 1 }}
+          type='primary'
+          htmlType='submit'
+        >댓글 작성
+        </Button>
+      </Form.Item>
     </Form>
   )
+}
+
+CommentForm.propTypes = {
+  post: PropTypes.object.isRequired
 }
 
 export default CommentForm

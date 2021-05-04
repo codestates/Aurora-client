@@ -9,18 +9,35 @@ import PostImages from './PostImages'
 import Thema from '../../Thema'
 import CommentForm from './CommentForm'
 import { removePost } from '../../../reducers/post'
+import PostCardContent from './PostCardContent'
 
 const PostCard = ({ post, onClick }) => {
   const dispatch = useDispatch()
   // 옵셔널체이닝 id or undefined
-  const id = useSelector(state => state.post.me?.id)
+  const id = useSelector(state => state.user.me?.id)
 
-  console.log('post : ', post)
+  // 포스트 수정
+  const [editMode, setEditMode] = useState(false)
+  const onClickUpdate = useCallback(() => {
+    setEditMode(true)
+  }, [])
+  const onCancelUpdate = useCallback(() => {
+    setEditMode(false)
+  }, [])
+  const onChangePost = useCallback((editText) => () => {
+    dispatch({
+      type: UPDATE_POST_REQUEST,
+      data: {
+        PostId: post.id,
+        content: editText
+      }
+    })
+  }, [post])
 
   // 포스트 삭제
-  const onRemovePost = useCallback(() => {
-    dispatch(removePost(post.id))
-  }, [])
+  const onRemovePost = () => {
+    dispatch(removePost(post._id))
+  }
 
   // 좋아요 기능
   const [liked, setLiked] = useState(false)
@@ -33,6 +50,8 @@ const PostCard = ({ post, onClick }) => {
   const onToggleComment = useCallback(() => {
     setCommentFormOpened((prev) => !prev)
   }, [])
+
+  console.log('post.mood : ', post.mood)
 
   return (
     <Wrapper ThemaColor={Thema[post.mood].color}>
@@ -47,9 +66,9 @@ const PostCard = ({ post, onClick }) => {
         </Auth>
         {Thema[post.mood].icon}
       </Header>
-      <Body>
+      {/* <Body>
         <span>{post.content}</span>
-      </Body>
+      </Body> */}
       <Footer>
         <Card
           cover={<PostImages images={post.images} />}
@@ -64,7 +83,7 @@ const PostCard = ({ post, onClick }) => {
               <Popover
                 key='more' content={(
                   <Button.Group>
-                    <Button>수정</Button>
+                    <Button onClick={onClickUpdate}>수정</Button>
                     <Button type='danger' onClick={onRemovePost}>삭제</Button>
                   </Button.Group>
                 )}
@@ -73,15 +92,58 @@ const PostCard = ({ post, onClick }) => {
               </Popover>
             )
           ]}
-        />
+        >
+          {editMode
+            ? (
+              <Card.Meta
+                description={<PostCardContent editMode={editMode} postData={post.content} onChangePost={onChangePost} onCancelUpdate={onCancelUpdate} />}
+              />
+            )
+            : (
+              <Card.Meta
+                description={<PostCardContent postData={post.content} />}
+              />
+            )}
+          {/* {post.RetweetId && post.Retweet
+            ? (
+              <Card
+                cover={post.Retweet.Images[0] && <PostImages images={post.Retweet.Images} />}
+              >
+                <div style={{ float: 'right' }}>{moment(post.createdAt).format('YYYY.MM.DD')}</div>
+                <Card.Meta
+                  avatar={(
+                    <Link href={`/user/${post.Retweet.User.id}`} prefetch={false}>
+                      <a><Avatar>{post.Retweet.User.nickname[0]}</Avatar></a>
+                    </Link>
+                  )}
+                  title={post.Retweet.User.nickname}
+                  description={<PostCardContent postData={post.Retweet.content} onChangePost={onChangePost} onCancelUpdate={onCancelUpdate} />}
+                />
+              </Card>
+              )
+            : (
+              <>
+                <div style={{ float: 'right' }}>{moment(post.createdAt).format('YYYY.MM.DD')}</div>
+                <Card.Meta
+                  avatar={(
+                    <Link href={`/user/${post.User.id}`} prefetch={false}>
+                      <a><Avatar>{post.User.nickname[0]}</Avatar></a>
+                    </Link>
+                  )}
+                  title={post.User.nickname}
+                  description={<PostCardContent editMode={editMode} onChangePost={onChangePost} onCancelUpdate={onCancelUpdate} postData={post.content} />}
+                />
+              </>
+              )} */}
+        </Card>
       </Footer>
       {commentFormOpened && (
         <>
           <CommentForm post={post} />
           <List
-            header={`${post.Comments.length} 개의 댓글`}
+            header={`${post.comments.length} 개의 댓글`}
             itemLayout='horizontal'
-            dataSource={post.Comments}
+            dataSource={post.comments}
             renderItem={item => (
               <li>
                 <Comment
