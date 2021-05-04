@@ -8,7 +8,7 @@ import { addComment } from '../../../reducers/post'
 const CommentForm = ({ post }) => {
   const dispatch = useDispatch()
   const { addCommentDone } = useSelector((state) => state.post)
-  const { id, username } = useSelector((state) => state.user)
+  const { _id, username } = useSelector((state) => state.user.me)
   const [commentText, onChangeCommentText, setCommentText] = useInput('')
 
   useEffect(() => {
@@ -20,14 +20,14 @@ const CommentForm = ({ post }) => {
   const onSubmitComment = useCallback(() => {
     const data = {
       content: commentText,
-      user: {
-        id,
+      commentedBy: {
+        _id,
         username
       },
-      postId: post.id
+      postId: post._id
     }
     dispatch(addComment(data))
-  }, [commentText, id])
+  }, [commentText, _id])
 
   return (
     <Form onFinish={onSubmitComment}>

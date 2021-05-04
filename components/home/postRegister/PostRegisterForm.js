@@ -11,10 +11,17 @@ import { addPost } from '../../../reducers/post'
 const PostRegisterForm = ({ onClose }) => {
   const dispatch = useDispatch()
   const { accessToken } = useSelector(state => state.user)
+  const { addPostLoading, addPostDone } = useSelector((state) => state.post)
 
   const [content, onChangeContent] = useInput('')
   const [images, setImages] = useState([])
   const [mood, setMood] = useState('')
+
+  useEffect(() => {
+    if (addPostDone) {
+      onClose()
+    }
+  }, [addPostDone])
 
   const onChangeMood = (e) => {
     setMood(e.target.value)
@@ -46,7 +53,6 @@ const PostRegisterForm = ({ onClose }) => {
     bodyFormData.append('mood', mood)
 
     dispatch(addPost(bodyFormData, accessToken))
-    onClose()
   }
 
   return (
@@ -69,7 +75,8 @@ const PostRegisterForm = ({ onClose }) => {
         <Radio value='rain'><i className='fas fa-cloud-showers-heavy' style={{ color: '#1E96FF' }} /></Radio>
         <Radio value='moon'><i className='fas fa-moon' style={{ color: '#C71F8F' }} /></Radio>
       </RadioWrapper>
-      <PostBtn disabled={content.length === 0 || mood.length === 0 || images.length === 0} type='submit' value='등록' />
+      {/* <PostBtn disabled={content.length === 0 || mood.length === 0 || images.length === 0} type='submit' value='등록' /> */}
+      <Button htmlType='submit' loading={addPostLoading} disabled={content.length === 0 || mood.length === 0 || images.length === 0}>등록</Button>
     </PostForm>
   )
 }
