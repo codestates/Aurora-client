@@ -30,24 +30,12 @@ export const ADD_COMMENT_FAILURE = 'ADD_POST_FAILURE'
 export const FILTER_WEATHER = 'FILTER_WEATHER'
 
 // 액션 크리에이터
-// export const loadPost = () => {
-//   try {
-//     const data = generateDummyPost(5)
-//     return {
-//       type: LOAD_POST_SUCCESS,
-//       payload: data
-//     }
-//   } catch (err) {
-//     return {
-//       type: LOAD_POST_FAILURE,
-//       payload: err
-//     }
-//   }
-// }
-
-export const loadPost = () => async (dispatch) => {
+export const loadPost = (accessToken) => async (dispatch) => {
   try {
-    const response = await axios.get('http://localhost:5000/api/posts/')
+    const headers = {
+      Authorization: accessToken
+    }
+    const response = await axios.get(`http://localhost:5000/api/posts?page=${1}`, { headers })
     dispatch({
       type: LOAD_POST_SUCCESS,
       payload: response.data
@@ -60,10 +48,12 @@ export const loadPost = () => async (dispatch) => {
   }
 }
 
-export const addPost = (data) => async (dispatch) => {
+export const addPost = (data, accessToken) => async (dispatch) => {
   try {
-    const response = await axios.post('http://localhost:5000/api/post/new', data)
-    // console.log('전송 후 이미지 : ', response.data.images[0])
+    const headers = {
+      Authorization: accessToken
+    }
+    const response = await axios.post('http://localhost:5000/api/post/', data, { headers })
     dispatch({
       type: ADD_POST_SUCCESS,
       payload: response.data
@@ -76,63 +66,41 @@ export const addPost = (data) => async (dispatch) => {
   }
 }
 
-export const updatePost = (data) => {
+export const updatePost = (id, data, accessToken) => async (dispatch) => {
   try {
-    return {
+    const headers = {
+      Authorization: accessToken
+    }
+    const response = await axios.patch(`http://localhost:5000/api/post/${id}`, data, { headers })
+    dispatch({
       type: UPDATE_POST_SUCCESS,
-      payload: data
-    }
+      payload: response.data
+    })
   } catch (err) {
-    return {
+    dispatch({
       type: UPDATE_POST_FAILURE,
-      payload: err
-    }
+      payload: err.response.data
+    })
   }
 }
 
-// export const updatePost = (data) => async (dispatch) => {
-//   try {
-//     const response = await axios.patch(`http://localhost:5000/api/post/${data.PostId}`)
-//     dispatch({
-//       type: UPDATE_POST_SUCCESS,
-//       payload: data
-//     })
-//   } catch (err) {
-//     dispatch({
-//       type: UPDATE_POST_FAILURE,
-//       payload: err.response.data
-//     })
-//   }
-// }
-
-export const removePost = (id) => {
+export const removePost = (id, accessToken) => async (dispatch) => {
   try {
-    return {
+    const headers = {
+      Authorization: accessToken
+    }
+    await axios.delete(`http://localhost:5000/api/post/${id}`, { headers })
+    dispatch({
       type: REMOVE_POST_SUCCESS,
       payload: id
-    }
+    })
   } catch (err) {
-    return {
+    dispatch({
       type: REMOVE_POST_FAILURE,
-      payload: err
-    }
+      payload: err.response.data
+    })
   }
 }
-
-// export const removePost = (id) => async (dispatch) => {
-//   try {
-//     const response = await axios.delete(`http://localhost:5000/api/post/${id}`)
-//     dispatch({
-//       type: REMOVE_POST_SUCCESS,
-//       payload: id
-//     })
-//   } catch (err) {
-//     dispatch({
-//       type: REMOVE_POST_FAILURE,
-//       payload: err.response.data
-//     })
-//   }
-// }
 
 export const addComment = (data) => (dispatch) => {
   try {
@@ -166,8 +134,9 @@ export const addComment = (data) => (dispatch) => {
 const reducer = (state = initialState, action) => Produce(state, (draft) => {
   switch (action.type) {
     case LOAD_POST_SUCCESS:
+      console.log('LOAD_POST_SUCCESS : ', action.payload)
       draft.loadPostsDone = true
-      draft.Posts = action.payload.concat(draft.Posts)
+      draft.Posts = action.payload.posts
       break
     case LOAD_POST_FAILURE:
       draft.loadPostsDone = false

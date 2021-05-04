@@ -25,7 +25,7 @@ const ImagesZoom = ({ images, onClose }) => {
           >
             {images.map((v) => (
               <ImgWrapper key={v._id}>
-                <img src={`data:image/png;base64,${Buffer.from(v.data.data).toString('base64')}`} />
+                <img src={`data:image/png;base64,${v.data}`} />
               </ImgWrapper>
             ))}
           </Slick>
