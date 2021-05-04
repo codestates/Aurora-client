@@ -18,7 +18,7 @@ const Top = ({ filter }) => {
         {filter && <FilterBar />}
       </Filter>
       <UserInfo>
-        <Link href='/profile'><Avatar src='' alt='avatar' /></Link>
+        <Link href='/profile'><Avatar src='/images/profile-thumbnail.jpg' alt='avatar' /></Link>
         <Signout />
       </UserInfo>
     </TopWrapper>
@@ -27,7 +27,7 @@ const Top = ({ filter }) => {
 
 const TopWrapper = styled.div`
     flex : 1 1 0;
-    border-bottom: 2px solid rgba(128,128,128,0.4);
+    box-shadow: 0px 4px 2px rgba(119, 119, 119, .25);
     display: flex;
     align-items: center;
     justify-content: space-evenly;
@@ -58,7 +58,7 @@ const Avatar = styled.img`
   width: 3rem;
   border-radius: 50%;
   object-fit: cover;
-  border: 1px solid gray;
+  border: 1px solid #D2D2D2;
 `
 
 export default Top

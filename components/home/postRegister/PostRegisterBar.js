@@ -13,7 +13,7 @@ const PostBar = () => {
         setShowModal(true)
       }}
       >
-        <Avatar src='' alt='avatar' />
+        <Avatar src='/images/profile-thumbnail.jpg' alt='avatar' />
         <span>{me.username}님, 오늘 당신의 날씨는 어떤가요?</span>
       </Wrapper>
       {showModal && (

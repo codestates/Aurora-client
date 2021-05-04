@@ -1,0 +1,76 @@
+import styled from 'styled-components'
+import { useState } from 'react'
+import { useSelector } from 'react-redux'
+import ProfileEditModal from './ProfileEditModal'
+
+const UserProfile = () => {
+  const { me } = useSelector((state) => state.user)
+  const [showModal, setShowModal] = useState(false)
+
+  return (
+    <>
+      <Wrapper>
+        <Avatar src='/images/profile-thumbnail.jpg' alt='avatar' />
+        <ProfileInfo>
+          <Username>{me.username}</Username>
+          <ProfileEditButton onClick={() => { setShowModal(true) }}>수정</ProfileEditButton>
+        </ProfileInfo>
+      </Wrapper>
+      {showModal && (
+        <ProfileEditModal
+          onClose={() => setShowModal(false)}
+          User={me}
+        />
+      )}
+    </>
+  )
+}
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 20rem;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 4px 2px rgba(119, 119, 119, .25);
+`
+
+const Avatar = styled.img`
+  height: 8rem;
+  width: 8rem;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #D2D2D2;
+`
+
+const ProfileInfo = styled.div`
+  padding-top: 1.6rem;
+  display: flex;
+  align-items: center;
+`
+
+const Username = styled.div`
+  margin: 0 1rem;
+  color: #424242;
+  font-size: 1.8rem;
+  font-weight: 600;
+`
+
+const ProfileEditButton = styled.button`
+  font-size: 0.9rem;
+  border-style: none;
+  border-radius: 0.8rem;
+  height: 2.2rem;
+  width: 3.6rem;
+  background-color: #A18AFC;
+  opacity: 0.7;
+  color: #fff;
+  cursor: pointer;
+  &:hover {
+    background-color: #A18AFC;
+    opacity: 1;
+  }
+`
+
+export default UserProfile

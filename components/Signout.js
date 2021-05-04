@@ -4,7 +4,7 @@ import { signoutAction } from '../reducers/user'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 
-const userInfo = () => {
+const Signout = () => {
   const router = useRouter()
   const dispatch = useDispatch()
   const { isLoggedIn } = useSelector(state => state.user)
@@ -38,7 +38,6 @@ const SignoutButton = styled.button`
     opacity: 0.8;
     color: #fff;
   }
-
 `
 
-export default userInfo
+export default Signout
