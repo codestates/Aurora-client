@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
+import { useRouter } from 'next/router'
 
 import AppLayout from '../components/AppLayout'
 import PostRegisterBar from '../components/home/postRegister/PostRegisterBar'
@@ -11,7 +12,7 @@ import { signinSuccessAction, getAccessTokenAction } from '../reducers/user'
 
 const Home = () => {
   const dispatch = useDispatch()
-  const { googleLoading, loginLoading, isLoggedIn, accessToken } = useSelector((state) => state.user)
+  const { googleLoading, loginLoading, isLoggedIn, accessToken, me } = useSelector((state) => state.user)
   const { Posts, loadPostsDone, filterWeather } = useSelector(state => state.post)
 
   useEffect(() => {

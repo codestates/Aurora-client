@@ -10,7 +10,9 @@ const userInfo = () => {
   const { isLoggedIn } = useSelector(state => state.user)
 
   useEffect(() => {
-    router.push('../')
+    if (!isLoggedIn) {
+      router.push('../')
+    }
   }, [isLoggedIn])
 
   const handleLogout = (e) => {
