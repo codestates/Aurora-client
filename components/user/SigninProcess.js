@@ -7,11 +7,13 @@ import useInput from '../../hooks/useInput'
 
 const SigninProcess = () => {
   const dispatch = useDispatch()
-  const { loginError } = useSelector((state) => state.user)
+  const { loginError, accessTokenError } = useSelector((state) => state.user)
   const [email, onChangeEmail] = useInput('')
   const [password, onChangePassword] = useInput('')
   const [loginErrorMsg, setLoginErrorMsg] = useState('')
 
+  console.log(loginError)
+  console.log('accessTokenError: ', accessTokenError)
   useEffect(() => {
     if (loginError) {
       setLoginErrorMsg(loginError)
@@ -41,8 +43,11 @@ const SigninProcess = () => {
           value={password}
           onChange={onChangePassword} required
         />
+        {/* {accessTokenError
+          ? <ErrorMessage>{accessTokenError}</ErrorMessage>
+          : ''} */}
         {loginErrorMsg
-          ? <LoginErrorMessage>{loginErrorMsg}</LoginErrorMessage>
+          ? <ErrorMessage>{loginErrorMsg}</ErrorMessage>
           : ''}
         <SigninButton type='submit' value='로그인' />
       </form>
@@ -70,7 +75,7 @@ const Input = styled.input`
   width: 23rem;
   font-size: .9rem;
 `
-const LoginErrorMessage = styled.div`
+const ErrorMessage = styled.div`
   padding-top: 0.2rem;
   color: #755BDB;
   font-size: 0.9rem;
