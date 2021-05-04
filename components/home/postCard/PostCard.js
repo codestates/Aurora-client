@@ -14,7 +14,7 @@ import PostCardContent from './PostCardContent'
 const PostCard = ({ post, onClick }) => {
   const dispatch = useDispatch()
   // 옵셔널체이닝 id or undefined
-  const id = useSelector(state => state.user.me?.id)
+  const { me, accessToken } = useSelector(state => state.user)
 
   // 포스트 수정
   const [editMode, setEditMode] = useState(false)
@@ -25,17 +25,16 @@ const PostCard = ({ post, onClick }) => {
     setEditMode(false)
   }, [])
   const onChangePost = useCallback((editText) => {
-    const data = {
-      PostId: post.id,
-      content: editText
-    }
-    dispatch(updatePost(data))
+    const data = new FormData()
+    data.append('content', editText)
+
+    dispatch(updatePost(post._id, data, accessToken))
     onCancelUpdate()
   }, [post])
 
   // 포스트 삭제
   const onRemovePost = () => {
-    dispatch(removePost(post._id))
+    dispatch(removePost(post._id, accessToken))
   }
 
   // 좋아요 기능
@@ -56,84 +55,45 @@ const PostCard = ({ post, onClick }) => {
         <Auth>
           {/* <img src={post.User.avatar} /> */}
           <div>
-            {/* <span>{post.User.username}</span> */}
-            <span>TEST1</span>
+            <span>{post.postedBy.username}</span>
             <span>22 minutes ago</span>
           </div>
         </Auth>
         {Thema[post.mood].icon}
       </Header>
-      {/* <Body>
-        <span>{post.content}</span>
-      </Body> */}
-      <Footer>
-        <Card
-          cover={<PostImages images={post.images} />}
-          actions={[
-            liked
-              ? <HeartTwoTone twoToneColor='#eb2f96' key='heart' onClick={onToggleLike} />
-              : <HeartOutlined key='heart' onClick={onToggleLike} />,
-            <MessageOutlined key='comment' onClick={onToggleComment} />,
-
-            // post.User.id === id && (
-            (
-              <Popover
-                key='more' content={(
-                  <Button.Group>
-                    <Button onClick={onClickUpdate}>수정</Button>
-                    <Button type='danger' onClick={onRemovePost}>삭제</Button>
-                  </Button.Group>
-                )}
-              >
-                <EllipsisOutlined />
-              </Popover>
+      <Card
+        cover={<PostImages images={post.images} />}
+        actions={[
+          liked
+            ? <HeartTwoTone twoToneColor='#eb2f96' key='heart' onClick={onToggleLike} />
+            : <HeartOutlined key='heart' onClick={onToggleLike} />,
+          <MessageOutlined key='comment' onClick={onToggleComment} />,
+          post.postedBy._id === me._id && (
+            <Popover
+              key='more' content={(
+                <Button.Group>
+                  <Button onClick={onClickUpdate}>수정</Button>
+                  <Button type='danger' onClick={onRemovePost}>삭제</Button>
+                </Button.Group>
+              )}
+            >
+              <EllipsisOutlined />
+            </Popover>
+          )
+        ]}
+      >
+        {editMode
+          ? (
+            <Card.Meta
+              description={<PostCardContent editMode={editMode} postData={post.content} onChangePost={onChangePost} onCancelUpdate={onCancelUpdate} />}
+            />
             )
-          ]}
-        >
-          {editMode
-            ? (
-              <Card.Meta
-                description={<PostCardContent editMode={editMode} postData={post.content} onChangePost={onChangePost} onCancelUpdate={onCancelUpdate} />}
-              />
-            )
-            : (
-              <Card.Meta
-                description={<PostCardContent postData={post.content} />}
-              />
+          : (
+            <Card.Meta
+              description={<PostCardContent postData={post.content} />}
+            />
             )}
-          {/* {post.RetweetId && post.Retweet
-            ? (
-              <Card
-                cover={post.Retweet.Images[0] && <PostImages images={post.Retweet.Images} />}
-              >
-                <div style={{ float: 'right' }}>{moment(post.createdAt).format('YYYY.MM.DD')}</div>
-                <Card.Meta
-                  avatar={(
-                    <Link href={`/user/${post.Retweet.User.id}`} prefetch={false}>
-                      <a><Avatar>{post.Retweet.User.nickname[0]}</Avatar></a>
-                    </Link>
-                  )}
-                  title={post.Retweet.User.nickname}
-                  description={<PostCardContent postData={post.Retweet.content} onChangePost={onChangePost} onCancelUpdate={onCancelUpdate} />}
-                />
-              </Card>
-              )
-            : (
-              <>
-                <div style={{ float: 'right' }}>{moment(post.createdAt).format('YYYY.MM.DD')}</div>
-                <Card.Meta
-                  avatar={(
-                    <Link href={`/user/${post.User.id}`} prefetch={false}>
-                      <a><Avatar>{post.User.nickname[0]}</Avatar></a>
-                    </Link>
-                  )}
-                  title={post.User.nickname}
-                  description={<PostCardContent editMode={editMode} onChangePost={onChangePost} onCancelUpdate={onCancelUpdate} postData={post.content} />}
-                />
-              </>
-              )} */}
-        </Card>
-      </Footer>
+      </Card>
       {commentFormOpened && (
         <>
           <CommentForm post={post} />
@@ -174,23 +134,6 @@ const Header = styled.div`
   i{
     font-size: 1.5rem
   }
-`
-
-const Body = styled.div`
-  padding : 1rem 1.5rem;
-  box-sizing: border-box;
-  span{
-    display : block;
-    margin-bottom: 1rem;
-  }
-  img {
-    width: 20rem;
-    height: 20rem;
-  }
-`
-
-const Footer = styled.div`
-  
 `
 
 const Auth = styled.div`
