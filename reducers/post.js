@@ -9,6 +9,8 @@ export const initialState = {
   loadPostsError: null,
   addPostDone: false,
   addPostError: null,
+  updatePostDone: false,
+  updatePostError: null,
   removePostDone: false,
   removePostError: null,
   filterWeather: []
@@ -19,6 +21,8 @@ export const LOAD_POST_SUCCESS = 'LOAD_POST_SUCCESS'
 export const LOAD_POST_FAILURE = 'LOAD_POST_FAILURE'
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS'
 export const ADD_POST_FAILURE = 'ADD_POST_FAILURE'
+export const UPDATE_POST_SUCCESS = 'UPDATE_POST_SUCCESS'
+export const UPDATE_POST_FAILURE = 'UPDATE_POST_FAILURE'
 export const REMOVE_POST_SUCCESS = 'REMOVE_POST_SUCCESS'
 export const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE'
 export const ADD_COMMENT_SUCCESS = 'ADD_POST_SUCCESS'
@@ -59,6 +63,7 @@ export const loadPost = () => async (dispatch) => {
 export const addPost = (data) => async (dispatch) => {
   try {
     const response = await axios.post('http://localhost:5000/api/post/new', data)
+    // console.log('전송 후 이미지 : ', response.data.images[0])
     dispatch({
       type: ADD_POST_SUCCESS,
       payload: response.data
@@ -70,6 +75,35 @@ export const addPost = (data) => async (dispatch) => {
     })
   }
 }
+
+export const updatePost = (data) => {
+  try {
+    return {
+      type: UPDATE_POST_SUCCESS,
+      payload: data
+    }
+  } catch (err) {
+    return {
+      type: UPDATE_POST_FAILURE,
+      payload: err
+    }
+  }
+}
+
+// export const updatePost = (data) => async (dispatch) => {
+//   try {
+//     const response = await axios.patch(`http://localhost:5000/api/post/${data.PostId}`)
+//     dispatch({
+//       type: UPDATE_POST_SUCCESS,
+//       payload: data
+//     })
+//   } catch (err) {
+//     dispatch({
+//       type: UPDATE_POST_FAILURE,
+//       payload: err.response.data
+//     })
+//   }
+// }
 
 export const removePost = (id) => {
   try {
@@ -146,6 +180,14 @@ const reducer = (state = initialState, action) => Produce(state, (draft) => {
     case ADD_POST_FAILURE:
       draft.addPostDone = true
       draft.addPostsError = action.payload.message
+      break
+    case UPDATE_POST_SUCCESS:
+      draft.updatePostDone = true
+      draft.Posts.find((v) => v.id === action.payload.PostId).content = action.payload.content
+      break
+    case UPDATE_POST_FAILURE:
+      draft.updatePostDone = false
+      draft.updatePostsError = action.payload.message
       break
     case REMOVE_POST_SUCCESS:
       draft.removePostDone = true
