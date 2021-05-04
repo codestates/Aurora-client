@@ -8,7 +8,7 @@ import { useRouter } from 'next/router'
 
 const Signin = () => {
   const router = useRouter()
-  const { loginLoading, tokenError } = useSelector((state) => state.user)
+  const { loginLoading } = useSelector((state) => state.user)
 
   useEffect(() => {
     if (loginLoading) {
@@ -18,16 +18,9 @@ const Signin = () => {
 
   return (
     <AppUserLayout>
-      {tokenError
-        ? <p>{tokenError}</p>
-        : (
-          <>
-            <SigninProcess />
-            <GoogleOAuthSignin />
-            <FacebookOAuthSignin />
-          </>
-          )}
-
+      <SigninProcess />
+      <GoogleOAuthSignin />
+      <FacebookOAuthSignin />
     </AppUserLayout>
   )
 }

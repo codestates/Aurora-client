@@ -89,19 +89,12 @@ export const signinSuccessAction = (token) => async (dispatch) => {
 }
 
 // logout
-// export const logoutAction = (data) => async (dispatch) => {
-//   const response = await axios.get('http://localhost:5000/api/signout', {
-//         headers: {
-//           'Authorization': `token ${token}`
-//         }
-//       })
-//   dispatch({ type: SIGN_OUT, response })
-// }
-
-// logout test용
-export const logoutAction = (data) => {
-  return {
-    type: SIGN_OUT
+export const signoutAction = (token) => async (dispatch) => {
+  try {
+    const response = await axios.get('http://localhost:5000/api/signout')
+    dispatch({ type: SIGN_OUT, payload: response })
+  } catch (err) {
+    dispatch({ type: SIGN_OUT, payload: err.response.data })
   }
 }
 
@@ -113,7 +106,8 @@ const reducer = (state = initialState, action) => {
       if (action.payload.statusText === 'OK') {
         return {
           ...state,
-          signupRequest: true
+          signupRequest: true,
+          signupError: null
         }
       } else {
         return {
@@ -128,7 +122,8 @@ const reducer = (state = initialState, action) => {
           ...state,
           signupRequest: false,
           signupLoading: false,
-          signedUp: true
+          signedUp: true,
+          signupError: null
         }
       } else {
         return {
@@ -148,7 +143,8 @@ const reducer = (state = initialState, action) => {
       if (action.payload.statusText === 'OK') {
         return {
           ...state,
-          loginLoading: true
+          loginLoading: true,
+          loginError: null
         }
       } else {
         return {
@@ -161,13 +157,15 @@ const reducer = (state = initialState, action) => {
       if (action.payload.statusText === 'OK') {
         return {
           ...state,
-          accessToken: action.payload.data.accessToken
+          accessToken: action.payload.data.accessToken,
+          accessTokenError: null
         }
       } else {
         return {
           ...state,
           // error message
-          accessTokenError: action.payload.message
+          accessTokenError: action.payload.message,
+          isLoggedIn: false
         }
       }
     case GET_USER:
@@ -175,14 +173,18 @@ const reducer = (state = initialState, action) => {
       if (action.payload.statusText === 'OK') {
         return {
           ...state,
+          loginLoading: false,
+          googleLoading: false,
           isLoggedIn: true,
-          me: action.payload.data
+          me: action.payload.data,
+          loginError: null
         }
       } else {
         return {
           ...state,
           // error message
-          loginError: action.payload
+          loginError: action.payload,
+          isLoggedIn: false
         }
       }
     case SIGN_OUT:
@@ -190,6 +192,8 @@ const reducer = (state = initialState, action) => {
         return {
           ...state,
           isLoggedIn: false,
+          loginError: null,
+          signoutError: null,
           me: null
         }
       } else {
