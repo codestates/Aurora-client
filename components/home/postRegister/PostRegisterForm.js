@@ -26,6 +26,7 @@ const PostRegisterForm = ({ onClose }) => {
   }, [imageInput.current])
 
   const onChangeImage = useCallback((e) => {
+    // console.log('전송 전 이미지 : ', e.target.files[0])
     setImages((prev) => [...prev, ...e.target.files])
   })
 

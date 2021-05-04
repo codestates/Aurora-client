@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import PostImages from './PostImages'
 import Thema from '../../Thema'
 import CommentForm from './CommentForm'
-import { removePost } from '../../../reducers/post'
+import { removePost, updatePost } from '../../../reducers/post'
 import PostCardContent from './PostCardContent'
 
 const PostCard = ({ post, onClick }) => {
@@ -24,14 +24,13 @@ const PostCard = ({ post, onClick }) => {
   const onCancelUpdate = useCallback(() => {
     setEditMode(false)
   }, [])
-  const onChangePost = useCallback((editText) => () => {
-    dispatch({
-      type: UPDATE_POST_REQUEST,
-      data: {
-        PostId: post.id,
-        content: editText
-      }
-    })
+  const onChangePost = useCallback((editText) => {
+    const data = {
+      PostId: post.id,
+      content: editText
+    }
+    dispatch(updatePost(data))
+    onCancelUpdate()
   }, [post])
 
   // 포스트 삭제
@@ -50,8 +49,6 @@ const PostCard = ({ post, onClick }) => {
   const onToggleComment = useCallback(() => {
     setCommentFormOpened((prev) => !prev)
   }, [])
-
-  console.log('post.mood : ', post.mood)
 
   return (
     <Wrapper ThemaColor={Thema[post.mood].color}>
