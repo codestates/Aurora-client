@@ -29,10 +29,14 @@ const Home = () => {
   if (filterWeather.length > 0) {
     filterPosts = Posts.filter((ele) => (filterWeather.includes(ele.mood)))
   }
-  console.log('HOME Posts : ', Posts)
+
+  console.log('HOME Posts :', Posts)
+
   useEffect(() => {
-    // dispatch(loadPost())
-  }, [])
+    if (isLoggedIn) {
+      dispatch(loadPost(accessToken))
+    }
+  }, [isLoggedIn])
 
   return (
     <>
@@ -48,8 +52,7 @@ const Home = () => {
           <AppLayout filter>
             <PostRegisterBar />
             <PostCardList>
-              {/* {loadPostsDone && */}
-              {
+              {loadPostsDone &&
                 (
                   filterWeather.length > 0
                     ? (
@@ -58,8 +61,7 @@ const Home = () => {
                     : (
                         Posts.map(post => <PostCard key={post.id} post={post} />)
                       )
-                )
-              }
+                )}
             </PostCardList>
           </AppLayout>
           )}

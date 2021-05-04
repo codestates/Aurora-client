@@ -10,7 +10,7 @@ import { addPost } from '../../../reducers/post'
 
 const PostRegisterForm = ({ onClose }) => {
   const dispatch = useDispatch()
-  const { me } = useSelector(state => state.user)
+  const { accessToken } = useSelector(state => state.user)
 
   const [content, onChangeContent] = useInput('')
   const [images, setImages] = useState([])
@@ -36,7 +36,6 @@ const PostRegisterForm = ({ onClose }) => {
   }
 
   const onSubmit = (e) => {
-    console.log('AA')
     e.preventDefault()
 
     const bodyFormData = new FormData()
@@ -46,7 +45,7 @@ const PostRegisterForm = ({ onClose }) => {
     })
     bodyFormData.append('mood', mood)
 
-    dispatch(addPost(bodyFormData))
+    dispatch(addPost(bodyFormData, accessToken))
     onClose()
   }
 
