@@ -1,11 +1,11 @@
 import { useCallback, useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import useInput from '../../../hooks/useInput'
+import PropTypes from 'prop-types'
 
 import { Button, Radio } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 
-import axios from 'axios'
 import { addPost } from '../../../reducers/post'
 
 const PostRegisterForm = ({ onClose }) => {
@@ -33,16 +33,15 @@ const PostRegisterForm = ({ onClose }) => {
   }, [imageInput.current])
 
   const onChangeImage = useCallback((e) => {
-    // console.log('전송 전 이미지 : ', e.target.files[0])
     setImages((prev) => [...prev, ...e.target.files])
   })
 
-  const removeImage = (name) => {
+  const removeImage = useCallback((name) => {
     const newImages = images.filter((v) => v.name !== name)
     setImages(newImages)
-  }
+  })
 
-  const onSubmit = (e) => {
+  const onSubmit = useCallback((e) => {
     e.preventDefault()
 
     const bodyFormData = new FormData()
@@ -53,7 +52,7 @@ const PostRegisterForm = ({ onClose }) => {
     bodyFormData.append('mood', mood)
 
     dispatch(addPost(bodyFormData, accessToken))
-  }
+  }, [content, images, mood])
 
   return (
     <PostForm onSubmit={onSubmit} encType='multipart/form-data'>
@@ -75,14 +74,13 @@ const PostRegisterForm = ({ onClose }) => {
         <Radio value='rain'><i className='fas fa-cloud-showers-heavy' style={{ color: '#1E96FF' }} /></Radio>
         <Radio value='moon'><i className='fas fa-moon' style={{ color: '#C71F8F' }} /></Radio>
       </RadioWrapper>
-      {/* <PostBtn disabled={content.length === 0 || mood.length === 0 || images.length === 0} type='submit' value='등록' /> */}
       <Button htmlType='submit' loading={addPostLoading} disabled={content.length === 0 || mood.length === 0 || images.length === 0}>등록</Button>
     </PostForm>
   )
 }
 
 const RadioWrapper = styled(Radio.Group)`
-  margin: 50px auto 0 auto;
+  margin: 50px auto 50px auto;
 `
 
 const PostForm = styled.form`
@@ -106,19 +104,8 @@ const PostForm = styled.form`
   }
 `
 
-const PostBtn = styled.input`
-    text-align: center;
-    border-radius: 15px;
-    width: 50%;
-    padding: 5px 0;
-    margin: auto auto 0 auto;
-    background-color: #E065CB;
-    font-size: 1rem;
-    cursor: pointer;
-    &[disabled]{
-      background-color: rgba(128,128,128,0.3);
-      cursor: unset;
-    },
-`
+PostRegisterForm.propTypes = {
+  onClose: PropTypes.func.isRequired
+}
 
 export default PostRegisterForm

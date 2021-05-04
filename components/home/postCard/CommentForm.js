@@ -7,8 +7,9 @@ import { addComment } from '../../../reducers/post'
 
 const CommentForm = ({ post }) => {
   const dispatch = useDispatch()
-  const { addCommentDone } = useSelector((state) => state.post)
-  const { _id, username } = useSelector((state) => state.user.me)
+  const { addCommentDone, addCommentLoading } = useSelector((state) => state.post)
+  const { accessToken } = useSelector(state => state.user)
+
   const [commentText, onChangeCommentText, setCommentText] = useInput('')
 
   useEffect(() => {
@@ -19,15 +20,10 @@ const CommentForm = ({ post }) => {
 
   const onSubmitComment = useCallback(() => {
     const data = {
-      content: commentText,
-      commentedBy: {
-        _id,
-        username
-      },
-      postId: post._id
+      content: commentText
     }
-    dispatch(addComment(data))
-  }, [commentText, _id])
+    dispatch(addComment(post._id, data, accessToken))
+  }, [commentText, post])
 
   return (
     <Form onFinish={onSubmitComment}>
@@ -37,6 +33,8 @@ const CommentForm = ({ post }) => {
           style={{ position: 'absolute', right: 0, bottom: -40, zIndex: 1 }}
           type='primary'
           htmlType='submit'
+          loading={addCommentLoading}
+          disabled={commentText.length === 0}
         >댓글 작성
         </Button>
       </Form.Item>

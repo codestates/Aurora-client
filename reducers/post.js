@@ -1,6 +1,4 @@
 import axios from 'axios'
-import shortId from 'shortid'
-
 import Produce from '../util/produce'
 
 // 초기 데이터 구조
@@ -18,13 +16,13 @@ export const initialState = {
   removePostLoading: false,
   removePostDone: false,
   removePostError: null,
-  addCommentLoading: true,
+  addCommentLoading: false,
   addCommentDone: false,
   addCommentError: null,
   updateCommentLoading: false,
   updateCommentDone: false,
   updateCommentError: null,
-  removeCommentLoading: true,
+  removeCommentLoading: false,
   removeCommentDone: false,
   removeCommentError: null,
   filterWeather: []
@@ -146,57 +144,80 @@ export const removePost = (id, accessToken) => async (dispatch) => {
   }
 }
 
-export const addComment = (data) => {
+export const addComment = (postId, data, accessToken) => async (dispatch) => {
   try {
-    const newComment = {
-      _id: shortId.generate(),
-      commentedBy: data.commentedBy,
-      content: data.content
+    dispatch({
+      type: ADD_COMMENT_REQUEST
+    })
+    const headers = {
+      Authorization: accessToken
     }
-    return {
+    const response = await axios.post(`http://localhost:5000/api/comment/${postId}`, data, { headers })
+    console.log(response.data)
+    dispatch({
       type: ADD_COMMENT_SUCCESS,
       payload: {
-        postId: data.postId,
-        data: newComment
+        postId,
+        data: response.data
       }
-    }
+    })
   } catch (err) {
-    return {
+    dispatch({
       type: ADD_COMMENT_FAILURE,
-      payload: err
-    }
+      payload: err.response.data
+    })
   }
 }
 
-// export const addComment = (data) => async (dispatch) => {
-//   try {
-//     const response = await axios.post('url', data)
-//     dispatch({
-//       type: ADD_COMMENT_SUCCESS,
-//       payload: response.data
-//     })
-//   } catch (err) {
-//     dispatch({
-//       type: ADD_COMMENT_FAILURE,
-//       payload: err.response.data
-//     })
-//   }
-// }
-
-export const removeComment = (postId, commentId, accessToken) => {
+export const updateComment = (postId, commentId, data, accessToken) => async (dispatch) => {
   try {
-    return {
+    dispatch({
+      type: UPDATE_COMMENT_REQUEST
+    })
+    const headers = {
+      Authorization: accessToken
+    }
+    const response = await axios.patch(`http://localhost:5000/api/comment/${commentId}`, data, { headers })
+    console.log(response.data)
+    dispatch({
+      type: UPDATE_COMMENT_SUCCESS,
+      payload: {
+        postId,
+        commentId,
+        content: data.content
+      }
+    })
+  } catch (err) {
+    console.log('ERROR : ', err.message)
+    // dispatch({
+    //   type: UPDATE_COMMENT_FAILURE,
+    //   payload: err.response.data
+    // })
+  }
+}
+
+export const removeComment = (postId, commentId, accessToken) => async (dispatch) => {
+  try {
+    dispatch({
+      type: REMOVE_COMMENT_REQUEST
+    })
+    const headers = {
+      Authorization: accessToken
+    }
+    const response = await axios.delete(`http://localhost:5000/api/post/${postId}/comment/${commentId}`, { headers })
+    console.log(response.data)
+    dispatch({
       type: REMOVE_COMMENT_SUCCESS,
       payload: {
         postId,
         commentId
       }
-    }
+    })
   } catch (err) {
-    return {
+    dispatch({
       type: REMOVE_COMMENT_FAILURE,
-      payload: err
-    }
+      payload: err.response.data
+    })
   }
 }
 
@@ -263,27 +284,45 @@ const reducer = (state = initialState, action) => Produce(state, (draft) => {
       draft.addCommentDone = false
       draft.addCommentError = null
       break
-    case ADD_COMMENT_SUCCESS:
+    case ADD_COMMENT_SUCCESS: {
       draft.addCommentLoading = false
       draft.addCommentDone = true
       const addPost_ = draft.Posts.find((v) => v._id === action.payload.postId)
       addPost_.comments.unshift(action.payload.data)
       break
+    }
     case ADD_COMMENT_FAILURE:
       draft.addCommentLoading = false
       draft.addCommentError = action.payload.message
+      break
+    case UPDATE_COMMENT_REQUEST:
+      draft.updateCommentLoading = true
+      draft.updateCommentDone = false
+      draft.updateCommentError = null
+      break
+    case UPDATE_COMMENT_SUCCESS: {
+      draft.updateCommentLoading = false
+      draft.updateCommentDone = true
+      const updatePost_ = draft.Posts.find((v) => v._id === action.payload.postId)
+      updatePost_.comments.find((v) => v._id === action.payload.commentId).content = action.payload.content
+      break
+    }
+    case UPDATE_COMMENT_FAILURE:
+      draft.updateCommentLoading = false
+      draft.updateCommentError = action.payload.message
       break
     case REMOVE_COMMENT_REQUEST:
       draft.removeCommentLoading = true
       draft.removeCommentDone = false
       draft.removeCommentError = null
       break
-    case REMOVE_COMMENT_SUCCESS:
+    case REMOVE_COMMENT_SUCCESS: {
       draft.removeCommentLoading = false
       draft.removeCommentDone = true
       const removePost_ = draft.Posts.find((v) => v._id === action.payload.postId)
       removePost_.comments = removePost_.comments.filter((v) => v._id !== action.payload.commentId)
       break
+    }
     case REMOVE_COMMENT_FAILURE:
       draft.removeCommentLoading = false
       draft.removeCommentError = action.payload.message

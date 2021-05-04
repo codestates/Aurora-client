@@ -1,30 +1,43 @@
+import PropTypes from 'prop-types'
 import { Button, Popover } from 'antd'
 import { EllipsisOutlined } from '@ant-design/icons'
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import TextArea from 'antd/lib/input/TextArea'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { removeComment } from '../../../reducers/post'
+import { updateComment, removeComment } from '../../../reducers/post'
+
+import useInput from '../../../hooks/useInput'
 
 const CommentContent = ({ item, postId }) => {
   const dispatch = useDispatch()
   const { accessToken } = useSelector(state => state.user)
-  // 댓글 수정
+  const { updateCommentLoading, removeCommentLoading, updateCommentDone } = useSelector((state) => state.post)
+
   const [editMode, setEditMode] = useState(false)
+  const [editText, changeEditText] = useInput(item.content)
+
+  // 수정 모드 설정
   const onClickUpdate = useCallback(() => {
     setEditMode(true)
   }, [])
   const onCancelUpdate = useCallback(() => {
     setEditMode(false)
   }, [])
-  const onChangeComment = useCallback((editText) => {
-    console.log('onChangeComment')
-  }, [item])
 
-  const [editText, setEditText] = useState(item.content)
-  const onChangeText = useCallback((e) => {
-    setEditText(e.target.value)
-  })
+  // 댓글 수정
+  const onChangeComment = useCallback(() => {
+    const data = {
+      content: editText
+    }
+    dispatch(updateComment(postId, item._id, data, accessToken))
+  }, [item, postId, editText])
+
+  useEffect(() => {
+    if (editMode && updateCommentDone) {
+      onCancelUpdate()
+    }
+  }, [updateCommentDone])
 
   // 댓글 삭제
   const onRemoveComment = () => {
@@ -36,9 +49,9 @@ const CommentContent = ({ item, postId }) => {
       {editMode
         ? (
           <>
-            <TextArea value={editText} onChange={onChangeText} />
+            <TextArea placeholder={editText} value={editText} onChange={changeEditText} />
             <Button.Group>
-              <Button onClick={() => onChangeComment(editText)}>수정</Button>
+              <Button loading={updateCommentLoading} disabled={editText.length === 0} onClick={() => onChangeComment(editText)}>수정</Button>
               <Button type='danger' onClick={onCancelUpdate}>취소</Button>
             </Button.Group>
           </>
@@ -50,7 +63,7 @@ const CommentContent = ({ item, postId }) => {
               key='more' content={(
                 <Button.Group>
                   <Button onClick={onClickUpdate}>수정</Button>
-                  <Button type='danger' onClick={onRemoveComment}>삭제</Button>
+                  <Button loading={removeCommentLoading} type='danger' onClick={onRemoveComment}>삭제</Button>
                 </Button.Group>
               )}
             >
@@ -60,6 +73,11 @@ const CommentContent = ({ item, postId }) => {
           )}
     </div>
   )
+}
+
+CommentContent.prototype = {
+  item: PropTypes.object.isRequired,
+  postId: PropTypes.string.isRequired
 }
 
 export default CommentContent

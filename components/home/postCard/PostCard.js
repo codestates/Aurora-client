@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import { Button, Card, Popover, List, Comment } from 'antd'
 import { HeartTwoTone, HeartOutlined, MessageOutlined, EllipsisOutlined } from '@ant-design/icons'
 
@@ -12,7 +13,7 @@ import { removePost, updatePost } from '../../../reducers/post'
 import PostCardContent from './PostCardContent'
 import CommentContent from './CommentContent'
 
-const PostCard = ({ post, onClick }) => {
+const PostCard = ({ post }) => {
   const dispatch = useDispatch()
   const { removePostLoading } = useSelector((state) => state.post)
   const { me, accessToken } = useSelector(state => state.user)
@@ -36,7 +37,7 @@ const PostCard = ({ post, onClick }) => {
   // 포스트 삭제
   const onRemovePost = useCallback(() => {
     dispatch(removePost(post._id, accessToken))
-  }, [])
+  }, [post])
 
   // 좋아요 기능
   const [liked, setLiked] = useState(false)
@@ -157,5 +158,9 @@ const Auth = styled.div`
     font-weight: bold;
   }
 `
+
+PostCard.propTypes = {
+  post: PropTypes.object.isRequired
+}
 
 export default PostCard

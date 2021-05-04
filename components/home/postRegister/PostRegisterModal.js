@@ -1,7 +1,8 @@
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import PostRegisterForm from './PostRegisterForm'
 
-const PostRegisterModal = ({ User, onClose }) => {
+const PostRegisterModal = ({ onClose }) => {
   return (
     <StyledModalOverlay>
       <StyledModal>
@@ -67,5 +68,9 @@ const StyledModalBody = styled.div`
       }
     }
 `
+
+PostRegisterForm.propTypes = {
+  onClose: PropTypes.func.isRequired
+}
 
 export default PostRegisterModal

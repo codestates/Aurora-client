@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { Checkbox } from 'antd'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { FILTER_WEATHER } from '../../reducers/post'
 
@@ -8,9 +8,9 @@ const FilterBar = () => {
   const dispatch = useDispatch()
   const [checkedWeather, setCheckedWeather] = useState([])
 
-  const onChangeWeather = (checkedValues) => {
+  const onChangeWeather = useCallback((checkedValues) => {
     setCheckedWeather(checkedValues)
-  }
+  }, [])
 
   useEffect(() => {
     dispatch({
