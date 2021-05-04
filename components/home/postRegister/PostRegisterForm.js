@@ -1,4 +1,4 @@
-import { useCallback, useState, useRef } from 'react'
+import { useCallback, useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import useInput from '../../../hooks/useInput'
 
@@ -10,7 +10,7 @@ import { addPost } from '../../../reducers/post'
 
 const PostRegisterForm = ({ onClose }) => {
   const dispatch = useDispatch()
-  const { me } = useSelector(state => state.post)
+  const { me } = useSelector(state => state.user)
 
   const [content, onChangeContent] = useInput('')
   const [images, setImages] = useState([])
@@ -26,18 +26,16 @@ const PostRegisterForm = ({ onClose }) => {
   }, [imageInput.current])
 
   const onChangeImage = useCallback((e) => {
-    console.log('upload img', e.target.files)
     setImages((prev) => [...prev, ...e.target.files])
   })
 
-  const removeImage = (idx) => {
-    console.log(images, idx)
-    const newImages = images.splice(idx, 1)
-    console.log('aft', newImages)
-    // setImages(newImages)
+  const removeImage = (name) => {
+    const newImages = images.filter((v) => v.name !== name)
+    setImages(newImages)
   }
 
-  const onSubmit = async (e) => {
+  const onSubmit = (e) => {
+    console.log('AA')
     e.preventDefault()
 
     const bodyFormData = new FormData()
@@ -55,12 +53,12 @@ const PostRegisterForm = ({ onClose }) => {
     <PostForm onSubmit={onSubmit} encType='multipart/form-data'>
       <textarea value={content} onChange={onChangeContent} maxLength={140} placeholder='어떤 신기한 일이 있었나요?' />
       <div>
-        <input type='file' accept='image/png' multiple hidden ref={imageInput} onChange={onChangeImage} />
+        <input type='file' accept='image/*' multiple hidden ref={imageInput} onChange={onChangeImage} />
         <Button onClick={onClickImageUpload}>이미지 업로드</Button>
         <div style={{ fontSize: '15px', height: '150px', padding: '10px' }}>
-          {images.map((ele, idx) => (
-            <div key={idx}>{ele.name}
-              <button style={{ marginLeft: '5px', cursor: 'pointer' }} onClick={() => (removeImage(idx))}>X</button>
+          {images.map((ele) => (
+            <div key={ele.name}>{ele.name}
+              <button type='button' style={{ marginLeft: '5px', cursor: 'pointer' }} onClick={() => removeImage(ele.name)}>X</button>
             </div>
           ))}
         </div>

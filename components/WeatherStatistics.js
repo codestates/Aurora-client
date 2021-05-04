@@ -6,15 +6,19 @@ import { useSelector } from 'react-redux'
 const WeatherStatistics = () => {
   const { Posts, loadPostsDone } = useSelector(state => state.post)
 
-  const statistic = {
-    sun: loadPostsDone ? Math.round(Posts.filter((ele) => ele.mood === 'sun').length / Posts.length * 100) : 0,
-    cloud: loadPostsDone ? Math.round(Posts.filter((ele) => ele.mood === 'cloud').length / Posts.length * 100) : 0,
-    rain: loadPostsDone ? Math.round(Posts.filter((ele) => ele.mood === 'rain').length / Posts.length * 100) : 0,
-    moon: loadPostsDone ? Math.round(Posts.filter((ele) => ele.mood === 'moon').length / Posts.length * 100) : 0
-  }
+  // const statistic = {
+  //   sun: loadPostsDone ? Math.round(Posts.filter((ele) => ele.mood === 'sun').length / Posts.length * 100) : 0,
+  //   cloud: loadPostsDone ? Math.round(Posts.filter((ele) => ele.mood === 'cloud').length / Posts.length * 100) : 0,
+  //   rain: loadPostsDone ? Math.round(Posts.filter((ele) => ele.mood === 'rain').length / Posts.length * 100) : 0,
+  //   moon: loadPostsDone ? Math.round(Posts.filter((ele) => ele.mood === 'moon').length / Posts.length * 100) : 0
+  // }
 
-  // console.log(Posts)
-  // console.log(statistic)
+  const statistic = {
+    sun: Posts.length > 0 ? Math.round(Posts.filter((ele) => ele.mood === 'sun').length / Posts.length * 100) : 0,
+    cloud: Posts.length > 0 ? Math.round(Posts.filter((ele) => ele.mood === 'cloud').length / Posts.length * 100) : 0,
+    rain: Posts.length > 0 ? Math.round(Posts.filter((ele) => ele.mood === 'rain').length / Posts.length * 100) : 0,
+    moon: Posts.length > 0 ? Math.round(Posts.filter((ele) => ele.mood === 'moon').length / Posts.length * 100) : 0
+  }
 
   return (
     <Wrapper>

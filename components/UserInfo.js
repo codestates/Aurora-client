@@ -1,14 +1,17 @@
 import styled from 'styled-components'
 import faker from 'faker'
 import Link from 'next/link'
+import { useSelector } from 'react-redux'
 
 const userInfo = () => {
+  const { me } = useSelector(state => state.user)
+
   return (
     <>
       <Link href='/profile'>
         <Wrapper>
-          <Avatar src={faker.image.avatar()} alt='avatar' />
-          <span>{faker.name.lastName()}</span>
+          <Avatar src='' alt='avatar' />
+          <span>{me.username}</span>
         </Wrapper>
       </Link>
     </>
