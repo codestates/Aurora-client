@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import useInput from '../../../hooks/useInput'
 import PropTypes from 'prop-types'
 
-import { Radio } from 'antd'
+import { Button, Radio } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { addPost } from '../../../reducers/post'
@@ -60,11 +60,11 @@ const PostRegisterForm = ({ onClose }) => {
       <textarea value={content} onChange={onChangeContent} maxLength={140} placeholder='어떤 신기한 일이 있었나요?' />
       <div>
         <input type='file' accept='image/*' multiple hidden ref={imageInput} onChange={onChangeImage} />
-        <ImageButton onClick={onClickImageUpload}>이미지 업로드</ImageButton>
-        <div style={{ fontSize: '15px', height: '150px', padding: '10px' }}>
+        <Button onClick={onClickImageUpload}>이미지 업로드</Button>
+        <div style={{ color: '#777', fontSize: '15px', height: '150px', padding: '10px' }}>
           {images.map((ele) => (
             <div key={ele.name}>{ele.name}
-              <button type='button' style={{ marginLeft: '5px', cursor: 'pointer' }} onClick={() => removeImage(ele.name)}>X</button>
+              <DeleteBtn type='button' style={{ marginLeft: '5px', cursor: 'pointer' }} onClick={() => removeImage(ele.name)}><i className='fas fa-times' style={{ color: '#777', fontSize: '1rem' }} /></DeleteBtn>
             </div>
           ))}
         </div>
@@ -75,7 +75,7 @@ const PostRegisterForm = ({ onClose }) => {
         <Radio value='rain'><i className='fas fa-cloud-showers-heavy' style={{ color: '#b6d8f8' }} /></Radio>
         <Radio value='moon'><i className='fas fa-moon' style={{ color: '#a18afc' }} /></Radio>
       </RadioWrapper>
-      <Button type='submit' loading={addPostLoading} disabled={content.length === 0 || mood.length === 0 || images.length === 0}>등록</Button>
+      <CustomBtn htmlType='submit' loading={addPostLoading} disabled={content.length === 0 || mood.length === 0 || images.length === 0}>등록</CustomBtn>
     </PostForm>
   )
 }
@@ -104,37 +104,28 @@ const PostForm = styled.form`
     margin: 0 2rem 0 0;
   }
 `
+const DeleteBtn = styled.button`
+  border: none;
+  background: none;
+`
 
-const Button = styled.button`
+const CustomBtn = styled(Button)`
+  border: none;
+  height: 2.4rem;
   width: 90%;
   align-self: center;
-  text-align: center;
-  border: none;
-  border-radius: 0.3rem;
-  padding: 0.5rem 0;
-  background-color: #A18AFC;
-  opacity: 0.9;
   color: #fff;
-  font-size: 1rem;
-  cursor: pointer;
+  background-color: #A18AFC; 
+  opacity: 0.7;
+  border-radius: 0.3rem;
+  &:hover{
+    background-color: #A18AFC;
+    opacity: 1;
+    color: #fff;
+  }
   &[disabled]{
-    background-color: rgba(128,128,128,0.3);
-    cursor: unset;
-  },
-`
-const ImageButton = styled.button`
-  width: 10rem;
-  border: none;
-  cursor: pointer;
-  color: #222;
-  font-weight: 300;
-  font-size: 1.1rem;
-  border: 1px solid #ccc;
-  border-radius: 0.2rem;
-  background-color: #fff;
-  &:hover {
-    border: 1px solid #A18AFC;
-    color: #A18AFC;
+  background-color: rgba(128,128,128,0.3);
+  cursor: unset;
   }
 `
 

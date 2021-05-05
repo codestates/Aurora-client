@@ -8,7 +8,7 @@ const PostRegisterModal = ({ onClose }) => {
       <StyledModal>
         <StyledModalHeader>
           <div>Aurora post</div>
-          <span onClick={onClose}><i class='fas fa-times' style={{ color: '#777', marginRight: '1rem' }} /></span>
+          <span onClick={onClose}><i className='fas fa-times' style={{ color: '#777', marginRight: '1rem' }} /></span>
         </StyledModalHeader>
         <StyledModalBody>
           <PostRegisterForm onClose={onClose} />
