@@ -86,16 +86,12 @@ export const signoutAction = (token) => async (dispatch) => {
 
 // update user profile
 export const updateUerProfileAction = (data, token) => async (dispatch) => {
-  // try {
   const response = await axios.patch('http://localhost:5000/api/user', data, {
     headers: {
       Authorization: `${token}`
     }
   })
   dispatch({ type: UPDATE_USER_PROFILE, payload: response })
-  // } catch (err) {
-  //   dispatch({ type: UPDATE_USER_PROFILE, payload: err.response.data })
-  // }
 }
 
 // withdrawal

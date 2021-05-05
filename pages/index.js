@@ -75,7 +75,7 @@ const Home = () => {
                         Posts.map(post => <PostCard key={post._id} post={post} />)
                       )
                 )}
-              {totalPosts > Posts.length && <button onClick={onClickMore}>더보기</button>}
+              {totalPosts > Posts.length && <LoadMoreBtn onClick={onClickMore}>더 많은 게시물 보기</LoadMoreBtn>}
             </PostCardList>
           </AppLayout>
           )}
@@ -94,6 +94,22 @@ const PostCardList = styled.div`
   -ms-overflow-style:none;
   &::-webkit-scrollbar{ 
     display:none;
+  }
+`
+
+const LoadMoreBtn = styled.button`
+  border: none;
+  background: none;
+  margin: 1rem 0;
+  font-size: 1rem;
+  color: #424242;
+  cursor: pointer;
+  &:hover{
+    color: #A18AFC;
+    font-size: 1.1rem;
+  }
+  &:focus{
+    outline: none;
   }
 `
 

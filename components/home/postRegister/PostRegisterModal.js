@@ -7,8 +7,8 @@ const PostRegisterModal = ({ onClose }) => {
     <StyledModalOverlay>
       <StyledModal>
         <StyledModalHeader>
-          <div>게시물 만들기</div>
-          <span onClick={onClose}>x</span>
+          <div>Aurora post</div>
+          <span onClick={onClose}><i className='fas fa-times' style={{ color: '#777', marginRight: '1rem' }} /></span>
         </StyledModalHeader>
         <StyledModalBody>
           <PostRegisterForm onClose={onClose} />
@@ -33,27 +33,29 @@ const StyledModalOverlay = styled.div`
 
 const StyledModal = styled.div`
     background: white;
-    width: 500px;
-    height: 600px;
-    border-radius: 15px;
+    width: 45rem;
+    height: 38rem;
+    border-radius: 0.7rem;
     padding: 15px;
     z-index: 500;
 `
 
 const StyledModalHeader = styled.div`
-    border-bottom: 2px solid gray;
-    display: flex;
-    position: relative; 
-    justify-content: space-between;
-    font-size: 25px;
-    text-align: center;
-    div{
-      font-weight: bold;
-      width: 100%;
-    }
-    span{
-      cursor: pointer;
-    }
+  padding-bottom: 1rem;
+  border-bottom: 1.5px solid #ccc;
+  display: flex;
+  position: relative; 
+  justify-content: space-between;
+  font-size: 1.4rem;
+  color: #888;
+  text-align: center;
+  div{
+    font-weight: 500;
+    width: 100%;
+  }
+  span{
+    cursor: pointer;
+  }
 `
 
 const StyledModalBody = styled.div`
