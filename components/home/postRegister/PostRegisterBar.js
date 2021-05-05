@@ -8,7 +8,6 @@ const PostBar = () => {
   const [showModal, setShowModal] = useState(false)
 
   const onClickModal = useCallback(() => {
-    console.log('AAA')
     setShowModal(true)
   }, [])
   const onCloseModal = useCallback(() => {
@@ -19,10 +18,6 @@ const PostBar = () => {
 
   return (
     <>
-<<<<<<< HEAD
-      <Wrapper onClick={onClickModal}>
-        <Avatar src='' alt='avatar' />
-=======
       <Wrapper onClick={() => {
         setShowModal(true)
       }}
@@ -32,7 +27,6 @@ const PostBar = () => {
             ? <Avatar src={`data:image/png;base64,${Buffer.from(me.avatar[0].data.data).toString('base64')}`} alt='avatar' />
             : <Avatar src='/images/profile-thumbnail.jpg' alt='avatar' />}
         </>
->>>>>>> ce9c14c38577db1dac35c7e6bb3031c6f23affd6
         <span>{me.username}님, 오늘 당신의 날씨는 어떤가요?</span>
       </Wrapper>
       {showModal && (

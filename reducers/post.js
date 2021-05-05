@@ -4,9 +4,12 @@ import Produce from '../util/produce'
 // 초기 데이터 구조
 export const initialState = {
   Posts: [],
-  loadPostsLoading: false,
-  loadPostsDone: false,
-  loadPostsError: null,
+  firstLoadPostLoading: false,
+  firstLoadPostDone: false,
+  firstLoadPostError: null,
+  moreLoadPostLoading: false,
+  moreLoadPostDone: false,
+  moreLoadPostError: null,
   addPostLoading: false,
   addPostDone: false,
   addPostError: null,
@@ -25,13 +28,18 @@ export const initialState = {
   removeCommentLoading: false,
   removeCommentDone: false,
   removeCommentError: null,
-  filterWeather: []
+  filterWeather: [],
+  totalPosts: 0
 }
 
 // 액션 상수
-export const LOAD_POST_REQUEST = 'LOAD_POST_REQUEST'
-export const LOAD_POST_SUCCESS = 'LOAD_POST_SUCCESS'
-export const LOAD_POST_FAILURE = 'LOAD_POST_FAILURE'
+export const FIRST_LOAD_POST_REQUEST = 'FIRST_LOAD_POST_REQUEST'
+export const FIRST_LOAD_POST_SUCCESS = 'FIRST_LOAD_POST_SUCCESS'
+export const FIRST_LOAD_POST_FAILURE = 'FIRST_LOAD_POST_FAILURE'
+
+export const MORE_LOAD_POST_REQUEST = 'MORE_LOAD_POST_REQUEST'
+export const MORE_LOAD_POST_SUCCESS = 'MORE_LOAD_POST_SUCCESS'
+export const MORE_LOAD_POST_FAILURE = 'MORE_LOAD_POST_FAILURE'
 
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST'
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS'
@@ -60,22 +68,44 @@ export const REMOVE_COMMENT_FAILURE = 'REMOVE_COMMENT_FAILURE'
 export const FILTER_WEATHER = 'FILTER_WEATHER'
 
 // 액션 크리에이터
-export const loadPost = (page, accessToken) => async (dispatch) => {
+export const firstLoadPost = (accessToken) => async (dispatch) => {
   try {
     dispatch({
-      type: LOAD_POST_REQUEST
+      type: FIRST_LOAD_POST_REQUEST
+    })
+    const headers = {
+      Authorization: accessToken
+    }
+    const response = await axios.get(`http://localhost:5000/api/posts?page=${1}`, { headers })
+    dispatch({
+      type: FIRST_LOAD_POST_SUCCESS,
+      payload: response.data
+    })
+  } catch (err) {
+    dispatch({
+      type: FIRST_LOAD_POST_FAILURE,
+      payload: err.response.data
+    })
+  }
+}
+
+export const moreLoadPost = (page, accessToken) => async (dispatch) => {
+  try {
+    dispatch({
+      type: MORE_LOAD_POST_REQUEST
     })
     const headers = {
       Authorization: accessToken
     }
     const response = await axios.get(`http://localhost:5000/api/posts?page=${page}`, { headers })
+    console.log('LOAD_POST_REQUEST : ', response.data)
     dispatch({
-      type: LOAD_POST_SUCCESS,
+      type: MORE_LOAD_POST_SUCCESS,
       payload: response.data
     })
   } catch (err) {
     dispatch({
-      type: LOAD_POST_FAILURE,
+      type: MORE_LOAD_POST_FAILURE,
       payload: err.response.data
     })
   }
@@ -92,7 +122,7 @@ export const addPost = (data, accessToken) => async (dispatch) => {
     const response = await axios.post('http://localhost:5000/api/post/', data, { headers })
     dispatch({
       type: ADD_POST_SUCCESS,
-      payload: response.data
+      payload: response.data.post
     })
   } catch (err) {
     dispatch({
@@ -221,19 +251,35 @@ export const removeComment = (postId, commentId, accessToken) => async (dispatch
 
 const reducer = (state = initialState, action) => Produce(state, (draft) => {
   switch (action.type) {
-    case LOAD_POST_REQUEST:
-      draft.loadPostLoading = true
-      draft.loadPostDone = false
-      draft.loadPostError = null
+    case FIRST_LOAD_POST_REQUEST:
+      draft.firstLoadPostLoading = true
+      draft.firstLoadPostDone = false
+      draft.firstLoadPostError = null
       break
-    case LOAD_POST_SUCCESS:
-      draft.loadPostLoading = false
-      draft.loadPostsDone = true
-      draft.Posts = [...draft.Posts, ...action.payload.posts]
+    case FIRST_LOAD_POST_SUCCESS:
+      draft.firstLoadPostLoading = false
+      draft.firstLoadPostDone = true
+      draft.Posts = action.payload.posts
+      draft.totalPosts = action.payload.totalPosts
       break
-    case LOAD_POST_FAILURE:
-      draft.loadPostLoading = false
-      draft.loadPostsError = action.payload.message
+    case FIRST_LOAD_POST_FAILURE:
+      draft.firstLoadPostLoading = false
+      draft.firstLoadPostError = action.payload.message
+      break
+    case MORE_LOAD_POST_REQUEST:
+      draft.moreLoadPostLoading = true
+      draft.moreLoadPostDone = false
+      draft.moreLoadPostError = null
+      break
+    case MORE_LOAD_POST_SUCCESS:
+      draft.moreLoadPostLoading = false
+      draft.moreLoadPostDone = true
+      draft.Posts = draft.Posts.concat(action.payload.posts)
+      draft.totalPosts = action.payload.totalPosts
+      break
+    case MORE_LOAD_POST_FAILURE:
+      draft.moreLoadPostLoading = false
+      draft.moreLoadPostError = action.payload.message
       break
     case ADD_POST_REQUEST:
       draft.addPostLoading = true
