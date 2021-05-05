@@ -4,6 +4,12 @@ import Produce from '../util/produce'
 // 초기 데이터 구조
 export const initialState = {
   Posts: [],
+  loadAllStatisticsLoading: false,
+  loadAllStatisticsDone: false,
+  loadAllStatisticsError: null,
+  loadStatisticsLoading: false,
+  loadStatisticsDone: false,
+  loadStatisticsError: null,
   firstLoadAllPostLoading: false,
   firstLoadAllPostDone: false,
   firstLoadAllPostError: null,
@@ -36,7 +42,8 @@ export const initialState = {
   removeCommentError: null,
   filterWeather: [],
   totalPosts: 0,
-  Time: ''
+  Time: '',
+  Statistics: null
 }
 
 // 액션 상수
@@ -82,6 +89,14 @@ export const REMOVE_COMMENT_FAILURE = 'REMOVE_COMMENT_FAILURE'
 
 export const FILTER_WEATHER = 'FILTER_WEATHER'
 export const CHANGE_TIME = 'CHANGE_TIME'
+
+export const LOAD_ALL_STATISTICS_REQUEST = 'LOAD_ALL_STATISTICS_REQUEST'
+export const LOAD_ALL_STATISTICS_SUCCESS = 'LOAD_ALL_STATISTICS_SUCCESS'
+export const LOAD_ALL_STATISTICS_FAILURE = 'LOAD_ALL_STATISTICS_FAILURE'
+
+export const LOAD_STATISTICS_REQUEST = 'LOAD_STATISTICS_REQUEST'
+export const LOAD_STATISTICS_SUCCESS = 'LOAD_STATISTICS_SUCCESS'
+export const LOAD_STATISTICS_FAILURE = 'LOAD_STATISTICS_FAILURE'
 
 // 액션 크리에이터
 export const firstLoadAllPost = (time, accessToken) => async (dispatch) => {
@@ -278,11 +293,10 @@ export const updateComment = (postId, commentId, data, accessToken) => async (di
       }
     })
   } catch (err) {
-    console.log('ERROR : ', err.message)
-    // dispatch({
-    //   type: UPDATE_COMMENT_FAILURE,
-    //   payload: err.response.data
-    // })
+    dispatch({
+      type: UPDATE_COMMENT_FAILURE,
+      payload: err.response.data
+    })
   }
 }
 
@@ -305,6 +319,47 @@ export const removeComment = (postId, commentId, accessToken) => async (dispatch
   } catch (err) {
     dispatch({
       type: REMOVE_COMMENT_FAILURE,
+      payload: err.response.data
+    })
+  }
+}
+
+export const loadAllStatistics = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: LOAD_ALL_STATISTICS_REQUEST
+    })
+    const response = await axios.get('http://localhost:5000/api/today-moods')
+    console.log('loadAllStatistics : ', response.data)
+    dispatch({
+      type: LOAD_ALL_STATISTICS_SUCCESS,
+      payload: response.data
+    })
+  } catch (err) {
+    dispatch({
+      type: LOAD_ALL_STATISTICS_FAILURE,
+      payload: err.response.data
+    })
+  }
+}
+
+export const loadStatistics = (accessToken) => async (dispatch) => {
+  try {
+    dispatch({
+      type: LOAD_STATISTICS_REQUEST
+    })
+    const headers = {
+      Authorization: accessToken
+    }
+    const response = await axios.get('http://localhost:5000/api/moods', { headers })
+    console.log('loadStatistics : ', response.data)
+    dispatch({
+      type: LOAD_STATISTICS_SUCCESS,
+      payload: response.data
+    })
+  } catch (err) {
+    dispatch({
+      type: LOAD_STATISTICS_FAILURE,
       payload: err.response.data
     })
   }
@@ -467,6 +522,36 @@ const reducer = (state = initialState, action) => Produce(state, (draft) => {
       break
     case CHANGE_TIME:
       draft.Time = action.payload
+      break
+    case LOAD_ALL_STATISTICS_REQUEST:
+      draft.loadAllStatisticsLoading = true
+      draft.loadAllStatisticsDone = false
+      draft.loadAllStatisticsError = null
+      draft.Statistics = null
+      break
+    case LOAD_ALL_STATISTICS_SUCCESS:
+      draft.loadAllStatisticsLoading = false
+      draft.loadAllStatisticsDone = true
+      draft.Statistics = action.payload
+      break
+    case LOAD_ALL_STATISTICS_FAILURE:
+      draft.loadAllStatisticsLoading = false
+      draft.loadAllStatisticsError = action.payload.message
+      break
+    case LOAD_STATISTICS_REQUEST:
+      draft.loadStatisticsLoading = true
+      draft.loadStatisticsDone = false
+      draft.loadStatisticsError = null
+      draft.Statistics = null
+      break
+    case LOAD_STATISTICS_SUCCESS:
+      draft.loadStatisticsLoading = false
+      draft.loadStatisticsDone = true
+      draft.Statistics = action.payload
+      break
+    case LOAD_STATISTICS_FAILURE:
+      draft.loadStatisticsLoading = false
+      draft.loadStatisticsError = action.payload.message
       break
     default:
       break
