@@ -9,13 +9,13 @@ import styled from 'styled-components'
 import PostImages from './PostImages'
 import Thema from '../../Thema'
 import CommentForm from './CommentForm'
-import { removePost, updatePost } from '../../../actions/post'
+import { removePost, updatePost, unlikePost, likePost } from '../../../actions/post'
 import PostCardContent from './PostCardContent'
 import CommentContent from './CommentContent'
 
 const PostCard = ({ post }) => {
   const dispatch = useDispatch()
-  const { removePostLoading } = useSelector((state) => state.post)
+  const { likePosts, removePostLoading } = useSelector((state) => state.post)
   const { me, accessToken } = useSelector(state => state.user)
 
   // 포스트 수정
@@ -39,9 +39,11 @@ const PostCard = ({ post }) => {
   }, [post])
 
   // 좋아요 기능
-  const [liked, setLiked] = useState(false)
-  const onToggleLike = useCallback(() => {
-    setLiked((prev) => !prev)
+  const onLike = useCallback(() => {
+    dispatch(likePost(post._id, accessToken))
+  }, [])
+  const onUnlike = useCallback(() => {
+    dispatch(unlikePost(post._id, accessToken))
   }, [])
 
   // 댓글 기능
@@ -49,6 +51,8 @@ const PostCard = ({ post }) => {
   const onToggleComment = useCallback(() => {
     setCommentFormOpened((prev) => !prev)
   }, [])
+
+  const liked = likePosts.find((v) => v === post._id)
   return (
     <Wrapper ThemaColor={Thema[post.mood].color}>
       <Header>
@@ -65,8 +69,8 @@ const PostCard = ({ post }) => {
         cover={<PostImages images={post.images} />}
         actions={[
           liked
-            ? <HeartTwoTone twoToneColor='#eb2f96' key='heart' onClick={onToggleLike} />
-            : <HeartOutlined key='heart' onClick={onToggleLike} />,
+            ? <HeartTwoTone twoToneColor='#eb2f96' key='heart' onClick={onUnlike} />
+            : <HeartOutlined key='heart' onClick={onLike} />,
           <MessageOutlined key='comment' onClick={onToggleComment} />,
           post.postedBy._id === me._id && (
             <Popover
@@ -87,12 +91,12 @@ const PostCard = ({ post }) => {
             <Card.Meta
               description={<PostCardContent editMode={editMode} postData={post.content} onChangePost={onChangePost} onCancelUpdate={onCancelUpdate} />}
             />
-          )
+            )
           : (
             <Card.Meta
               description={<PostCardContent postData={post.content} />}
             />
-          )}
+            )}
       </Card>
       {commentFormOpened && (
         <>

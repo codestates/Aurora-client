@@ -1,4 +1,4 @@
-import { ADD_COMMENT_FAILURE, ADD_COMMENT_REQUEST, ADD_COMMENT_SUCCESS, ADD_POST_FAILURE, ADD_POST_REQUEST, ADD_POST_SUCCESS, CHANGE_TIME, FILTER_WEATHER, FIRST_LOAD_ALL_POST_FAILURE, FIRST_LOAD_ALL_POST_REQUEST, FIRST_LOAD_ALL_POST_SUCCESS, FIRST_LOAD_POST_FAILURE, FIRST_LOAD_POST_REQUEST, FIRST_LOAD_POST_SUCCESS, LOAD_ALL_STATISTICS_FAILURE, LOAD_ALL_STATISTICS_REQUEST, LOAD_ALL_STATISTICS_SUCCESS, LOAD_STATISTICS_FAILURE, LOAD_STATISTICS_REQUEST, LOAD_STATISTICS_SUCCESS, MORE_LOAD_ALL_POST_FAILURE, MORE_LOAD_ALL_POST_REQUEST, MORE_LOAD_ALL_POST_SUCCESS, MORE_LOAD_POST_FAILURE, MORE_LOAD_POST_REQUEST, MORE_LOAD_POST_SUCCESS, REMOVE_COMMENT_FAILURE, REMOVE_COMMENT_REQUEST, REMOVE_COMMENT_SUCCESS, REMOVE_POST_FAILURE, REMOVE_POST_REQUEST, REMOVE_POST_SUCCESS, UPDATE_COMMENT_FAILURE, UPDATE_COMMENT_REQUEST, UPDATE_COMMENT_SUCCESS, UPDATE_POST_FAILURE, UPDATE_POST_REQUEST, UPDATE_POST_SUCCESS } from '../actions/post'
+import { ADD_COMMENT_FAILURE, ADD_COMMENT_REQUEST, ADD_COMMENT_SUCCESS, ADD_POST_FAILURE, ADD_POST_REQUEST, ADD_POST_SUCCESS, CHANGE_TIME, FILTER_WEATHER, FIRST_LOAD_ALL_POST_FAILURE, FIRST_LOAD_ALL_POST_REQUEST, FIRST_LOAD_ALL_POST_SUCCESS, FIRST_LOAD_POST_FAILURE, FIRST_LOAD_POST_REQUEST, FIRST_LOAD_POST_SUCCESS, LIKE_POST_FAILURE, LIKE_POST_REQUEST, LIKE_POST_SUCCESS, LOAD_ALL_STATISTICS_FAILURE, LOAD_ALL_STATISTICS_REQUEST, LOAD_ALL_STATISTICS_SUCCESS, LOAD_LIKE_POST_FAILURE, LOAD_LIKE_POST_REQUEST, LOAD_LIKE_POST_SUCCESS, LOAD_STATISTICS_FAILURE, LOAD_STATISTICS_REQUEST, LOAD_STATISTICS_SUCCESS, MORE_LOAD_ALL_POST_FAILURE, MORE_LOAD_ALL_POST_REQUEST, MORE_LOAD_ALL_POST_SUCCESS, MORE_LOAD_POST_FAILURE, MORE_LOAD_POST_REQUEST, MORE_LOAD_POST_SUCCESS, REMOVE_COMMENT_FAILURE, REMOVE_COMMENT_REQUEST, REMOVE_COMMENT_SUCCESS, REMOVE_POST_FAILURE, REMOVE_POST_REQUEST, REMOVE_POST_SUCCESS, UNLIKE_POST_FAILURE, UNLIKE_POST_REQUEST, UNLIKE_POST_SUCCESS, UPDATE_COMMENT_FAILURE, UPDATE_COMMENT_REQUEST, UPDATE_COMMENT_SUCCESS, UPDATE_POST_FAILURE, UPDATE_POST_REQUEST, UPDATE_POST_SUCCESS } from '../actions/post'
 import Produce from '../util/produce'
 
 // 초기 데이터 구조
@@ -43,7 +43,17 @@ export const initialState = {
   filterWeather: [],
   totalPosts: 0,
   Time: '',
-  Statistics: null
+  Statistics: null,
+  likePosts: [],
+  loadLikePostLoading: false,
+  loadLikePostDone: false,
+  loadLikePostError: null,
+  likePostLoading: false,
+  likePostDone: false,
+  likePostError: null,
+  unlikePostLoading: false,
+  unlikePostDone: false,
+  unlikePostError: null
 }
 
 const reducer = (state = initialState, action) => Produce(state, (draft) => {
@@ -233,6 +243,48 @@ const reducer = (state = initialState, action) => Produce(state, (draft) => {
     case LOAD_STATISTICS_FAILURE:
       draft.loadStatisticsLoading = false
       draft.loadStatisticsError = action.payload.message
+      break
+    case LOAD_LIKE_POST_REQUEST:
+      draft.loadLikePostLoading = true
+      draft.loadLikePostDone = false
+      draft.loadLikePostError = null
+      break
+    case LOAD_LIKE_POST_SUCCESS:
+      draft.likePosts = action.payload
+      draft.loadLikePostLoading = false
+      draft.likePostDone = true
+      break
+    case LOAD_LIKE_POST_FAILURE:
+      draft.loadLikePostDone = false
+      draft.loadLikePostError = action.payload.message
+      break
+    case LIKE_POST_REQUEST:
+      draft.likePostLoading = true
+      draft.likePostDone = false
+      draft.likePostError = null
+      break
+    case LIKE_POST_SUCCESS:
+      draft.likePosts.push(action.payload)
+      draft.likePostLoading = false
+      draft.likePostDone = true
+      break
+    case LIKE_POST_FAILURE:
+      draft.likePostLoading = false
+      draft.likePostError = action.payload.message
+      break
+    case UNLIKE_POST_REQUEST:
+      draft.unlikePostLoading = true
+      draft.unlikePostDone = false
+      draft.unlikePostError = null
+      break
+    case UNLIKE_POST_SUCCESS:
+      draft.likePosts = draft.likePosts.filter((v) => v !== action.payload)
+      draft.unlikePostLoading = false
+      draft.unlikePostDone = true
+      break
+    case UNLIKE_POST_FAILURE:
+      draft.unlikePostLoading = false
+      draft.unlikePostError = action.payload.message
       break
     default:
       break

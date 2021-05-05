@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 
@@ -7,12 +7,12 @@ import AppLayout from '../components/AppLayout'
 import PostRegisterBar from '../components/home/postRegister/PostRegisterBar'
 import PostCard from '../components/home/postCard/PostCard'
 import Signin from './user/signin'
-import { firstLoadAllPost, moreLoadAllPost, CHANGE_TIME, loadAllStatistics } from '../actions/post'
+import { firstLoadAllPost, moreLoadAllPost, CHANGE_TIME, loadAllStatistics, loadLikePost } from '../actions/post'
 import { signinSuccessAction, getAccessTokenAction } from '../actions/user'
 
 const Home = () => {
   const dispatch = useDispatch()
-  const { Time, Posts, firstLoadAllPostDone, filterWeather, totalPosts } = useSelector(state => state.post)
+  const { Time, Posts, firstLoadAllPostDone, filterWeather, totalPosts, moreLoadAllPostLoading } = useSelector(state => state.post)
   const { googleLoading, loginLoading, isLoggedIn, accessToken } = useSelector((state) => state.user)
 
   dispatch({
@@ -39,6 +39,7 @@ const Home = () => {
   useEffect(() => {
     if (isLoggedIn) {
       dispatch(firstLoadAllPost(Time, accessToken))
+      dispatch(loadLikePost(accessToken))
     }
   }, [isLoggedIn])
 
@@ -52,6 +53,13 @@ const Home = () => {
   useEffect(() => {
     dispatch(loadAllStatistics())
   }, [])
+
+  const moreBtn = useRef()
+  // const onScroll = useCallback((e) => {
+  //   if ((e.target.scrollTop + e.target.clientHeight === e.target.scrollHeight) && (totalPosts > Posts.length)) {
+  //     moreBtn.current.click()
+  //   }
+  // }, [moreBtn.current])
 
   return (
     <>
@@ -75,7 +83,9 @@ const Home = () => {
                         Posts.map(post => <PostCard key={post._id} post={post} />)
                       )
                 )}
-              {totalPosts > Posts.length && <button onClick={onClickMore}>더보기</button>}
+              {/* {moreLoadAllPostLoading && <div>불러오는중</div>} */}
+              {/* <button hidden onClick={onClickMore} ref={moreBtn} /> */}
+              {totalPosts > Posts.length && <button onClick={onClickMore} ref={moreBtn}>더보기</button>}
             </PostCardList>
           </AppLayout>
           )}
