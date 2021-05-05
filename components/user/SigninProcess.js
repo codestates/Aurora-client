@@ -7,7 +7,7 @@ import useInput from '../../hooks/useInput'
 
 const SigninProcess = () => {
   const dispatch = useDispatch()
-  const { loginError, accessTokenError } = useSelector((state) => state.user)
+  const { loginError } = useSelector((state) => state.user)
   const [email, onChangeEmail] = useInput('')
   const [password, onChangePassword] = useInput('')
   const [loginErrorMsg, setLoginErrorMsg] = useState('')
@@ -41,9 +41,6 @@ const SigninProcess = () => {
           value={password}
           onChange={onChangePassword} required
         />
-        {/* {accessTokenError
-          ? <ErrorMessage>{accessTokenError}</ErrorMessage>
-          : ''} */}
         {loginErrorMsg
           ? <ErrorMessage>{loginErrorMsg}</ErrorMessage>
           : ''}
