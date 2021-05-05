@@ -12,8 +12,6 @@ const SigninProcess = () => {
   const [password, onChangePassword] = useInput('')
   const [loginErrorMsg, setLoginErrorMsg] = useState('')
 
-  console.log(loginError)
-  console.log('accessTokenError: ', accessTokenError)
   useEffect(() => {
     if (loginError) {
       setLoginErrorMsg(loginError)
