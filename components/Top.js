@@ -18,7 +18,13 @@ const Top = ({ filter }) => {
         {filter && <FilterBar />}
       </Filter>
       <UserInfo>
-        <Link href='/profile'><Avatar src='/images/profile-thumbnail.jpg' alt='avatar' /></Link>
+        <Link href='/profile'>
+          <a>
+            {me.avatar[0]
+              ? <Avatar src={`data:image/png;base64,${Buffer.from(me.avatar[0].data.data).toString('base64')}`} alt='avatar' />
+              : <Avatar src='/images/profile-thumbnail.jpg' alt='avatar' />}
+          </a>
+        </Link>
         <Signout />
       </UserInfo>
     </TopWrapper>

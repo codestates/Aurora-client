@@ -8,8 +8,7 @@ import { updateUerProfileAction } from '../../reducers/user'
 
 const ProfileEditForm = ({ onClose }) => {
   const dispatch = useDispatch()
-  const { me, updateError } = useSelector(state => state.user)
-  // console.log(me)
+  const { updateError, accessToken } = useSelector(state => state.user)
 
   const [username, onChangeUsername] = useInput('')
   const [bio, onChangeBio] = useInput('')
@@ -20,15 +19,12 @@ const ProfileEditForm = ({ onClose }) => {
     imageInput.current.click()
   }, [imageInput.current])
 
-  console.log(image)
-
   const onChangeImage = useCallback((e) => {
     console.log('전송 전 이미지 : ', e.target.files[0])
     setImage(...e.target.files)
   })
 
   const removeImage = (name) => {
-    // const newImage = image.filter((v) => v.name !== name)
     setImage('')
   }
 
@@ -42,7 +38,7 @@ const ProfileEditForm = ({ onClose }) => {
 
     console.log(typeof bodyFormData)
 
-    dispatch(updateUerProfileAction(bodyFormData))
+    dispatch(updateUerProfileAction(bodyFormData, accessToken))
     onClose()
   }
 
@@ -68,7 +64,7 @@ const ProfileEditForm = ({ onClose }) => {
             : ''}
           </div>
         </UploadImage>
-        <EditButton disabled={username.length === 0 || bio.length === 0} type='submit' value='등록' />
+        <EditButton disabled={!username && !bio && !image} type='submit' value='등록' />
       </EditForm>
     </>
   )

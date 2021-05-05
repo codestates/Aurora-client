@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import styled, { keyframes } from 'styled-components'
+import styled from 'styled-components'
 
+import Loading from '../components/Loading'
 import AppLayout from '../components/AppLayout'
 import PostRegisterBar from '../components/home/postRegister/PostRegisterBar'
 import PostCard from '../components/home/postCard/PostCard'
@@ -43,9 +44,7 @@ const Home = () => {
       {!isLoggedIn
         ? (
           <>
-            {accessToken
-              ? <Wrapper><Loading /></Wrapper>
-              : <Signin />}
+            {accessToken ? <Loading /> : <Signin />}
           </>
           )
         : (
@@ -68,36 +67,6 @@ const Home = () => {
     </>
   )
 }
-
-const Wrapper = styled.div`
-  height: 50rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
-
-const rotate360 = keyframes`
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-`
-
-const Loading = styled.div`
-  animation: ${rotate360} 1s linear infinite;
-  transform: translateZ(0);
-  
-  border-top: 2px solid grey;
-  border-right: 2px solid grey;
-  border-bottom: 2px solid grey;
-  border-left: 4px solid black;
-  background: transparent;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-`
 
 const PostCardList = styled.div`
   width : 100%;

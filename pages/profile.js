@@ -1,10 +1,11 @@
 import Head from 'next/head'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import styled, { keyframes } from 'styled-components'
+import styled from 'styled-components'
 
 import AppLayout from '../components/AppLayout'
 import Signin from './user/signin'
+import Loading from '../components/Loading'
 import UserProfile from '../components/userProfile/UserProfile'
 import PostCard from '../components/home/postCard/PostCard'
 import { signinSuccessAction, getAccessTokenAction } from '../reducers/user'
@@ -12,11 +13,11 @@ import { signinSuccessAction, getAccessTokenAction } from '../reducers/user'
 const Profile = () => {
   const dispatch = useDispatch()
 
-  const { isLoggedIn, googleLoading, loginLoading, accessToken } = useSelector((state) => state.user)
+  const { isLoggedIn, googleLoading, loginLoading, accessToken, me } = useSelector((state) => state.user)
   const { Posts, loadPostsDone, filterWeather } = useSelector(state => state.post)
-  console.log('accessToken', accessToken)
-  console.log('isLoading', googleLoading, loginLoading)
-  console.log('isLoggedIn', isLoggedIn)
+  // console.log('accessToken', accessToken)
+  // console.log('isLoading', googleLoading, loginLoading)
+  // console.log('isLoggedIn', isLoggedIn)
 
   useEffect(async () => {
     await dispatch(getAccessTokenAction())
@@ -36,9 +37,7 @@ const Profile = () => {
       {!isLoggedIn
         ? (
           <>
-            {accessToken
-              ? <Wrapper><Loading /></Wrapper>
-              : <Signin />}
+            {accessToken ? <Loading /> : <Signin />}
           </>
           )
         : (
@@ -68,36 +67,6 @@ const Profile = () => {
     </>
   )
 }
-
-const Wrapper = styled.div`
-  height: 50rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
-
-const rotate360 = keyframes`
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-`
-
-const Loading = styled.div`
-  animation: ${rotate360} 1s linear infinite;
-  transform: translateZ(0);
-  
-  border-top: 2px solid grey;
-  border-right: 2px solid grey;
-  border-bottom: 2px solid grey;
-  border-left: 4px solid black;
-  background: transparent;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-`
 
 const PostCardList = styled.div`
   width : 100%;

@@ -10,11 +10,21 @@ const UserProfile = () => {
   return (
     <>
       <Wrapper>
-        <Avatar src='/images/profile-thumbnail.jpg' alt='avatar' />
+        <>
+          {/* 맨 처음 가입 & 로그인 했을 때 디폴트 프로필 사진 설정 */}
+          {me.avatar[0]
+            ? <Avatar src={`data:image/png;base64,${Buffer.from(me.avatar[0].data.data).toString('base64')}`} alt='avatar' />
+            : <Avatar src='/images/profile-thumbnail.jpg' alt='avatar' />}
+        </>
         <ProfileInfo>
           <Username>{me.username}</Username>
           <ProfileEditButton onClick={() => { setShowModal(true) }}>수정</ProfileEditButton>
         </ProfileInfo>
+        <>
+          {me.bio
+            ? <Bio>{me.bio}</Bio>
+            : <Bio>만나서 반가워요!</Bio>}
+        </>
       </Wrapper>
       {showModal && (
         <ProfileEditModal
@@ -55,6 +65,12 @@ const Username = styled.div`
   color: #424242;
   font-size: 1.8rem;
   font-weight: 600;
+`
+
+const Bio = styled.div`
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: #444;
 `
 
 const ProfileEditButton = styled.button`

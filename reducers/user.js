@@ -101,13 +101,17 @@ export const signoutAction = (token) => async (dispatch) => {
 }
 
 // update user profile
-export const updateUerProfileAction = (data) => async (dispatch) => {
-  try {
-    const response = await axios.post('http://localhost:5000/api/user/update', data)
-    dispatch({ type: UPDATE_USER_PROFILE, payload: response })
-  } catch (err) {
-    dispatch({ type: UPDATE_USER_PROFILE, payload: err.response.data })
-  }
+export const updateUerProfileAction = (data, token) => async (dispatch) => {
+  // try {
+  const response = await axios.patch('http://localhost:5000/api/user', data, {
+    headers: {
+      Authorization: `${token}`
+    }
+  })
+  dispatch({ type: UPDATE_USER_PROFILE, payload: response })
+  // } catch (err) {
+  //   dispatch({ type: UPDATE_USER_PROFILE, payload: err.response.data })
+  // }
 }
 
 /* ------- reducer ------ */
@@ -181,7 +185,7 @@ const reducer = (state = initialState, action) => {
         }
       }
     case GET_USER:
-      console.log(action.payload)
+      console.log('GET USER', action.payload)
       if (action.payload.statusText === 'OK') {
         return {
           ...state,
@@ -215,6 +219,7 @@ const reducer = (state = initialState, action) => {
         }
       }
     case UPDATE_USER_PROFILE:
+      console.log('UPDATE USER', action.payload)
       if (action.payload.statusText === 'OK') {
         return {
           ...state,
@@ -223,8 +228,8 @@ const reducer = (state = initialState, action) => {
         }
       } else {
         return {
-          ...state,
-          updateError: action.payload.message
+          ...state
+          // updateError: action.payload.message
         }
       }
     default:
