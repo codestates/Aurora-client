@@ -7,19 +7,18 @@ import AppLayout from '../components/AppLayout'
 import PostRegisterBar from '../components/home/postRegister/PostRegisterBar'
 import PostCard from '../components/home/postCard/PostCard'
 import Signin from './user/signin'
-import { firstLoadPost, firstLoadAllPost, moreLoadPost, moreLoadAllPost } from '../reducers/post'
+import { firstLoadAllPost, moreLoadAllPost, CHANGE_TIME } from '../reducers/post'
 import { signinSuccessAction, getAccessTokenAction } from '../reducers/user'
 
 const Home = () => {
   const dispatch = useDispatch()
-  const { Posts, firstLoadPostDone, firstLoadAllPostDone, filterWeather, totalPosts } = useSelector(state => state.post)
+  const { Time, Posts, firstLoadAllPostDone, filterWeather, totalPosts } = useSelector(state => state.post)
   const { googleLoading, loginLoading, isLoggedIn, accessToken } = useSelector((state) => state.user)
 
-  const [time, setTime] = useState('')
-  useEffect(() => {
-    const time = new Date()
-    setTime(time.toISOString())
-  }, [])
+  dispatch({
+    type: CHANGE_TIME,
+    payload: new Date().toISOString()
+  })
 
   useEffect(() => {
     dispatch(getAccessTokenAction())
@@ -39,15 +38,14 @@ const Home = () => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      dispatch(firstLoadAllPost(time, accessToken))
+      dispatch(firstLoadAllPost(Time, accessToken))
     }
   }, [isLoggedIn])
 
   const [page, setPage] = useState(2)
 
   const onClickMore = useCallback(() => {
-    // dispatch(moreLoadPost(page, accessToken))
-    dispatch(moreLoadAllPost(page, time, accessToken))
+    dispatch(moreLoadAllPost(page, Time, accessToken))
     setPage((prev) => prev + 1)
   })
 
@@ -58,7 +56,7 @@ const Home = () => {
           <>
             {accessToken ? <Loading /> : <Signin />}
           </>
-        )
+          )
         : (
           <AppLayout filter>
             <PostRegisterBar />
@@ -67,16 +65,16 @@ const Home = () => {
                 (
                   filterWeather.length > 0
                     ? (
-                      filterPosts.map(post => <PostCard key={post._id} post={post} />)
-                    )
+                        filterPosts.map(post => <PostCard key={post._id} post={post} />)
+                      )
                     : (
-                      Posts.map(post => <PostCard key={post._id} post={post} />)
-                    )
+                        Posts.map(post => <PostCard key={post._id} post={post} />)
+                      )
                 )}
               {totalPosts > Posts.length && <button onClick={onClickMore}>더보기</button>}
             </PostCardList>
           </AppLayout>
-        )}
+          )}
     </>
   )
 }

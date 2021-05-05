@@ -49,7 +49,6 @@ const PostCard = ({ post }) => {
   const onToggleComment = useCallback(() => {
     setCommentFormOpened((prev) => !prev)
   }, [])
-  console.log('post : ', post)
   return (
     <Wrapper ThemaColor={Thema[post.mood].color}>
       <Header>
@@ -88,12 +87,12 @@ const PostCard = ({ post }) => {
             <Card.Meta
               description={<PostCardContent editMode={editMode} postData={post.content} onChangePost={onChangePost} onCancelUpdate={onCancelUpdate} />}
             />
-          )
+            )
           : (
             <Card.Meta
               description={<PostCardContent postData={post.content} />}
             />
-          )}
+            )}
       </Card>
       {commentFormOpened && (
         <>

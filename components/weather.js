@@ -16,8 +16,8 @@ const weather = () => {
     // 이 부분에 동기로직 필요
     if (loadedCords === null) {
       askForCoords()
+      loadedCords = localStorage.getItem(COORDS)
     }
-    loadedCords = localStorage.getItem(COORDS)
     const parseCoords = JSON.parse(loadedCords)
     console.log('loadedCords : ', loadedCords)
     console.log('parseCoords : ', parseCoords)

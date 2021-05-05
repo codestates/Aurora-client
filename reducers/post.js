@@ -35,7 +35,8 @@ export const initialState = {
   removeCommentDone: false,
   removeCommentError: null,
   filterWeather: [],
-  totalPosts: 0
+  totalPosts: 0,
+  Time: ''
 }
 
 // 액션 상수
@@ -80,6 +81,7 @@ export const REMOVE_COMMENT_SUCCESS = 'REMOVE_COMMENT_SUCCESS'
 export const REMOVE_COMMENT_FAILURE = 'REMOVE_COMMENT_FAILURE'
 
 export const FILTER_WEATHER = 'FILTER_WEATHER'
+export const CHANGE_TIME = 'CHANGE_TIME'
 
 // 액션 크리에이터
 export const firstLoadAllPost = (time, accessToken) => async (dispatch) => {
@@ -90,7 +92,9 @@ export const firstLoadAllPost = (time, accessToken) => async (dispatch) => {
     const headers = {
       Authorization: accessToken
     }
+    console.log('firstLoadAllPost : ', time)
     const response = await axios.get(`http://localhost:5000/api/posts/all?page=${1}&createdAt=${time}`, { headers })
+    console.log('firstLoadAllPost : ', response.data)
     dispatch({
       type: FIRST_LOAD_ALL_POST_SUCCESS,
       payload: response.data
@@ -133,6 +137,7 @@ export const firstLoadPost = (accessToken) => async (dispatch) => {
       Authorization: accessToken
     }
     const response = await axios.get(`http://localhost:5000/api/posts?page=${1}`, { headers })
+    console.log('firstLoadPost : ', response.data)
     dispatch({
       type: FIRST_LOAD_POST_SUCCESS,
       payload: response.data
@@ -263,7 +268,7 @@ export const updateComment = (postId, commentId, data, accessToken) => async (di
     const headers = {
       Authorization: accessToken
     }
-    const response = await axios.patch(`http://localhost:5000/api/comment/${commentId}`, data, { headers })
+    await axios.patch(`http://localhost:5000/api/comment/${commentId}`, data, { headers })
     dispatch({
       type: UPDATE_COMMENT_SUCCESS,
       payload: {
@@ -289,7 +294,7 @@ export const removeComment = (postId, commentId, accessToken) => async (dispatch
     const headers = {
       Authorization: accessToken
     }
-    const response = await axios.delete(`http://localhost:5000/api/post/${postId}/comment/${commentId}`, { headers })
+    await axios.delete(`http://localhost:5000/api/post/${postId}/comment/${commentId}`, { headers })
     dispatch({
       type: REMOVE_COMMENT_SUCCESS,
       payload: {
@@ -459,6 +464,9 @@ const reducer = (state = initialState, action) => Produce(state, (draft) => {
       break
     case FILTER_WEATHER:
       draft.filterWeather = action.payload
+      break
+    case CHANGE_TIME:
+      draft.Time = action.payload
       break
     default:
       break
