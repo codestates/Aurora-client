@@ -12,6 +12,7 @@ export const initialState = {
   loginError: null,
   accessTokenError: null,
   signoutError: null,
+  updateError: null,
   me: null,
   accessToken: null,
   googleAuthURL: ''
@@ -25,6 +26,7 @@ const SIGN_IN_REQUEST = 'SIGN_IN_REQUEST'
 const GET_ACCESS_TOKEN = 'GET_ACCESS_TOKEN'
 const GET_USER = 'GET_USER'
 const SIGN_OUT = 'LOG_OUT'
+const UPDATE_USER_PROFILE = 'UPDATE_USER_PROFILE'
 
 /* ------- dispatch 함수 ------ */
 // signup request
@@ -98,6 +100,20 @@ export const signoutAction = (token) => async (dispatch) => {
   }
 }
 
+// update user profile
+export const updateUerProfileAction = (data, token) => async (dispatch) => {
+  // try {
+  const response = await axios.patch('http://localhost:5000/api/user', data, {
+    headers: {
+      Authorization: `${token}`
+    }
+  })
+  dispatch({ type: UPDATE_USER_PROFILE, payload: response })
+  // } catch (err) {
+  //   dispatch({ type: UPDATE_USER_PROFILE, payload: err.response.data })
+  // }
+}
+
 /* ------- reducer ------ */
 const reducer = (state = initialState, action) => {
   // const { statusText, message, accessToken, data } = action.payload
@@ -169,7 +185,7 @@ const reducer = (state = initialState, action) => {
         }
       }
     case GET_USER:
-      console.log(action.payload)
+      console.log('GET USER', action.payload)
       if (action.payload.statusText === 'OK') {
         return {
           ...state,
@@ -200,6 +216,20 @@ const reducer = (state = initialState, action) => {
         return {
           ...state,
           signoutError: action.payload.message
+        }
+      }
+    case UPDATE_USER_PROFILE:
+      console.log('UPDATE USER', action.payload)
+      if (action.payload.statusText === 'OK') {
+        return {
+          ...state,
+          me: action.payload.data,
+          updateError: null
+        }
+      } else {
+        return {
+          ...state
+          // updateError: action.payload.message
         }
       }
     default:

@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 
+import Loading from '../components/Loading'
 import AppLayout from '../components/AppLayout'
 import PostRegisterBar from '../components/home/postRegister/PostRegisterBar'
 import PostCard from '../components/home/postCard/PostCard'
@@ -11,18 +12,18 @@ import { signinSuccessAction, getAccessTokenAction } from '../reducers/user'
 
 const Home = () => {
   const dispatch = useDispatch()
+
   const { googleLoading, loginLoading, isLoggedIn, accessToken } = useSelector((state) => state.user)
   const { Posts, loadPostsDone, loadPostsLoading, filterWeather } = useSelector(state => state.post)
 
-  useEffect(() => {
-    dispatch(getAccessTokenAction())
-  }, [googleLoading, loginLoading])
+  console.log('logged in? ', isLoggedIn)
 
-  useEffect(() => {
+  useEffect(async () => {
+    await dispatch(getAccessTokenAction())
     if (accessToken) {
       dispatch(signinSuccessAction(accessToken))
     }
-  }, [accessToken])
+  }, [googleLoading, loginLoading, accessToken])
 
   let filterPosts = []
 
@@ -61,7 +62,11 @@ const Home = () => {
   return (
     <>
       {!isLoggedIn
-        ? <Signin />
+        ? (
+          <>
+            {accessToken ? <Loading /> : <Signin />}
+          </>
+          )
         : (
           <AppLayout filter>
             <PostRegisterBar />
