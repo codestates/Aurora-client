@@ -6,7 +6,7 @@ const RightSideBar = () => {
   return (
     <Wrapper>
       <WeatherStatistics />
-      <Weather />
+      {/* <Weather /> */}
     </Wrapper>
   )
 }
