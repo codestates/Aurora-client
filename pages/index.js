@@ -7,8 +7,8 @@ import AppLayout from '../components/AppLayout'
 import PostRegisterBar from '../components/home/postRegister/PostRegisterBar'
 import PostCard from '../components/home/postCard/PostCard'
 import Signin from './user/signin'
-import { firstLoadAllPost, moreLoadAllPost, CHANGE_TIME, loadAllStatistics } from '../reducers/post'
-import { signinSuccessAction, getAccessTokenAction } from '../reducers/user'
+import { firstLoadAllPost, moreLoadAllPost, CHANGE_TIME, loadAllStatistics } from '../actions/post'
+import { signinSuccessAction, getAccessTokenAction } from '../actions/user'
 
 const Home = () => {
   const dispatch = useDispatch()
@@ -50,7 +50,6 @@ const Home = () => {
   })
 
   useEffect(() => {
-    console.log('HOME : loadAllStatistics')
     dispatch(loadAllStatistics())
   }, [])
 

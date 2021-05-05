@@ -5,7 +5,7 @@ import { useState, useCallback, useEffect } from 'react'
 import TextArea from 'antd/lib/input/TextArea'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { updateComment, removeComment } from '../../../reducers/post'
+import { updateComment, removeComment } from '../../../actions/post'
 
 import useInput from '../../../hooks/useInput'
 
@@ -57,7 +57,7 @@ const CommentContent = ({ item, postId }) => {
               <Button type='danger' onClick={onCancelUpdate}>취소</Button>
             </Button.Group>
           </>
-          )
+        )
         : (
           <>
             <span> {item.content}</span>
@@ -72,7 +72,7 @@ const CommentContent = ({ item, postId }) => {
               <EllipsisOutlined />
             </Popover>
           </>
-          )}
+        )}
     </div>
   )
 }
