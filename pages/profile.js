@@ -15,7 +15,8 @@ const Profile = () => {
   const dispatch = useDispatch()
 
   const { isLoggedIn, googleLoading, loginLoading, accessToken } = useSelector((state) => state.user)
-  const { Posts, firstLoadPostDone, filterWeather, totalPosts, moreLoadPostLoading } = useSelector(state => state.post)
+  const { Posts, firstLoadPostDone, filterWeather, totalPosts } = useSelector(state => state.post)
+
   useEffect(() => {
     dispatch(getAccessTokenAction())
   }, [googleLoading, loginLoading])
@@ -46,6 +47,7 @@ const Profile = () => {
     filterPosts = Posts.filter((ele) => (filterWeather.includes(ele.mood)))
   }
 
+  // TODO: 날씨 통계 제목 넘겨주기
   useEffect(() => {
     dispatch(loadStatistics(accessToken))
   }, [])
@@ -72,6 +74,7 @@ const Profile = () => {
             </Head>
             <AppLayout filter>
               <UserProfile />
+              <Text>나의 포스트</Text>
               <PostCardList>
                 {firstLoadPostDone &&
                   (
@@ -107,5 +110,13 @@ const PostCardList = styled.div`
     display:none;
   }
 `
-
+const Text = styled.div`
+  margin: 1rem 0;
+  padding: 1rem; 
+  width: 80%;
+  border-bottom: 1px solid #ddd;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #424242;
+`
 export default Profile

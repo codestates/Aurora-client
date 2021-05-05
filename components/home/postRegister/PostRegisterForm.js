@@ -61,21 +61,21 @@ const PostRegisterForm = ({ onClose }) => {
       <div>
         <input type='file' accept='image/*' multiple hidden ref={imageInput} onChange={onChangeImage} />
         <Button onClick={onClickImageUpload}>이미지 업로드</Button>
-        <div style={{ fontSize: '15px', height: '150px', padding: '10px' }}>
+        <div style={{ color: '#777', fontSize: '15px', height: '150px', padding: '10px' }}>
           {images.map((ele) => (
             <div key={ele.name}>{ele.name}
-              <button type='button' style={{ marginLeft: '5px', cursor: 'pointer' }} onClick={() => removeImage(ele.name)}>X</button>
+              <DeleteBtn type='button' style={{ marginLeft: '5px', cursor: 'pointer' }} onClick={() => removeImage(ele.name)}><i className='fas fa-times' style={{ color: '#777', fontSize: '1rem' }} /></DeleteBtn>
             </div>
           ))}
         </div>
       </div>
       <RadioWrapper onChange={onChangeMood}>
-        <Radio value='sun'><i className='fas fa-sun' style={{ color: '#FF6A89' }} /></Radio>
-        <Radio value='cloud'><i className='fas fa-cloud' style={{ color: '#a0a0a0' }} /></Radio>
-        <Radio value='rain'><i className='fas fa-cloud-showers-heavy' style={{ color: '#1E96FF' }} /></Radio>
-        <Radio value='moon'><i className='fas fa-moon' style={{ color: '#C71F8F' }} /></Radio>
+        <Radio value='sun'><i className='fas fa-sun' style={{ color: '#ffbebe' }} /></Radio>
+        <Radio value='cloud'><i className='fas fa-cloud' style={{ color: '#D4D4D4' }} /></Radio>
+        <Radio value='rain'><i className='fas fa-cloud-showers-heavy' style={{ color: '#b6d8f8' }} /></Radio>
+        <Radio value='moon'><i className='fas fa-moon' style={{ color: '#a18afc' }} /></Radio>
       </RadioWrapper>
-      <Button type='primary' htmlType='submit' loading={addPostLoading} disabled={content.length === 0 || mood.length === 0 || images.length === 0}>등록</Button>
+      <CustomBtn htmlType='submit' loading={addPostLoading} disabled={content.length === 0 || mood.length === 0 || images.length === 0}>등록</CustomBtn>
     </PostForm>
   )
 }
@@ -88,7 +88,7 @@ const PostForm = styled.form`
   height: 100%;
   display: flex;
   flex-direction: column;
-  font-size: 2rem;
+  font-size: 1.2rem;
   textarea{
     padding : 1rem;
     width: 100%;
@@ -102,6 +102,30 @@ const PostForm = styled.form`
   I{
     font-size: 2rem;
     margin: 0 2rem 0 0;
+  }
+`
+const DeleteBtn = styled.button`
+  border: none;
+  background: none;
+`
+
+const CustomBtn = styled(Button)`
+  border: none;
+  height: 2.4rem;
+  width: 90%;
+  align-self: center;
+  color: #fff;
+  background-color: #A18AFC; 
+  opacity: 0.7;
+  border-radius: 0.3rem;
+  &:hover{
+    background-color: #A18AFC;
+    opacity: 1;
+    color: #fff;
+  }
+  &[disabled]{
+  background-color: rgba(128,128,128,0.3);
+  cursor: unset;
   }
 `
 

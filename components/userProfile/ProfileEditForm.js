@@ -57,9 +57,9 @@ const ProfileEditForm = ({ onClose }) => {
         <Input value={username} onChange={onChangeUsername} placeholder='새 유저네임' />
         <Input value={bio} onChange={onChangeBio} placeholder='새 소개글' />
         <UploadImage>
-          <div style={{ marginBottom: '1rem' }}>프로필 이미지 업로드</div>
+          <div style={{ margin: '0 0 1rem 1rem', fontSize: '1.1rem' }}>프로필 이미지 업로드</div>
           <input type='file' accept='image/*' hidden ref={imageInput} onChange={onChangeImage} />
-          <Button style={{ width: '10rem' }} onClick={onClickImageUpload}>파일 선택</Button>
+          <Button style={{ marginLeft: '1rem', width: '9rem' }} onClick={onClickImageUpload}>파일 선택</Button>
           <div> {image
             ? (
               <ImageWrapper>
@@ -70,8 +70,8 @@ const ProfileEditForm = ({ onClose }) => {
             : ''}
           </div>
         </UploadImage>
-        <EditButton disabled={!username && !bio && !image} type='submit' value='등록' />
-        <button type='button' onClick={onClickWithdrawal}>회원탈퇴</button>
+        <EditButton disabled={!username && !bio && !image} type='submit'>수정</EditButton>
+        <WithdrawlButton type='button' onClick={onClickWithdrawal}>회원탈퇴</WithdrawlButton>
       </EditForm>
     </>
   )
@@ -81,20 +81,18 @@ const EditForm = styled.form`
   height: 100%;
   display: flex;
   flex-direction: column;
-  input{
-    padding : 1rem;
-    width: 90%;
-    height: 10rem;
-    border: none;
-    margin-left: 1rem;
-    resize: none;
-    &:focus{
-      outline:none;
-    }
-  }
 `
 const Input = styled.input`
   font-size: 1rem;
+  padding : 1rem;
+  width: 90%;
+  /* height: 10rem; */
+  border: none;
+  margin-left: 1rem;
+  resize: none;
+  &:focus{
+    outline:none;
+  }
 `
 
 const ImageWrapper = styled.div`
@@ -130,20 +128,43 @@ const Image = styled.img`
   max-height: 14rem;
 `
 
-const EditButton = styled.input`
-    text-align: center;
-    border-radius: 0.3rem;
-    padding: 2rem 0;
-    margin: auto auto 0 auto;
+const EditButton = styled.button`
+  margin: auto auto 0.5rem auto;
+  border: none;
+  height: 2.4rem;
+  width: 90%;
+  align-self: center;
+  color: #fff;
+  font-size: 1rem;
+  background-color: #A18AFC;
+  opacity: 0.7;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  &:hover{
     background-color: #A18AFC;
-    opacity: 0.9;
+    opacity: 1;
     color: #fff;
-    font-size: 1rem;
-    cursor: pointer;
-    &[disabled]{
-      background-color: rgba(128,128,128,0.3);
-      cursor: unset;
-    },
+  }
+  &[disabled]{
+  background-color: rgba(128,128,128,0.3);
+  cursor: unset;
+  }
+`
+const WithdrawlButton = styled.button`
+  border: none;
+  height: 2.4rem;
+  width: 90%;
+  align-self: center;
+  background-color: rgba(128,128,128,0.3);
+  color: #fff;
+  font-size: 1rem;
+  opacity: 0.7;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  &:hover{
+    background-color: #EB8686;
+    color: #fff;
+  }
 `
 
 export default ProfileEditForm

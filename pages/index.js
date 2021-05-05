@@ -54,7 +54,7 @@ const Home = () => {
     dispatch(loadAllStatistics())
   }, [])
 
-  const moreBtn = useRef()
+  // const moreBtn = useRef()
   // const onScroll = useCallback((e) => {
   //   if ((e.target.scrollTop + e.target.clientHeight === e.target.scrollHeight) && (totalPosts > Posts.length)) {
   //     moreBtn.current.click()
@@ -85,7 +85,8 @@ const Home = () => {
                 )}
               {/* {moreLoadAllPostLoading && <div>불러오는중</div>} */}
               {/* <button hidden onClick={onClickMore} ref={moreBtn} /> */}
-              {totalPosts > Posts.length && <button onClick={onClickMore} ref={moreBtn}>더보기</button>}
+              {/* {totalPosts > Posts.length && <button onClick={onClickMore} ref={moreBtn}>더보기</button>} */}
+              {totalPosts > Posts.length && <LoadMoreBtn onClick={onClickMore}>더 많은 게시물 보기</LoadMoreBtn>}
             </PostCardList>
           </AppLayout>
           )}
@@ -104,6 +105,22 @@ const PostCardList = styled.div`
   -ms-overflow-style:none;
   &::-webkit-scrollbar{ 
     display:none;
+  }
+`
+
+const LoadMoreBtn = styled.button`
+  border: none;
+  background: none;
+  margin: 1rem 0;
+  font-size: 1rem;
+  color: #424242;
+  cursor: pointer;
+  &:hover{
+    color: #A18AFC;
+    font-size: 1.1rem;
+  }
+  &:focus{
+    outline: none;
   }
 `
 

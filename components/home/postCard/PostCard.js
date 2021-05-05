@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import styled from 'styled-components'
 import PostImages from './PostImages'
-import Thema from '../../Thema'
+import Theme from '../../Theme'
 import CommentForm from './CommentForm'
 import { removePost, updatePost, unlikePost, likePost } from '../../../actions/post'
 import PostCardContent from './PostCardContent'
@@ -54,7 +54,7 @@ const PostCard = ({ post }) => {
 
   const liked = likePosts.find((v) => v === post._id)
   return (
-    <Wrapper ThemaColor={Thema[post.mood].color}>
+    <Wrapper ThemeColor={Theme[post.mood].color}>
       <Header>
         <Auth>
           {/* <img src={post.User.avatar} /> */}
@@ -63,7 +63,7 @@ const PostCard = ({ post }) => {
             <span>22 minutes ago</span>
           </div>
         </Auth>
-        {Thema[post.mood].icon}
+        {Theme[post.mood].icon}
       </Header>
       <Card
         cover={<PostImages images={post.images} />}
@@ -126,7 +126,7 @@ const Wrapper = styled.div`
   border-radius: 0.5rem;
   font-size: 0.9rem;
   margin-bottom : 1rem;
-  box-shadow: 0 0 3px ${props => props.ThemaColor};
+  box-shadow: 0 0 3px ${props => props.ThemeColor};
 `
 
 const Header = styled.div`
