@@ -185,7 +185,6 @@ const reducer = (state = initialState, action) => {
         }
       }
     case GET_USER:
-      console.log('GET USER', action.payload)
       if (action.payload.statusText === 'OK') {
         return {
           ...state,
@@ -230,7 +229,6 @@ const reducer = (state = initialState, action) => {
       } else {
         return {
           ...state
-          // updateError: action.payload.message
         }
       }
     default:

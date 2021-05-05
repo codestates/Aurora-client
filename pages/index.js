@@ -7,13 +7,19 @@ import AppLayout from '../components/AppLayout'
 import PostRegisterBar from '../components/home/postRegister/PostRegisterBar'
 import PostCard from '../components/home/postCard/PostCard'
 import Signin from './user/signin'
-import { firstLoadPost, moreLoadPost } from '../reducers/post'
-import { signinSuccessAction, getAccessTokenAction, signoutAction } from '../reducers/user'
+import { firstLoadPost, firstLoadAllPost, moreLoadPost, moreLoadAllPost } from '../reducers/post'
+import { signinSuccessAction, getAccessTokenAction } from '../reducers/user'
 
 const Home = () => {
   const dispatch = useDispatch()
-  const { Posts, firstLoadPostDone, filterWeather, totalPosts } = useSelector(state => state.post)
-  const { googleLoading, loginLoading, isLoggedIn, accessToken, accessTokenError, me } = useSelector((state) => state.user)
+  const { Posts, firstLoadPostDone, firstLoadAllPostDone, filterWeather, totalPosts } = useSelector(state => state.post)
+  const { googleLoading, loginLoading, isLoggedIn, accessToken } = useSelector((state) => state.user)
+
+  const [time, setTime] = useState('')
+  useEffect(() => {
+    const time = new Date()
+    setTime(time.toISOString())
+  }, [])
 
   useEffect(() => {
     dispatch(getAccessTokenAction())
@@ -33,14 +39,15 @@ const Home = () => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      dispatch(firstLoadPost(accessToken))
+      dispatch(firstLoadAllPost(time, accessToken))
     }
   }, [isLoggedIn])
 
   const [page, setPage] = useState(2)
 
   const onClickMore = useCallback(() => {
-    dispatch(moreLoadPost(page, accessToken))
+    // dispatch(moreLoadPost(page, accessToken))
+    dispatch(moreLoadAllPost(page, time, accessToken))
     setPage((prev) => prev + 1)
   })
 
@@ -56,7 +63,7 @@ const Home = () => {
           <AppLayout filter>
             <PostRegisterBar />
             <PostCardList>
-              {firstLoadPostDone &&
+              {firstLoadAllPostDone &&
                 (
                   filterWeather.length > 0
                     ? (
