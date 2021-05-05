@@ -55,10 +55,10 @@ const Home = () => {
                 (
                   filterWeather.length > 0
                     ? (
-                        filterPosts.map(post => <PostCard key={post.id} post={post} />)
+                        filterPosts.map(post => <PostCard key={post._id} post={post} />)
                       )
                     : (
-                        Posts.map(post => <PostCard key={post.id} post={post} />)
+                        Posts.map(post => <PostCard key={post._id} post={post} />)
                       )
                 )}
             </PostCardList>

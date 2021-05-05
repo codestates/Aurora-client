@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 
 const { TextArea } = Input
 const PostCardContent = ({ postData, editMode, onChangePost, onCancelUpdate }) => {
-  const { updatePostDone } = useSelector((state) => state.post)
+  const { updatePostLoading, updatePostDone } = useSelector((state) => state.post)
   const [editText, setEditText] = useState(postData)
 
   useEffect(() => {
@@ -23,13 +23,13 @@ const PostCardContent = ({ postData, editMode, onChangePost, onCancelUpdate }) =
       {editMode
         ? (
           <>
-            <TextArea value={editText} onChange={onChangeText} />
+            <TextArea placeholder={editText} value={editText} onChange={onChangeText} />
             <Button.Group>
-              <Button onClick={() => onChangePost(editText)}>수정</Button>
+              <Button loading={updatePostLoading} onClick={onChangePost(editText)}>수정</Button>
               <Button type='danger' onClick={onCancelUpdate}>취소</Button>
             </Button.Group>
           </>
-          )
+        )
         : postData}
     </div>
   )
