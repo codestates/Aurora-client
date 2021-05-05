@@ -15,10 +15,6 @@ const Home = () => {
   const { Posts, firstLoadPostDone, filterWeather, totalPosts } = useSelector(state => state.post)
   const { googleLoading, loginLoading, isLoggedIn, accessToken, accessTokenError, me } = useSelector((state) => state.user)
 
-  console.log('logged in? ', isLoggedIn)
-  console.log('accessTokenError: ', accessTokenError)
-  console.log(accessToken, googleLoading, loginLoading)
-
   useEffect(() => {
     dispatch(getAccessTokenAction())
   }, [googleLoading, loginLoading])
@@ -35,8 +31,6 @@ const Home = () => {
     filterPosts = Posts.filter((ele) => (filterWeather.includes(ele.mood)))
   }
 
-  console.log('HOME Posts :', Posts)
-  console.log('totalPosts : ', totalPosts)
   useEffect(() => {
     if (isLoggedIn) {
       dispatch(firstLoadPost(accessToken))
@@ -57,7 +51,7 @@ const Home = () => {
           <>
             {accessToken ? <Loading /> : <Signin />}
           </>
-          )
+        )
         : (
           <AppLayout filter>
             <PostRegisterBar />
@@ -66,16 +60,16 @@ const Home = () => {
                 (
                   filterWeather.length > 0
                     ? (
-                        filterPosts.map(post => <PostCard key={post._id} post={post} />)
-                      )
+                      filterPosts.map(post => <PostCard key={post._id} post={post} />)
+                    )
                     : (
-                        Posts.map(post => <PostCard key={post._id} post={post} />)
-                      )
+                      Posts.map(post => <PostCard key={post._id} post={post} />)
+                    )
                 )}
               {totalPosts > Posts.length && <button onClick={onClickMore}>더보기</button>}
             </PostCardList>
           </AppLayout>
-          )}
+        )}
     </>
   )
 }
