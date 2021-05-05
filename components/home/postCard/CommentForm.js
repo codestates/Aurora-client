@@ -3,7 +3,7 @@ import { Form, Input, Button } from 'antd'
 import { useEffect, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import useInput from '../../../hooks/useInput'
-import { addComment } from '../../../reducers/post'
+import { addComment } from '../../../actions/post'
 
 const CommentForm = ({ post }) => {
   const dispatch = useDispatch()

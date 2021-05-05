@@ -8,8 +8,8 @@ import Signin from './user/signin'
 import Loading from '../components/Loading'
 import UserProfile from '../components/userProfile/UserProfile'
 import PostCard from '../components/home/postCard/PostCard'
-import { firstLoadPost, moreLoadPost } from '../reducers/post'
-import { signinSuccessAction, getAccessTokenAction } from '../reducers/user'
+import { firstLoadPost, moreLoadPost, loadStatistics } from '../actions/post'
+import { signinSuccessAction, getAccessTokenAction } from '../actions/user'
 
 const Profile = () => {
   const dispatch = useDispatch()
@@ -46,6 +46,11 @@ const Profile = () => {
     filterPosts = Posts.filter((ele) => (filterWeather.includes(ele.mood)))
   }
 
+  useEffect(() => {
+    console.log('PROFILE : loadStatistics')
+    dispatch(loadStatistics(accessToken))
+  }, [])
+
   return (
     <>
       {!isLoggedIn
@@ -53,13 +58,13 @@ const Profile = () => {
           <>
             {accessToken ? <Loading /> : <Signin />}
           </>
-          )
+        )
         : (
           <>
             <Head>
               <title>프로필 | Aurora</title>
             </Head>
-            <AppLayout>
+            <AppLayout filter>
               <UserProfile />
               <Text>나의 포스트</Text>
               <PostCardList>
@@ -67,17 +72,17 @@ const Profile = () => {
                   (
                     filterWeather.length > 0
                       ? (
-                          filterPosts.map(post => <PostCard key={post.id} post={post} />)
-                        )
+                        filterPosts.map(post => <PostCard key={post._id} post={post} />)
+                      )
                       : (
-                          Posts.map(post => <PostCard key={post.id} post={post} />)
-                        )
+                        Posts.map(post => <PostCard key={post._id} post={post} />)
+                      )
                   )}
                 {totalPosts > Posts.length && <button onClick={onClickMore}>더보기</button>}
               </PostCardList>
             </AppLayout>
           </>
-          )}
+        )}
     </>
   )
 }

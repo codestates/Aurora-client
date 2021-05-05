@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { Checkbox } from 'antd'
 import { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { FILTER_WEATHER } from '../../reducers/post'
+import { FILTER_WEATHER } from '../../actions/post'
 
 const FilterBar = () => {
   const dispatch = useDispatch()

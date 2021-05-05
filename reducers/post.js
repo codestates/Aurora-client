@@ -1,9 +1,15 @@
-import axios from 'axios'
+import { ADD_COMMENT_FAILURE, ADD_COMMENT_REQUEST, ADD_COMMENT_SUCCESS, ADD_POST_FAILURE, ADD_POST_REQUEST, ADD_POST_SUCCESS, CHANGE_TIME, FILTER_WEATHER, FIRST_LOAD_ALL_POST_FAILURE, FIRST_LOAD_ALL_POST_REQUEST, FIRST_LOAD_ALL_POST_SUCCESS, FIRST_LOAD_POST_FAILURE, FIRST_LOAD_POST_REQUEST, FIRST_LOAD_POST_SUCCESS, LOAD_ALL_STATISTICS_FAILURE, LOAD_ALL_STATISTICS_REQUEST, LOAD_ALL_STATISTICS_SUCCESS, LOAD_STATISTICS_FAILURE, LOAD_STATISTICS_REQUEST, LOAD_STATISTICS_SUCCESS, MORE_LOAD_ALL_POST_FAILURE, MORE_LOAD_ALL_POST_REQUEST, MORE_LOAD_ALL_POST_SUCCESS, MORE_LOAD_POST_FAILURE, MORE_LOAD_POST_REQUEST, MORE_LOAD_POST_SUCCESS, REMOVE_COMMENT_FAILURE, REMOVE_COMMENT_REQUEST, REMOVE_COMMENT_SUCCESS, REMOVE_POST_FAILURE, REMOVE_POST_REQUEST, REMOVE_POST_SUCCESS, UPDATE_COMMENT_FAILURE, UPDATE_COMMENT_REQUEST, UPDATE_COMMENT_SUCCESS, UPDATE_POST_FAILURE, UPDATE_POST_REQUEST, UPDATE_POST_SUCCESS } from '../actions/post'
 import Produce from '../util/produce'
 
 // 초기 데이터 구조
 export const initialState = {
   Posts: [],
+  loadAllStatisticsLoading: false,
+  loadAllStatisticsDone: false,
+  loadAllStatisticsError: null,
+  loadStatisticsLoading: false,
+  loadStatisticsDone: false,
+  loadStatisticsError: null,
   firstLoadAllPostLoading: false,
   firstLoadAllPostDone: false,
   firstLoadAllPostError: null,
@@ -36,278 +42,8 @@ export const initialState = {
   removeCommentError: null,
   filterWeather: [],
   totalPosts: 0,
-  Time: ''
-}
-
-// 액션 상수
-export const FIRST_LOAD_ALL_POST_REQUEST = 'FIRST_LOAD_ALL_POST_REQUEST'
-export const FIRST_LOAD_ALL_POST_SUCCESS = 'FIRST_LOAD_ALL_POST_SUCCESS'
-export const FIRST_LOAD_ALL_POST_FAILURE = 'FIRST_LOAD_ALL_POST_FAILURE'
-
-export const MORE_LOAD_ALL_POST_REQUEST = 'MORE_LOAD_ALL_POST_REQUEST'
-export const MORE_LOAD_ALL_POST_SUCCESS = 'MORE_LOAD_ALL_POST_SUCCESS'
-export const MORE_LOAD_ALL_POST_FAILURE = 'MORE_LOAD_ALL_POST_FAILURE'
-
-export const FIRST_LOAD_POST_REQUEST = 'FIRST_LOAD_POST_REQUEST'
-export const FIRST_LOAD_POST_SUCCESS = 'FIRST_LOAD_POST_SUCCESS'
-export const FIRST_LOAD_POST_FAILURE = 'FIRST_LOAD_POST_FAILURE'
-
-export const MORE_LOAD_POST_REQUEST = 'MORE_LOAD_POST_REQUEST'
-export const MORE_LOAD_POST_SUCCESS = 'MORE_LOAD_POST_SUCCESS'
-export const MORE_LOAD_POST_FAILURE = 'MORE_LOAD_POST_FAILURE'
-
-export const ADD_POST_REQUEST = 'ADD_POST_REQUEST'
-export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS'
-export const ADD_POST_FAILURE = 'ADD_POST_FAILURE'
-
-export const UPDATE_POST_REQUEST = 'UPDATE_POST_REQUEST'
-export const UPDATE_POST_SUCCESS = 'UPDATE_POST_SUCCESS'
-export const UPDATE_POST_FAILURE = 'UPDATE_POST_FAILURE'
-
-export const REMOVE_POST_REQUEST = 'REMOVE_POST_REQUEST'
-export const REMOVE_POST_SUCCESS = 'REMOVE_POST_SUCCESS'
-export const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE'
-
-export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST'
-export const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS'
-export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE'
-
-export const UPDATE_COMMENT_REQUEST = 'UPDATE_COMMENT_REQUEST'
-export const UPDATE_COMMENT_SUCCESS = 'UPDATE_COMMENT_SUCCESS'
-export const UPDATE_COMMENT_FAILURE = 'UPDATE_COMMENT_FAILURE'
-
-export const REMOVE_COMMENT_REQUEST = 'REMOVE_COMMENT_REQUEST'
-export const REMOVE_COMMENT_SUCCESS = 'REMOVE_COMMENT_SUCCESS'
-export const REMOVE_COMMENT_FAILURE = 'REMOVE_COMMENT_FAILURE'
-
-export const FILTER_WEATHER = 'FILTER_WEATHER'
-export const CHANGE_TIME = 'CHANGE_TIME'
-
-// 액션 크리에이터
-export const firstLoadAllPost = (time, accessToken) => async (dispatch) => {
-  try {
-    dispatch({
-      type: FIRST_LOAD_ALL_POST_REQUEST
-    })
-    const headers = {
-      Authorization: accessToken
-    }
-    console.log('firstLoadAllPost : ', time)
-    const response = await axios.get(`http://localhost:5000/api/posts/all?page=${1}&createdAt=${time}`, { headers })
-    console.log('firstLoadAllPost : ', response.data)
-    dispatch({
-      type: FIRST_LOAD_ALL_POST_SUCCESS,
-      payload: response.data
-    })
-  } catch (err) {
-    dispatch({
-      type: FIRST_LOAD_ALL_POST_FAILURE,
-      payload: err.response.data
-    })
-  }
-}
-
-export const moreLoadAllPost = (page, time, accessToken) => async (dispatch) => {
-  try {
-    dispatch({
-      type: MORE_LOAD_ALL_POST_REQUEST
-    })
-    const headers = {
-      Authorization: accessToken
-    }
-    const response = await axios.get(`http://localhost:5000/api/posts/all?page=${page}&createdAt=${time}`, { headers })
-    dispatch({
-      type: MORE_LOAD_ALL_POST_SUCCESS,
-      payload: response.data
-    })
-  } catch (err) {
-    dispatch({
-      type: MORE_LOAD_ALL_POST_FAILURE,
-      payload: err.response.data
-    })
-  }
-}
-
-export const firstLoadPost = (accessToken) => async (dispatch) => {
-  try {
-    dispatch({
-      type: FIRST_LOAD_POST_REQUEST
-    })
-    const headers = {
-      Authorization: accessToken
-    }
-    const response = await axios.get(`http://localhost:5000/api/posts?page=${1}`, { headers })
-    console.log('firstLoadPost : ', response.data)
-    dispatch({
-      type: FIRST_LOAD_POST_SUCCESS,
-      payload: response.data
-    })
-  } catch (err) {
-    dispatch({
-      type: FIRST_LOAD_POST_FAILURE,
-      payload: err.response.data
-    })
-  }
-}
-
-export const moreLoadPost = (page, accessToken) => async (dispatch) => {
-  try {
-    dispatch({
-      type: MORE_LOAD_POST_REQUEST
-    })
-    const headers = {
-      Authorization: accessToken
-    }
-    const response = await axios.get(`http://localhost:5000/api/posts?page=${page}`, { headers })
-    console.log('LOAD_POST_REQUEST : ', response.data)
-    dispatch({
-      type: MORE_LOAD_POST_SUCCESS,
-      payload: response.data
-    })
-  } catch (err) {
-    dispatch({
-      type: MORE_LOAD_POST_FAILURE,
-      payload: err.response.data
-    })
-  }
-}
-
-export const addPost = (data, accessToken) => async (dispatch) => {
-  try {
-    dispatch({
-      type: ADD_POST_REQUEST
-    })
-    const headers = {
-      Authorization: accessToken
-    }
-    const response = await axios.post('http://localhost:5000/api/post/', data, { headers })
-    dispatch({
-      type: ADD_POST_SUCCESS,
-      payload: response.data.post
-    })
-  } catch (err) {
-    dispatch({
-      type: ADD_POST_FAILURE,
-      payload: err.response.data
-    })
-  }
-}
-
-export const updatePost = (id, data, accessToken) => async (dispatch) => {
-  try {
-    dispatch({
-      type: UPDATE_POST_REQUEST
-    })
-    const headers = {
-      Authorization: accessToken
-    }
-    const response = await axios.patch(`http://localhost:5000/api/post/${id}`, data, { headers })
-    dispatch({
-      type: UPDATE_POST_SUCCESS,
-      payload: response.data
-    })
-  } catch (err) {
-    dispatch({
-      type: UPDATE_POST_FAILURE,
-      payload: err.response.data
-    })
-  }
-}
-
-export const removePost = (id, accessToken) => async (dispatch) => {
-  try {
-    dispatch({
-      type: REMOVE_POST_REQUEST
-    })
-    const headers = {
-      Authorization: accessToken
-    }
-    await axios.delete(`http://localhost:5000/api/post/${id}`, { headers })
-    dispatch({
-      type: REMOVE_POST_SUCCESS,
-      payload: id
-    })
-  } catch (err) {
-    dispatch({
-      type: REMOVE_POST_FAILURE,
-      payload: err.response.data
-    })
-  }
-}
-
-export const addComment = (postId, data, accessToken) => async (dispatch) => {
-  try {
-    dispatch({
-      type: ADD_COMMENT_REQUEST
-    })
-    const headers = {
-      Authorization: accessToken
-    }
-    const response = await axios.post(`http://localhost:5000/api/comment/${postId}`, data, { headers })
-    console.log(response.data)
-    dispatch({
-      type: ADD_COMMENT_SUCCESS,
-      payload: {
-        postId,
-        data: response.data
-      }
-    })
-  } catch (err) {
-    dispatch({
-      type: ADD_COMMENT_FAILURE,
-      payload: err.response.data
-    })
-  }
-}
-
-export const updateComment = (postId, commentId, data, accessToken) => async (dispatch) => {
-  try {
-    dispatch({
-      type: UPDATE_COMMENT_REQUEST
-    })
-    const headers = {
-      Authorization: accessToken
-    }
-    await axios.patch(`http://localhost:5000/api/comment/${commentId}`, data, { headers })
-    dispatch({
-      type: UPDATE_COMMENT_SUCCESS,
-      payload: {
-        postId,
-        commentId,
-        content: data.content
-      }
-    })
-  } catch (err) {
-    console.log('ERROR : ', err.message)
-    // dispatch({
-    //   type: UPDATE_COMMENT_FAILURE,
-    //   payload: err.response.data
-    // })
-  }
-}
-
-export const removeComment = (postId, commentId, accessToken) => async (dispatch) => {
-  try {
-    dispatch({
-      type: REMOVE_COMMENT_REQUEST
-    })
-    const headers = {
-      Authorization: accessToken
-    }
-    await axios.delete(`http://localhost:5000/api/post/${postId}/comment/${commentId}`, { headers })
-    dispatch({
-      type: REMOVE_COMMENT_SUCCESS,
-      payload: {
-        postId,
-        commentId
-      }
-    })
-  } catch (err) {
-    dispatch({
-      type: REMOVE_COMMENT_FAILURE,
-      payload: err.response.data
-    })
-  }
+  Time: '',
+  Statistics: null
 }
 
 const reducer = (state = initialState, action) => Produce(state, (draft) => {
@@ -467,6 +203,36 @@ const reducer = (state = initialState, action) => Produce(state, (draft) => {
       break
     case CHANGE_TIME:
       draft.Time = action.payload
+      break
+    case LOAD_ALL_STATISTICS_REQUEST:
+      draft.loadAllStatisticsLoading = true
+      draft.loadAllStatisticsDone = false
+      draft.loadAllStatisticsError = null
+      draft.Statistics = null
+      break
+    case LOAD_ALL_STATISTICS_SUCCESS:
+      draft.loadAllStatisticsLoading = false
+      draft.loadAllStatisticsDone = true
+      draft.Statistics = action.payload
+      break
+    case LOAD_ALL_STATISTICS_FAILURE:
+      draft.loadAllStatisticsLoading = false
+      draft.loadAllStatisticsError = action.payload.message
+      break
+    case LOAD_STATISTICS_REQUEST:
+      draft.loadStatisticsLoading = true
+      draft.loadStatisticsDone = false
+      draft.loadStatisticsError = null
+      draft.Statistics = null
+      break
+    case LOAD_STATISTICS_SUCCESS:
+      draft.loadStatisticsLoading = false
+      draft.loadStatisticsDone = true
+      draft.Statistics = action.payload
+      break
+    case LOAD_STATISTICS_FAILURE:
+      draft.loadStatisticsLoading = false
+      draft.loadStatisticsError = action.payload.message
       break
     default:
       break

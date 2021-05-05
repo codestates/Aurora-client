@@ -6,7 +6,6 @@ import thunk from 'redux-thunk'
 import reducer from '../reducers'
 
 const configureStore = (context) => {
-  console.log(context)
   const middlewares = [thunk]
   const enhancer = process.env.NODE_ENV === 'production'
     ? compose(applyMiddleware(...middlewares))

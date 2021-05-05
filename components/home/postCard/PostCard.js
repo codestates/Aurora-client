@@ -9,7 +9,7 @@ import styled from 'styled-components'
 import PostImages from './PostImages'
 import Theme from '../../Theme'
 import CommentForm from './CommentForm'
-import { removePost, updatePost } from '../../../reducers/post'
+import { removePost, updatePost } from '../../../actions/post'
 import PostCardContent from './PostCardContent'
 import CommentContent from './CommentContent'
 
@@ -87,12 +87,12 @@ const PostCard = ({ post }) => {
             <Card.Meta
               description={<PostCardContent editMode={editMode} postData={post.content} onChangePost={onChangePost} onCancelUpdate={onCancelUpdate} />}
             />
-            )
+          )
           : (
             <Card.Meta
               description={<PostCardContent postData={post.content} />}
             />
-            )}
+          )}
       </Card>
       {commentFormOpened && (
         <>

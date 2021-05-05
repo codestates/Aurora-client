@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import Link from 'next/link'
 import { useDispatch, useSelector } from 'react-redux'
-import { signupRequestAction } from '../../reducers/user'
+import { signupRequestAction } from '../../actions/user'
 import { useEffect, useState, useCallback } from 'react'
 import useInput from '../../hooks/useInput'
 
@@ -79,7 +79,7 @@ const SignupProcess = () => {
             </InputContainer>
 
           </>
-        )}
+          )}
     </>
 
   )

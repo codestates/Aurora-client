@@ -4,7 +4,7 @@ import { Button } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 
 import useInput from '../../hooks/useInput'
-import { updateUerProfileAction, withdrawal } from '../../reducers/user'
+import { updateUerProfileAction, withdrawal } from '../../actions/user'
 
 const ProfileEditForm = ({ onClose }) => {
   const dispatch = useDispatch()
@@ -66,7 +66,7 @@ const ProfileEditForm = ({ onClose }) => {
                 <Image src={URL.createObjectURL(image)} />
                 <CloseButton type='button' onClick={() => removeImage(image)}>지우기</CloseButton>
               </ImageWrapper>
-              )
+            )
             : ''}
           </div>
         </UploadImage>

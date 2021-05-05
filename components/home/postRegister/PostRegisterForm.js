@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 import { Button, Radio } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { addPost } from '../../../reducers/post'
+import { addPost } from '../../../actions/post'
 
 const PostRegisterForm = ({ onClose }) => {
   const dispatch = useDispatch()
