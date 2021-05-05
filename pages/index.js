@@ -7,7 +7,7 @@ import AppLayout from '../components/AppLayout'
 import PostRegisterBar from '../components/home/postRegister/PostRegisterBar'
 import PostCard from '../components/home/postCard/PostCard'
 import Signin from './user/signin'
-import { firstLoadAllPost, moreLoadAllPost, CHANGE_TIME } from '../reducers/post'
+import { firstLoadAllPost, moreLoadAllPost, CHANGE_TIME, loadAllStatistics } from '../reducers/post'
 import { signinSuccessAction, getAccessTokenAction } from '../reducers/user'
 
 const Home = () => {
@@ -48,6 +48,11 @@ const Home = () => {
     dispatch(moreLoadAllPost(page, Time, accessToken))
     setPage((prev) => prev + 1)
   })
+
+  useEffect(() => {
+    console.log('HOME : loadAllStatistics')
+    dispatch(loadAllStatistics())
+  }, [])
 
   return (
     <>

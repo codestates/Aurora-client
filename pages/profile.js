@@ -8,7 +8,7 @@ import Signin from './user/signin'
 import Loading from '../components/Loading'
 import UserProfile from '../components/userProfile/UserProfile'
 import PostCard from '../components/home/postCard/PostCard'
-import { firstLoadPost, moreLoadPost } from '../reducers/post'
+import { firstLoadPost, moreLoadPost, loadStatistics } from '../reducers/post'
 import { signinSuccessAction, getAccessTokenAction } from '../reducers/user'
 
 const Profile = () => {
@@ -45,6 +45,11 @@ const Profile = () => {
   if (filterWeather.length > 0) {
     filterPosts = Posts.filter((ele) => (filterWeather.includes(ele.mood)))
   }
+
+  useEffect(() => {
+    console.log('PROFILE : loadStatistics')
+    dispatch(loadStatistics(accessToken))
+  }, [])
 
   return (
     <>
