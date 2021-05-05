@@ -60,7 +60,7 @@ export const REMOVE_COMMENT_FAILURE = 'REMOVE_COMMENT_FAILURE'
 export const FILTER_WEATHER = 'FILTER_WEATHER'
 
 // 액션 크리에이터
-export const loadPost = (accessToken) => async (dispatch) => {
+export const loadPost = (page, accessToken) => async (dispatch) => {
   try {
     dispatch({
       type: LOAD_POST_REQUEST
@@ -68,7 +68,7 @@ export const loadPost = (accessToken) => async (dispatch) => {
     const headers = {
       Authorization: accessToken
     }
-    const response = await axios.get(`http://localhost:5000/api/posts?page=${1}`, { headers })
+    const response = await axios.get(`http://localhost:5000/api/posts?page=${page}`, { headers })
     dispatch({
       type: LOAD_POST_SUCCESS,
       payload: response.data
@@ -178,7 +178,6 @@ export const updateComment = (postId, commentId, data, accessToken) => async (di
       Authorization: accessToken
     }
     const response = await axios.patch(`http://localhost:5000/api/comment/${commentId}`, data, { headers })
-    console.log(response.data)
     dispatch({
       type: UPDATE_COMMENT_SUCCESS,
       payload: {
@@ -205,7 +204,6 @@ export const removeComment = (postId, commentId, accessToken) => async (dispatch
       Authorization: accessToken
     }
     const response = await axios.delete(`http://localhost:5000/api/post/${postId}/comment/${commentId}`, { headers })
-    console.log(response.data)
     dispatch({
       type: REMOVE_COMMENT_SUCCESS,
       payload: {
@@ -231,7 +229,7 @@ const reducer = (state = initialState, action) => Produce(state, (draft) => {
     case LOAD_POST_SUCCESS:
       draft.loadPostLoading = false
       draft.loadPostsDone = true
-      draft.Posts = action.payload.posts
+      draft.Posts = [...draft.Posts, ...action.payload.posts]
       break
     case LOAD_POST_FAILURE:
       draft.loadPostLoading = false
@@ -288,7 +286,7 @@ const reducer = (state = initialState, action) => Produce(state, (draft) => {
       draft.addCommentLoading = false
       draft.addCommentDone = true
       const addPost_ = draft.Posts.find((v) => v._id === action.payload.postId)
-      addPost_.comments.unshift(action.payload.data)
+      addPost_.comments.push(action.payload.data)
       break
     }
     case ADD_COMMENT_FAILURE:

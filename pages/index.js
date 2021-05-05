@@ -12,7 +12,7 @@ import { signinSuccessAction, getAccessTokenAction } from '../reducers/user'
 const Home = () => {
   const dispatch = useDispatch()
   const { googleLoading, loginLoading, isLoggedIn, accessToken } = useSelector((state) => state.user)
-  const { Posts, loadPostsDone, filterWeather } = useSelector(state => state.post)
+  const { Posts, loadPostsDone, loadPostsLoading, filterWeather } = useSelector(state => state.post)
 
   useEffect(() => {
     dispatch(getAccessTokenAction())
@@ -34,9 +34,29 @@ const Home = () => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      dispatch(loadPost(accessToken))
+      dispatch(loadPost(1, accessToken))
     }
   }, [isLoggedIn])
+
+  const onScroll = (e) => {
+    if (e.target.scrollTop + 701 === e.target.scrollHeight) {
+      dispatch(loadPost(2, accessToken))
+    }
+  }
+
+  // useEffect(() => {
+  //   function onScroll () {
+  //     if (window.pageYOffset + document.documentElement.clientHeight > document.documentElement.scrollHeight) {
+  //       if (!loadPostsLoading) {
+  //         dispatch(loadPost(2, accessToken))
+  //       }
+  //     }
+  //   }
+  //   window.addEventListener('scroll', onScroll)
+  //   return () => {
+  //     window.removeEventListener('scroll', onScroll)
+  //   }
+  // }, [loadPostsLoading])
 
   return (
     <>
@@ -45,20 +65,20 @@ const Home = () => {
         : (
           <AppLayout filter>
             <PostRegisterBar />
-            <PostCardList>
+            <PostCardList onScroll={onScroll}>
               {loadPostsDone &&
                 (
                   filterWeather.length > 0
                     ? (
-                        filterPosts.map(post => <PostCard key={post._id} post={post} />)
-                      )
+                      filterPosts.map(post => <PostCard key={post._id} post={post} />)
+                    )
                     : (
-                        Posts.map(post => <PostCard key={post._id} post={post} />)
-                      )
+                      Posts.map(post => <PostCard key={post._id} post={post} />)
+                    )
                 )}
             </PostCardList>
           </AppLayout>
-          )}
+        )}
     </>
   )
 }
@@ -72,9 +92,9 @@ const PostCardList = styled.div`
   padding-top: 10px;
   overflow: auto;
   -ms-overflow-style:none;
-  &::-webkit-scrollbar{ 
-    display:none;
-  }
+  // &::-webkit-scrollbar{ 
+  //   display:none;
+  // }
 `
 
 export default Home

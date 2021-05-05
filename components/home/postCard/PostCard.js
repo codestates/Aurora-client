@@ -24,7 +24,6 @@ const PostCard = ({ post }) => {
     setEditMode(true)
   }, [])
   const onCancelUpdate = useCallback(() => {
-    console.log('onCancelUpdate')
     setEditMode(false)
   }, [])
   const onChangePost = useCallback((editText) => () => {
@@ -89,12 +88,12 @@ const PostCard = ({ post }) => {
             <Card.Meta
               description={<PostCardContent editMode={editMode} postData={post.content} onChangePost={onChangePost} onCancelUpdate={onCancelUpdate} />}
             />
-            )
+          )
           : (
             <Card.Meta
               description={<PostCardContent postData={post.content} />}
             />
-            )}
+          )}
       </Card>
       {commentFormOpened && (
         <>

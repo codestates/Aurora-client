@@ -1,24 +1,31 @@
 import styled from 'styled-components'
 import PostRegisterModal from './PostRegisterModal'
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { useSelector } from 'react-redux'
 
 const PostBar = () => {
   const { me } = useSelector(state => state.user)
   const [showModal, setShowModal] = useState(false)
 
+  const onClickModal = useCallback(() => {
+    console.log('AAA')
+    setShowModal(true)
+  }, [])
+  const onCloseModal = useCallback(() => {
+    setShowModal(false)
+  }, [])
+
+  console.log(showModal)
+
   return (
     <>
-      <Wrapper onClick={() => {
-        setShowModal(true)
-      }}
-      >
+      <Wrapper onClick={onClickModal}>
         <Avatar src='' alt='avatar' />
         <span>{me.username}님, 오늘 당신의 날씨는 어떤가요?</span>
       </Wrapper>
       {showModal && (
         <PostRegisterModal
-          onClose={() => setShowModal(false)}
+          onClose={onCloseModal}
           User={me}
         />
       )}
