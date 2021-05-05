@@ -106,9 +106,7 @@ const Wrapper = styled.div`
 `
 
 PostImages.propTypes = {
-  images: PropTypes.arrayOf(PropTypes.shape({
-    src: PropTypes.string
-  })).isRequired
+  images: PropTypes.arrayOf(PropTypes.object).isRequired
 }
 
 export default PostImages

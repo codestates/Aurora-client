@@ -18,8 +18,6 @@ const Home = () => {
     dispatch(getAccessTokenAction())
   }, [googleLoading, loginLoading])
 
-  console.log('logged in? ', isLoggedIn)
-
   useEffect(() => {
     if (accessToken) {
       dispatch(signinSuccessAction(accessToken))
@@ -52,10 +50,10 @@ const Home = () => {
                 (
                   filterWeather.length > 0
                     ? (
-                        filterPosts.map(post => <PostCard key={post.id} post={post} />)
+                        filterPosts.map(post => <PostCard key={post._id} post={post} />)
                       )
                     : (
-                        Posts.map(post => <PostCard key={post.id} post={post} />)
+                        Posts.map(post => <PostCard key={post._id} post={post} />)
                       )
                 )}
             </PostCardList>

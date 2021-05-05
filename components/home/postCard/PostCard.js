@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import { Button, Card, Popover, List, Comment } from 'antd'
 import { HeartTwoTone, HeartOutlined, MessageOutlined, EllipsisOutlined } from '@ant-design/icons'
 
@@ -10,10 +11,11 @@ import Thema from '../../Thema'
 import CommentForm from './CommentForm'
 import { removePost, updatePost } from '../../../reducers/post'
 import PostCardContent from './PostCardContent'
+import CommentContent from './CommentContent'
 
-const PostCard = ({ post, onClick }) => {
+const PostCard = ({ post }) => {
   const dispatch = useDispatch()
-  // 옵셔널체이닝 id or undefined
+  const { removePostLoading } = useSelector((state) => state.post)
   const { me, accessToken } = useSelector(state => state.user)
 
   // 포스트 수정
@@ -22,20 +24,20 @@ const PostCard = ({ post, onClick }) => {
     setEditMode(true)
   }, [])
   const onCancelUpdate = useCallback(() => {
+    console.log('onCancelUpdate')
     setEditMode(false)
   }, [])
-  const onChangePost = useCallback((editText) => {
+  const onChangePost = useCallback((editText) => () => {
     const data = new FormData()
     data.append('content', editText)
 
     dispatch(updatePost(post._id, data, accessToken))
-    onCancelUpdate()
   }, [post])
 
   // 포스트 삭제
-  const onRemovePost = () => {
+  const onRemovePost = useCallback(() => {
     dispatch(removePost(post._id, accessToken))
-  }
+  }, [post])
 
   // 좋아요 기능
   const [liked, setLiked] = useState(false)
@@ -73,7 +75,7 @@ const PostCard = ({ post, onClick }) => {
               key='more' content={(
                 <Button.Group>
                   <Button onClick={onClickUpdate}>수정</Button>
-                  <Button type='danger' onClick={onRemovePost}>삭제</Button>
+                  <Button type='danger' loading={removePostLoading} onClick={onRemovePost}>삭제</Button>
                 </Button.Group>
               )}
             >
@@ -104,8 +106,9 @@ const PostCard = ({ post, onClick }) => {
             renderItem={item => (
               <li>
                 <Comment
-                  author={item.User.username}
-                  content={item.content}
+                  style={{ padding: '0 10px' }}
+                  author={item.commentedBy.username}
+                  content={<CommentContent item={item} postId={post._id} />}
                 />
               </li>
             )}
@@ -155,5 +158,9 @@ const Auth = styled.div`
     font-weight: bold;
   }
 `
+
+PostCard.propTypes = {
+  post: PropTypes.object.isRequired
+}
 
 export default PostCard
