@@ -8,21 +8,20 @@ import Signin from './user/signin'
 import Loading from '../components/Loading'
 import UserProfile from '../components/userProfile/UserProfile'
 import PostCard from '../components/home/postCard/PostCard'
-import { signinSuccessAction, getAccessTokenAction } from '../reducers/user'
+import { signinSuccessAction, getAccessTokenAction, signoutAction } from '../reducers/user'
 
 const Profile = () => {
   const dispatch = useDispatch()
 
   const { isLoggedIn, googleLoading, loginLoading, accessToken, me } = useSelector((state) => state.user)
   const { Posts, loadPostsDone, filterWeather } = useSelector(state => state.post)
-  // console.log('accessToken', accessToken)
-  // console.log('isLoading', googleLoading, loginLoading)
-  // console.log('isLoggedIn', isLoggedIn)
 
   useEffect(async () => {
     await dispatch(getAccessTokenAction())
     if (accessToken) {
       dispatch(signinSuccessAction(accessToken))
+    } else {
+      dispatch(signoutAction(accessToken))
     }
   }, [googleLoading, loginLoading, accessToken])
 
