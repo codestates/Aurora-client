@@ -23,19 +23,22 @@ const FilterBar = () => {
     <Wrapper>
       <div>보고싶은 날씨를 선택해보세요</div>
       <Checkbox.Group onChange={onChangeWeather}>
-        <Checkbox value='sun'><i className='fas fa-sun' style={{ color: '#FF6A89' }} /></Checkbox>
-        <Checkbox value='cloud'><i className='fas fa-cloud' style={{ color: '#a0a0a0' }} /></Checkbox>
-        <Checkbox value='rain'><i className='fas fa-cloud-showers-heavy' style={{ color: '#1E96FF' }} /></Checkbox>
-        <Checkbox value='moon'><i className='fas fa-moon' style={{ color: '#C71F8F' }} /></Checkbox>
+        <Checkbox value='sun'><i className='fas fa-sun' style={{ color: '#ffbebe' }} /></Checkbox>
+        <Checkbox value='cloud'><i className='fas fa-cloud' style={{ color: '#D4D4D4' }} /></Checkbox>
+        <Checkbox value='rain'><i className='fas fa-cloud-showers-heavy' style={{ color: '#b6d8f8' }} /></Checkbox>
+        <Checkbox value='moon'><i className='fas fa-moon' style={{ color: '#a18afc' }} /></Checkbox>
       </Checkbox.Group>
     </Wrapper>
   )
 }
 
 const Wrapper = styled.div`
-    border: 1px solid gray;
-    border-radius: 3.125em;
     display : flex;
+    border: double 0.08rem transparent;
+    border-radius: 3.125em;
+    background-image: linear-gradient(white, white), radial-gradient(circle at top left, #ffbebe, #b6d8f8, #a18afc);
+    background-origin: border-box;
+    background-clip: content-box, border-box;
     height: 3rem;
     align-items: center;
     justify-content: space-evenly;
