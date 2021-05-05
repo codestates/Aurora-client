@@ -7,7 +7,7 @@ import AppLayout from '../components/AppLayout'
 import Loading from '../components/Loading'
 import Signin from './user/signin'
 
-import { signinSuccessAction, getAccessTokenAction } from '../reducers/user'
+import { signinSuccessAction, getAccessTokenAction } from '../actions/user'
 
 const Notification = () => {
   const dispatch = useDispatch()
@@ -30,7 +30,7 @@ const Notification = () => {
           <>
             {accessToken ? <Loading /> : <Signin />}
           </>
-          )
+        )
         : (
           <>
             <Head>
@@ -40,7 +40,7 @@ const Notification = () => {
               <NotificationMsg>알림이 없습니다 :(</NotificationMsg>
             </AppLayout>
           </>
-          )}
+        )}
     </>
   )
 }

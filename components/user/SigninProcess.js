@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import Link from 'next/link'
 import { useDispatch, useSelector } from 'react-redux'
-import { signinRequestAction } from '../../reducers/user'
+import { signinRequestAction } from '../../actions/user'
 import { useEffect, useState, useCallback } from 'react'
 import useInput from '../../hooks/useInput'
 

@@ -14,8 +14,6 @@ const PostBar = () => {
     setShowModal(false)
   }, [])
 
-  console.log(showModal)
-
   return (
     <>
       <Wrapper onClick={() => {
