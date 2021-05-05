@@ -67,6 +67,7 @@ const UserInfo = styled.div`
 `
 const GoToProfile = styled.a`
   margin-left: -2rem;
+  cursor: pointer;
   &:hover{
     color: #A18AFC;
   }

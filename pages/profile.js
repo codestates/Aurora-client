@@ -15,7 +15,8 @@ const Profile = () => {
   const dispatch = useDispatch()
 
   const { isLoggedIn, googleLoading, loginLoading, accessToken } = useSelector((state) => state.user)
-  const { Posts, firstLoadPostDone, filterWeather, totalPosts } = useSelector(state => state.post)
+  const { Posts, firstLoadPostDone, filterWeather, totalPosts, Statistics } = useSelector(state => state.post)
+
   useEffect(() => {
     dispatch(getAccessTokenAction())
   }, [googleLoading, loginLoading])
@@ -46,6 +47,7 @@ const Profile = () => {
     filterPosts = Posts.filter((ele) => (filterWeather.includes(ele.mood)))
   }
 
+  // TODO: 날씨 통계 제목 넘겨주기
   useEffect(() => {
     console.log('PROFILE : loadStatistics')
     dispatch(loadStatistics(accessToken))
@@ -58,7 +60,7 @@ const Profile = () => {
           <>
             {accessToken ? <Loading /> : <Signin />}
           </>
-        )
+          )
         : (
           <>
             <Head>
@@ -72,17 +74,17 @@ const Profile = () => {
                   (
                     filterWeather.length > 0
                       ? (
-                        filterPosts.map(post => <PostCard key={post._id} post={post} />)
-                      )
+                          filterPosts.map(post => <PostCard key={post._id} post={post} />)
+                        )
                       : (
-                        Posts.map(post => <PostCard key={post._id} post={post} />)
-                      )
+                          Posts.map(post => <PostCard key={post._id} post={post} />)
+                        )
                   )}
                 {totalPosts > Posts.length && <button onClick={onClickMore}>더보기</button>}
               </PostCardList>
             </AppLayout>
           </>
-        )}
+          )}
     </>
   )
 }

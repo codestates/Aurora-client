@@ -15,6 +15,8 @@ const WeatherStatistics = () => {
 
   return (
     <Wrapper>
+      {/* TODO: 날씨 통계 제목 */}
+      <div>날씨 현황</div>
       <Progress type='circle' width={60} percent={statistic.sun} format={() => (Theme.sun.icon)} />{statistic.sun}%
       <Progress type='circle' width={60} percent={statistic.cloud} format={() => (Theme.cloud.icon)} />{statistic.cloud}%
       <Progress type='circle' width={60} percent={statistic.rain} format={() => (Theme.rain.icon)} />{statistic.rain}%
