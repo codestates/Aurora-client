@@ -4,7 +4,7 @@ import { Button } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 
 import useInput from '../../hooks/useInput'
-import { updateUerProfileAction } from '../../reducers/user'
+import { updateUerProfileAction, withdrawal } from '../../reducers/user'
 
 const ProfileEditForm = ({ onClose }) => {
   const dispatch = useDispatch()
@@ -26,6 +26,12 @@ const ProfileEditForm = ({ onClose }) => {
 
   const removeImage = (name) => {
     setImage('')
+  }
+
+  const onClickWithdrawal = () => {
+    if (confirm('정말 탈퇴하시겠습니까??') === true) {
+      dispatch(withdrawal(accessToken))
+    }
   }
 
   const onSubmit = (e) => {
@@ -65,6 +71,7 @@ const ProfileEditForm = ({ onClose }) => {
           </div>
         </UploadImage>
         <EditButton disabled={!username && !bio && !image} type='submit' value='등록' />
+        <button type='button' onClick={onClickWithdrawal}>회원탈퇴</button>
       </EditForm>
     </>
   )

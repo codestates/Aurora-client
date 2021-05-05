@@ -27,6 +27,7 @@ const GET_ACCESS_TOKEN = 'GET_ACCESS_TOKEN'
 const GET_USER = 'GET_USER'
 const SIGN_OUT = 'LOG_OUT'
 const UPDATE_USER_PROFILE = 'UPDATE_USER_PROFILE'
+const WITHDRAWAL = 'WITHDRAWAL'
 
 /* ------- dispatch 함수 ------ */
 // signup request
@@ -112,6 +113,20 @@ export const updateUerProfileAction = (data, token) => async (dispatch) => {
   // } catch (err) {
   //   dispatch({ type: UPDATE_USER_PROFILE, payload: err.response.data })
   // }
+}
+
+// withdrawal
+export const withdrawal = (accessToken) => async (dispatch) => {
+  try {
+    const headers = {
+      Authorization: accessToken
+    }
+    const response = await axios.delete('http://localhost:5000/api/user', { headers })
+    console.log('withdrawal : ', response)
+    dispatch({ type: WITHDRAWAL, payload: response })
+  } catch (err) {
+    dispatch({ type: WITHDRAWAL, payload: err.response.data })
+  }
 }
 
 /* ------- reducer ------ */
@@ -225,6 +240,19 @@ const reducer = (state = initialState, action) => {
           ...state,
           me: action.payload.data,
           updateError: null
+        }
+      } else {
+        return {
+          ...state
+        }
+      }
+    case WITHDRAWAL:
+      if (action.payload.statusText === 'OK') {
+        return {
+          ...state,
+          me: null,
+          isLoggedIn: false,
+          accessToken: null
         }
       } else {
         return {
