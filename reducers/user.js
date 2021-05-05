@@ -210,6 +210,7 @@ const reducer = (state = initialState, action) => {
           isLoggedIn: false,
           loginError: null,
           signoutError: null,
+          accessToken: null,
           me: null
         }
       } else {

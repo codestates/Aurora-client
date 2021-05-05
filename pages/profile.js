@@ -13,17 +13,21 @@ import { signinSuccessAction, getAccessTokenAction, signoutAction } from '../red
 const Profile = () => {
   const dispatch = useDispatch()
 
-  const { isLoggedIn, googleLoading, loginLoading, accessToken, me } = useSelector((state) => state.user)
+  const { isLoggedIn, googleLoading, loginLoading, accessToken, accessTokenError, me } = useSelector((state) => state.user)
   const { Posts, loadPostsDone, filterWeather } = useSelector(state => state.post)
 
-  useEffect(async () => {
-    await dispatch(getAccessTokenAction())
+  console.log('accessTokenError: ', accessTokenError)
+  console.log('accessToken: ', accessToken)
+
+  useEffect(() => {
+    dispatch(getAccessTokenAction())
+  }, [googleLoading, loginLoading])
+
+  useEffect(() => {
     if (accessToken) {
       dispatch(signinSuccessAction(accessToken))
-    } else {
-      dispatch(signoutAction(accessToken))
     }
-  }, [googleLoading, loginLoading, accessToken])
+  }, [accessToken])
 
   let filterPosts = []
 

@@ -13,19 +13,22 @@ import { signinSuccessAction, getAccessTokenAction, signoutAction } from '../red
 const Home = () => {
   const dispatch = useDispatch()
 
-  const { googleLoading, loginLoading, isLoggedIn, accessToken, me } = useSelector((state) => state.user)
+  const { googleLoading, loginLoading, isLoggedIn, accessToken, accessTokenError, me } = useSelector((state) => state.user)
   const { Posts, loadPostsDone, filterWeather } = useSelector(state => state.post)
 
   console.log('logged in? ', isLoggedIn)
+  console.log('accessTokenError: ', accessTokenError)
+  console.log(accessToken, googleLoading, loginLoading)
 
-  useEffect(async () => {
-    await dispatch(getAccessTokenAction())
+  useEffect(() => {
+    dispatch(getAccessTokenAction())
+  }, [googleLoading, loginLoading])
+
+  useEffect(() => {
     if (accessToken) {
       dispatch(signinSuccessAction(accessToken))
-    } else {
-      dispatch(signoutAction(accessToken))
     }
-  }, [googleLoading, loginLoading, accessToken])
+  }, [accessToken])
 
   let filterPosts = []
 
