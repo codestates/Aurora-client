@@ -19,7 +19,8 @@ const PostRegisterForm = ({ onClose }) => {
 
   useEffect(() => {
     if (content.length > 0 && addPostDone) {
-      onClose()
+      // onClose()
+      window.location.replace('/')
     }
   }, [addPostDone])
 

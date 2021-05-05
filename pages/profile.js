@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { useEffect } from 'react'
+import { useEffect, useCallback, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 
@@ -8,14 +8,14 @@ import Signin from './user/signin'
 import Loading from '../components/Loading'
 import UserProfile from '../components/userProfile/UserProfile'
 import PostCard from '../components/home/postCard/PostCard'
+import { firstLoadPost, moreLoadPost } from '../reducers/post'
 import { signinSuccessAction, getAccessTokenAction } from '../reducers/user'
 
 const Profile = () => {
   const dispatch = useDispatch()
 
   const { isLoggedIn, googleLoading, loginLoading, accessToken } = useSelector((state) => state.user)
-  const { Posts, loadPostsDone, filterWeather } = useSelector(state => state.post)
-
+  const { Posts, firstLoadPostDone, filterWeather, totalPosts } = useSelector(state => state.post)
   useEffect(() => {
     dispatch(getAccessTokenAction())
   }, [googleLoading, loginLoading])
@@ -25,6 +25,20 @@ const Profile = () => {
       dispatch(signinSuccessAction(accessToken))
     }
   }, [accessToken])
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      dispatch(firstLoadPost(accessToken))
+    }
+  }, [isLoggedIn])
+
+  const [page, setPage] = useState(2)
+
+  const onClickMore = useCallback(() => {
+    // dispatch(moreLoadPost(page, accessToken))
+    dispatch(moreLoadPost(page, accessToken))
+    setPage((prev) => prev + 1)
+  })
 
   let filterPosts = []
 
@@ -49,18 +63,17 @@ const Profile = () => {
               <UserProfile />
               <Text>나의 포스트</Text>
               <PostCardList>
-                {/* {loadPostsDone && */}
-                {
-                (
-                  filterWeather.length > 0
-                    ? (
-                        filterPosts.map(post => <PostCard key={post.id} post={post} />)
-                      )
-                    : (
-                        Posts.map(post => <PostCard key={post.id} post={post} />)
-                      )
-                )
-              }
+                {firstLoadPostDone &&
+                  (
+                    filterWeather.length > 0
+                      ? (
+                          filterPosts.map(post => <PostCard key={post.id} post={post} />)
+                        )
+                      : (
+                          Posts.map(post => <PostCard key={post.id} post={post} />)
+                        )
+                  )}
+                {totalPosts > Posts.length && <button onClick={onClickMore}>더보기</button>}
               </PostCardList>
             </AppLayout>
           </>

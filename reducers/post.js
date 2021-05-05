@@ -4,6 +4,12 @@ import Produce from '../util/produce'
 // 초기 데이터 구조
 export const initialState = {
   Posts: [],
+  firstLoadAllPostLoading: false,
+  firstLoadAllPostDone: false,
+  firstLoadAllPostError: null,
+  moreLoadAllPostLoading: false,
+  moreLoadAllPostDone: false,
+  moreLoadAllPostError: null,
   firstLoadPostLoading: false,
   firstLoadPostDone: false,
   firstLoadPostError: null,
@@ -29,10 +35,19 @@ export const initialState = {
   removeCommentDone: false,
   removeCommentError: null,
   filterWeather: [],
-  totalPosts: 0
+  totalPosts: 0,
+  Time: ''
 }
 
 // 액션 상수
+export const FIRST_LOAD_ALL_POST_REQUEST = 'FIRST_LOAD_ALL_POST_REQUEST'
+export const FIRST_LOAD_ALL_POST_SUCCESS = 'FIRST_LOAD_ALL_POST_SUCCESS'
+export const FIRST_LOAD_ALL_POST_FAILURE = 'FIRST_LOAD_ALL_POST_FAILURE'
+
+export const MORE_LOAD_ALL_POST_REQUEST = 'MORE_LOAD_ALL_POST_REQUEST'
+export const MORE_LOAD_ALL_POST_SUCCESS = 'MORE_LOAD_ALL_POST_SUCCESS'
+export const MORE_LOAD_ALL_POST_FAILURE = 'MORE_LOAD_ALL_POST_FAILURE'
+
 export const FIRST_LOAD_POST_REQUEST = 'FIRST_LOAD_POST_REQUEST'
 export const FIRST_LOAD_POST_SUCCESS = 'FIRST_LOAD_POST_SUCCESS'
 export const FIRST_LOAD_POST_FAILURE = 'FIRST_LOAD_POST_FAILURE'
@@ -66,8 +81,53 @@ export const REMOVE_COMMENT_SUCCESS = 'REMOVE_COMMENT_SUCCESS'
 export const REMOVE_COMMENT_FAILURE = 'REMOVE_COMMENT_FAILURE'
 
 export const FILTER_WEATHER = 'FILTER_WEATHER'
+export const CHANGE_TIME = 'CHANGE_TIME'
 
 // 액션 크리에이터
+export const firstLoadAllPost = (time, accessToken) => async (dispatch) => {
+  try {
+    dispatch({
+      type: FIRST_LOAD_ALL_POST_REQUEST
+    })
+    const headers = {
+      Authorization: accessToken
+    }
+    console.log('firstLoadAllPost : ', time)
+    const response = await axios.get(`http://localhost:5000/api/posts/all?page=${1}&createdAt=${time}`, { headers })
+    console.log('firstLoadAllPost : ', response.data)
+    dispatch({
+      type: FIRST_LOAD_ALL_POST_SUCCESS,
+      payload: response.data
+    })
+  } catch (err) {
+    dispatch({
+      type: FIRST_LOAD_ALL_POST_FAILURE,
+      payload: err.response.data
+    })
+  }
+}
+
+export const moreLoadAllPost = (page, time, accessToken) => async (dispatch) => {
+  try {
+    dispatch({
+      type: MORE_LOAD_ALL_POST_REQUEST
+    })
+    const headers = {
+      Authorization: accessToken
+    }
+    const response = await axios.get(`http://localhost:5000/api/posts/all?page=${page}&createdAt=${time}`, { headers })
+    dispatch({
+      type: MORE_LOAD_ALL_POST_SUCCESS,
+      payload: response.data
+    })
+  } catch (err) {
+    dispatch({
+      type: MORE_LOAD_ALL_POST_FAILURE,
+      payload: err.response.data
+    })
+  }
+}
+
 export const firstLoadPost = (accessToken) => async (dispatch) => {
   try {
     dispatch({
@@ -77,6 +137,7 @@ export const firstLoadPost = (accessToken) => async (dispatch) => {
       Authorization: accessToken
     }
     const response = await axios.get(`http://localhost:5000/api/posts?page=${1}`, { headers })
+    console.log('firstLoadPost : ', response.data)
     dispatch({
       type: FIRST_LOAD_POST_SUCCESS,
       payload: response.data
@@ -207,7 +268,7 @@ export const updateComment = (postId, commentId, data, accessToken) => async (di
     const headers = {
       Authorization: accessToken
     }
-    const response = await axios.patch(`http://localhost:5000/api/comment/${commentId}`, data, { headers })
+    await axios.patch(`http://localhost:5000/api/comment/${commentId}`, data, { headers })
     dispatch({
       type: UPDATE_COMMENT_SUCCESS,
       payload: {
@@ -233,7 +294,7 @@ export const removeComment = (postId, commentId, accessToken) => async (dispatch
     const headers = {
       Authorization: accessToken
     }
-    const response = await axios.delete(`http://localhost:5000/api/post/${postId}/comment/${commentId}`, { headers })
+    await axios.delete(`http://localhost:5000/api/post/${postId}/comment/${commentId}`, { headers })
     dispatch({
       type: REMOVE_COMMENT_SUCCESS,
       payload: {
@@ -251,6 +312,36 @@ export const removeComment = (postId, commentId, accessToken) => async (dispatch
 
 const reducer = (state = initialState, action) => Produce(state, (draft) => {
   switch (action.type) {
+    case FIRST_LOAD_ALL_POST_REQUEST:
+      draft.firstLoadAllPostLoading = true
+      draft.firstLoadAllPostDone = false
+      draft.firstLoadAllPostError = null
+      break
+    case FIRST_LOAD_ALL_POST_SUCCESS:
+      draft.firstLoadAllPostLoading = false
+      draft.firstLoadAllPostDone = true
+      draft.Posts = action.payload.posts
+      draft.totalPosts = action.payload.totalPosts
+      break
+    case FIRST_LOAD_ALL_POST_FAILURE:
+      draft.firstLoadAllPostLoading = false
+      draft.firstLoadAllPostError = action.payload.message
+      break
+    case MORE_LOAD_ALL_POST_REQUEST:
+      draft.moreLoadAllPostLoading = true
+      draft.moreLoadAllPostDone = false
+      draft.moreLoadAllPostError = null
+      break
+    case MORE_LOAD_ALL_POST_SUCCESS:
+      draft.moreLoadAllPostLoading = false
+      draft.moreLoadAllPostDone = true
+      draft.Posts = draft.Posts.concat(action.payload.posts)
+      draft.totalPosts = action.payload.totalPosts
+      break
+    case MORE_LOAD_ALL_POST_FAILURE:
+      draft.moreLoadAllPostLoading = false
+      draft.moreLoadAllPostError = action.payload.message
+      break
     case FIRST_LOAD_POST_REQUEST:
       draft.firstLoadPostLoading = true
       draft.firstLoadPostDone = false
@@ -289,7 +380,7 @@ const reducer = (state = initialState, action) => Produce(state, (draft) => {
     case ADD_POST_SUCCESS:
       draft.addPostLoading = false
       draft.addPostDone = true
-      draft.Posts.unshift(action.payload)
+      // draft.Posts.unshift(action.payload)
       break
     case ADD_POST_FAILURE:
       draft.addPostLoading = false
@@ -373,6 +464,9 @@ const reducer = (state = initialState, action) => Produce(state, (draft) => {
       break
     case FILTER_WEATHER:
       draft.filterWeather = action.payload
+      break
+    case CHANGE_TIME:
+      draft.Time = action.payload
       break
     default:
       break

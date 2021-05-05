@@ -49,7 +49,6 @@ const PostCard = ({ post }) => {
   const onToggleComment = useCallback(() => {
     setCommentFormOpened((prev) => !prev)
   }, [])
-
   return (
     <Wrapper ThemeColor={Theme[post.mood].color}>
       <Header>

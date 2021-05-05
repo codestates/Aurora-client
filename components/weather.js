@@ -1,22 +1,26 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
+// axios.defaults.withCredentials = true
 
 const weather = () => {
   const API_KEY = process.env.openweatherKey
 
-  const [weatherInfo, setWeatherInfo] = useState({})
+  const [weatherInfo, setWeatherInfo] = useState(null)
   const [isData, setIsData] = useState(false)
 
   const COORDS = 'coords'
 
   const loadCoords = () => {
-    const loadedCords = localStorage.getItem(COORDS)
-    console.log('loadedCords : ', loadedCords)
+    let loadedCords = localStorage.getItem(COORDS)
+    // 이 부분에 동기로직 필요
     if (loadedCords === null) {
       askForCoords()
+      loadedCords = localStorage.getItem(COORDS)
     }
     const parseCoords = JSON.parse(loadedCords)
+    console.log('loadedCords : ', loadedCords)
+    console.log('parseCoords : ', parseCoords)
     return [parseCoords.latitude, parseCoords.longitude]
   }
 
@@ -44,10 +48,22 @@ const weather = () => {
     const lat = coords[0]
     const lng = coords[1]
     const API_URL = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${API_KEY}&units=metric`
-    const res = await axios.get(API_URL)
-    setWeatherInfo(res.data)
-    setIsData(true)
+    const headers = {
+      'Access-Control-Allow-Origin': '*'
+    }
+    console.log('API_URL : ', API_URL)
+    // const res = await axios.get(API_URL, { headers }, { withCredentials: true })
+    fetch(API_URL)
+      .then((res) => res.json())
+      .then((data) => {
+        setWeatherInfo(data)
+        setIsData(true)
+      })
   }
+
+  console.log('IsData : ', isData)
+  console.log('weatherInfo : ', weatherInfo)
+
   useEffect(() => {
     getWeather()
   }, [])

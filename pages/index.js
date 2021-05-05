@@ -7,15 +7,18 @@ import AppLayout from '../components/AppLayout'
 import PostRegisterBar from '../components/home/postRegister/PostRegisterBar'
 import PostCard from '../components/home/postCard/PostCard'
 import Signin from './user/signin'
-import { firstLoadPost, moreLoadPost } from '../reducers/post'
+import { firstLoadAllPost, moreLoadAllPost, CHANGE_TIME } from '../reducers/post'
 import { signinSuccessAction, getAccessTokenAction } from '../reducers/user'
 
 const Home = () => {
   const dispatch = useDispatch()
-  const { Posts, firstLoadPostDone, filterWeather, totalPosts } = useSelector(state => state.post)
+  const { Time, Posts, firstLoadAllPostDone, filterWeather, totalPosts } = useSelector(state => state.post)
   const { googleLoading, loginLoading, isLoggedIn, accessToken } = useSelector((state) => state.user)
 
-  console.log('logged in? ', isLoggedIn)
+  dispatch({
+    type: CHANGE_TIME,
+    payload: new Date().toISOString()
+  })
 
   useEffect(() => {
     dispatch(getAccessTokenAction())
@@ -33,18 +36,16 @@ const Home = () => {
     filterPosts = Posts.filter((ele) => (filterWeather.includes(ele.mood)))
   }
 
-  console.log('HOME Posts :', Posts)
-  console.log('totalPosts : ', totalPosts)
   useEffect(() => {
     if (isLoggedIn) {
-      dispatch(firstLoadPost(accessToken))
+      dispatch(firstLoadAllPost(Time, accessToken))
     }
   }, [isLoggedIn])
 
   const [page, setPage] = useState(2)
 
   const onClickMore = useCallback(() => {
-    dispatch(moreLoadPost(page, accessToken))
+    dispatch(moreLoadAllPost(page, Time, accessToken))
     setPage((prev) => prev + 1)
   })
 
@@ -60,7 +61,7 @@ const Home = () => {
           <AppLayout filter>
             <PostRegisterBar />
             <PostCardList>
-              {firstLoadPostDone &&
+              {firstLoadAllPostDone &&
                 (
                   filterWeather.length > 0
                     ? (
