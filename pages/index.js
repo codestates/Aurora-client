@@ -8,12 +8,12 @@ import PostRegisterBar from '../components/home/postRegister/PostRegisterBar'
 import PostCard from '../components/home/postCard/PostCard'
 import Signin from './user/signin'
 import { loadPost } from '../reducers/post'
-import { signinSuccessAction, getAccessTokenAction } from '../reducers/user'
+import { signinSuccessAction, getAccessTokenAction, signoutAction } from '../reducers/user'
 
 const Home = () => {
   const dispatch = useDispatch()
 
-  const { googleLoading, loginLoading, isLoggedIn, accessToken } = useSelector((state) => state.user)
+  const { googleLoading, loginLoading, isLoggedIn, accessToken, me } = useSelector((state) => state.user)
   const { Posts, loadPostsDone, filterWeather } = useSelector(state => state.post)
 
   console.log('logged in? ', isLoggedIn)
@@ -22,6 +22,8 @@ const Home = () => {
     await dispatch(getAccessTokenAction())
     if (accessToken) {
       dispatch(signinSuccessAction(accessToken))
+    } else {
+      dispatch(signoutAction(accessToken))
     }
   }, [googleLoading, loginLoading, accessToken])
 

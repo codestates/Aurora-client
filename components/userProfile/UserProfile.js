@@ -6,7 +6,6 @@ import ProfileEditModal from './ProfileEditModal'
 const UserProfile = () => {
   const { me } = useSelector((state) => state.user)
   const [showModal, setShowModal] = useState(false)
-
   return (
     <>
       <Wrapper>
