@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import useInput from '../../../hooks/useInput'
 import PropTypes from 'prop-types'
 
-import { Button, Radio } from 'antd'
+import { Radio } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { addPost } from '../../../reducers/post'
@@ -59,7 +59,7 @@ const PostRegisterForm = ({ onClose }) => {
       <textarea value={content} onChange={onChangeContent} maxLength={140} placeholder='어떤 신기한 일이 있었나요?' />
       <div>
         <input type='file' accept='image/*' multiple hidden ref={imageInput} onChange={onChangeImage} />
-        <Button onClick={onClickImageUpload}>이미지 업로드</Button>
+        <ImageButton onClick={onClickImageUpload}>이미지 업로드</ImageButton>
         <div style={{ fontSize: '15px', height: '150px', padding: '10px' }}>
           {images.map((ele) => (
             <div key={ele.name}>{ele.name}
@@ -69,12 +69,12 @@ const PostRegisterForm = ({ onClose }) => {
         </div>
       </div>
       <RadioWrapper onChange={onChangeMood}>
-        <Radio value='sun'><i className='fas fa-sun' style={{ color: '#FF6A89' }} /></Radio>
-        <Radio value='cloud'><i className='fas fa-cloud' style={{ color: '#a0a0a0' }} /></Radio>
-        <Radio value='rain'><i className='fas fa-cloud-showers-heavy' style={{ color: '#1E96FF' }} /></Radio>
-        <Radio value='moon'><i className='fas fa-moon' style={{ color: '#C71F8F' }} /></Radio>
+        <Radio value='sun'><i className='fas fa-sun' style={{ color: '#ffbebe' }} /></Radio>
+        <Radio value='cloud'><i className='fas fa-cloud' style={{ color: '#D4D4D4' }} /></Radio>
+        <Radio value='rain'><i className='fas fa-cloud-showers-heavy' style={{ color: '#b6d8f8' }} /></Radio>
+        <Radio value='moon'><i className='fas fa-moon' style={{ color: '#a18afc' }} /></Radio>
       </RadioWrapper>
-      <Button type='primary' htmlType='submit' loading={addPostLoading} disabled={content.length === 0 || mood.length === 0 || images.length === 0}>등록</Button>
+      <Button type='submit' loading={addPostLoading} disabled={content.length === 0 || mood.length === 0 || images.length === 0}>등록</Button>
     </PostForm>
   )
 }
@@ -87,7 +87,7 @@ const PostForm = styled.form`
   height: 100%;
   display: flex;
   flex-direction: column;
-  font-size: 2rem;
+  font-size: 1.2rem;
   textarea{
     padding : 1rem;
     width: 100%;
@@ -101,6 +101,39 @@ const PostForm = styled.form`
   I{
     font-size: 2rem;
     margin: 0 2rem 0 0;
+  }
+`
+
+const Button = styled.button`
+  width: 90%;
+  align-self: center;
+  text-align: center;
+  border: none;
+  border-radius: 0.3rem;
+  padding: 0.5rem 0;
+  background-color: #A18AFC;
+  opacity: 0.9;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  &[disabled]{
+    background-color: rgba(128,128,128,0.3);
+    cursor: unset;
+  },
+`
+const ImageButton = styled.button`
+  width: 10rem;
+  border: none;
+  cursor: pointer;
+  color: #222;
+  font-weight: 300;
+  font-size: 1.1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.2rem;
+  background-color: #fff;
+  &:hover {
+    border: 1px solid #A18AFC;
+    color: #A18AFC;
   }
 `
 

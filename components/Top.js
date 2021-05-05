@@ -32,27 +32,28 @@ const Top = ({ filter }) => {
 }
 
 const TopWrapper = styled.div`
-    flex : 1 1 0;
-    box-shadow: 0px 4px 2px rgba(119, 119, 119, .25);
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
+  width: 100%;
+  flex : 0.6 1 0;
+  box-shadow: 0px 4px 2px rgba(119, 119, 119, .25);
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
 `
 
 const Logo = styled.img`
-    width: 10rem;
-    padding : 2%;
+  width: 8rem;
+  padding : 2%;
 `
 
 const Filter = styled.div`
-    width: 35rem;
-    
+  width: 38rem;
+  margin: 0.5rem 0 0.5rem 2rem;
 `
 const UserInfo = styled.div`
   display: flex;
   width: 12rem;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: center;
   cursor: pointer;
   span {
     text-align: center;
@@ -60,8 +61,8 @@ const UserInfo = styled.div`
 `
 
 const Avatar = styled.img`
-  height: 3rem;
-  width: 3rem;
+  height: 2rem;
+  width: 2rem;
   border-radius: 50%;
   object-fit: cover;
   border: 1px solid #D2D2D2;

@@ -24,6 +24,7 @@ const Signout = () => {
 }
 
 const SignoutButton = styled.button`
+  margin-left: .8rem;
   display: inline;
   font-size: 0.9rem;
   border-style: none;

@@ -42,13 +42,13 @@ const PostBar = () => {
 const Wrapper = styled.div`
   width : 80%;
   height: 10%;
-  box-shadow: 0 0 10px rgba(128, 128, 128, 0.8);
-  border-radius: 10px;
+  box-shadow: 0 .2rem .3rem .1rem rgba(85, 85, 85, .25);
+  border-radius: 0.3rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   padding: 0 1rem;
-  margin: 1rem 0;
+  margin: 2rem 0 1rem;
   &:hover{
     background-color: rgba(128, 128, 128, 0.2);
   }

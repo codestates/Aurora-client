@@ -47,6 +47,7 @@ const Profile = () => {
             </Head>
             <AppLayout>
               <UserProfile />
+              <Text>나의 포스트</Text>
               <PostCardList>
                 {/* {loadPostsDone && */}
                 {
@@ -81,5 +82,13 @@ const PostCardList = styled.div`
     display:none;
   }
 `
-
+const Text = styled.div`
+  margin: 1rem 0;
+  padding: 1rem; 
+  width: 80%;
+  border-bottom: 1px solid #ddd;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #424242;
+`
 export default Profile

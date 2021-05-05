@@ -1,5 +1,5 @@
 import { Progress } from 'antd'
-import Thema from './Thema'
+import Theme from './Theme'
 import styled from 'styled-components'
 import { useSelector } from 'react-redux'
 
@@ -22,15 +22,16 @@ const WeatherStatistics = () => {
 
   return (
     <Wrapper>
-      <Progress type='circle' width={60} percent={statistic.sun} format={() => (Thema.sun.icon)} />{statistic.sun}%
-      <Progress type='circle' width={60} percent={statistic.cloud} format={() => (Thema.cloud.icon)} />{statistic.cloud}%
-      <Progress type='circle' width={60} percent={statistic.rain} format={() => (Thema.rain.icon)} />{statistic.rain}%
-      <Progress type='circle' width={60} percent={statistic.moon} format={() => (Thema.moon.icon)} />{statistic.moon}%
+      <Progress type='circle' width={60} percent={statistic.sun} format={() => (Theme.sun.icon)} />{statistic.sun}%
+      <Progress type='circle' width={60} percent={statistic.cloud} format={() => (Theme.cloud.icon)} />{statistic.cloud}%
+      <Progress type='circle' width={60} percent={statistic.rain} format={() => (Theme.rain.icon)} />{statistic.rain}%
+      <Progress type='circle' width={60} percent={statistic.moon} format={() => (Theme.moon.icon)} />{statistic.moon}%
     </Wrapper>
   )
 }
 
 const Wrapper = styled.div`
+  margin-top: 2rem;
   I{
     font-size: 1.5rem;
   }
