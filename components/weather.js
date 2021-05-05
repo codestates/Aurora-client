@@ -11,11 +11,11 @@ const weather = () => {
   const COORDS = 'coords'
 
   const loadCoords = () => {
-    let loadedCords = localStorage.getItem(COORDS)
+    const loadedCords = localStorage.getItem(COORDS)
+    console.log('loadedCords : ', loadedCords)
     if (loadedCords === null) {
       askForCoords()
     }
-    loadedCords = localStorage.getItem(COORDS)
     const parseCoords = JSON.parse(loadedCords)
     return [parseCoords.latitude, parseCoords.longitude]
   }
@@ -27,6 +27,7 @@ const weather = () => {
       latitude,
       longitude
     }
+    console.log('coordsObj : ', coordsObj)
     localStorage.setItem(COORDS, JSON.stringify(coordsObj))
   }
 

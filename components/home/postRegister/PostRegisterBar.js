@@ -1,11 +1,20 @@
 import styled from 'styled-components'
 import PostRegisterModal from './PostRegisterModal'
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { useSelector } from 'react-redux'
 
 const PostBar = () => {
   const { me } = useSelector(state => state.user)
   const [showModal, setShowModal] = useState(false)
+
+  const onClickModal = useCallback(() => {
+    setShowModal(true)
+  }, [])
+  const onCloseModal = useCallback(() => {
+    setShowModal(false)
+  }, [])
+
+  console.log(showModal)
 
   return (
     <>
@@ -22,7 +31,7 @@ const PostBar = () => {
       </Wrapper>
       {showModal && (
         <PostRegisterModal
-          onClose={() => setShowModal(false)}
+          onClose={onCloseModal}
           User={me}
         />
       )}

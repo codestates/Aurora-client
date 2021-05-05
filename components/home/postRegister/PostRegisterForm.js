@@ -18,7 +18,7 @@ const PostRegisterForm = ({ onClose }) => {
   const [mood, setMood] = useState('')
 
   useEffect(() => {
-    if (addPostDone) {
+    if (content.length > 0 && addPostDone) {
       onClose()
     }
   }, [addPostDone])
@@ -74,7 +74,7 @@ const PostRegisterForm = ({ onClose }) => {
         <Radio value='rain'><i className='fas fa-cloud-showers-heavy' style={{ color: '#1E96FF' }} /></Radio>
         <Radio value='moon'><i className='fas fa-moon' style={{ color: '#C71F8F' }} /></Radio>
       </RadioWrapper>
-      <Button htmlType='submit' loading={addPostLoading} disabled={content.length === 0 || mood.length === 0 || images.length === 0}>등록</Button>
+      <Button type='primary' htmlType='submit' loading={addPostLoading} disabled={content.length === 0 || mood.length === 0 || images.length === 0}>등록</Button>
     </PostForm>
   )
 }

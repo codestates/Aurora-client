@@ -15,15 +15,17 @@ const CommentContent = ({ item, postId }) => {
   const { updateCommentLoading, removeCommentLoading, updateCommentDone } = useSelector((state) => state.post)
 
   const [editMode, setEditMode] = useState(false)
-  const [editText, changeEditText] = useInput(item.content)
-
+  const [editText, changeEditText, setEditText] = useInput(item.content)
+  console.log('item.content : ', item.content)
+  console.log('editText : ', editText)
   // 수정 모드 설정
   const onClickUpdate = useCallback(() => {
     setEditMode(true)
   }, [])
   const onCancelUpdate = useCallback(() => {
+    setEditText(item.content)
     setEditMode(false)
-  }, [])
+  }, [updateCommentDone])
 
   // 댓글 수정
   const onChangeComment = useCallback(() => {

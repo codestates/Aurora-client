@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 
@@ -7,14 +7,13 @@ import AppLayout from '../components/AppLayout'
 import PostRegisterBar from '../components/home/postRegister/PostRegisterBar'
 import PostCard from '../components/home/postCard/PostCard'
 import Signin from './user/signin'
-import { loadPost } from '../reducers/post'
+import { firstLoadPost, moreLoadPost } from '../reducers/post'
 import { signinSuccessAction, getAccessTokenAction, signoutAction } from '../reducers/user'
 
 const Home = () => {
   const dispatch = useDispatch()
-
+  const { Posts, firstLoadPostDone, filterWeather, totalPosts } = useSelector(state => state.post)
   const { googleLoading, loginLoading, isLoggedIn, accessToken, accessTokenError, me } = useSelector((state) => state.user)
-  const { Posts, loadPostsDone, filterWeather } = useSelector(state => state.post)
 
   console.log('logged in? ', isLoggedIn)
   console.log('accessTokenError: ', accessTokenError)
@@ -37,12 +36,19 @@ const Home = () => {
   }
 
   console.log('HOME Posts :', Posts)
-
+  console.log('totalPosts : ', totalPosts)
   useEffect(() => {
     if (isLoggedIn) {
-      dispatch(loadPost(accessToken))
+      dispatch(firstLoadPost(accessToken))
     }
   }, [isLoggedIn])
+
+  const [page, setPage] = useState(2)
+
+  const onClickMore = useCallback(() => {
+    dispatch(moreLoadPost(page, accessToken))
+    setPage((prev) => prev + 1)
+  })
 
   return (
     <>
@@ -56,7 +62,7 @@ const Home = () => {
           <AppLayout filter>
             <PostRegisterBar />
             <PostCardList>
-              {loadPostsDone &&
+              {firstLoadPostDone &&
                 (
                   filterWeather.length > 0
                     ? (
@@ -66,6 +72,7 @@ const Home = () => {
                         Posts.map(post => <PostCard key={post._id} post={post} />)
                       )
                 )}
+              {totalPosts > Posts.length && <button onClick={onClickMore}>더보기</button>}
             </PostCardList>
           </AppLayout>
           )}
