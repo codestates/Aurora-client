@@ -65,16 +65,17 @@ const Home = () => {
           <AppLayout filter>
             <PostRegisterBar />
             <PostCardList>
-              {firstLoadAllPostDone &&
-                (
-                  filterWeather.length > 0
-                    ? (
-                        filterPosts.map(post => <PostCard key={post._id} post={post} />)
-                      )
-                    : (
-                        Posts.map(post => <PostCard key={post._id} post={post} />)
-                      )
-                )}
+              {firstLoadAllPostDone
+                ? (
+                    filterWeather.length > 0
+                      ? (
+                          filterPosts.map(post => <PostCard key={post._id} post={post} />)
+                        )
+                      : (
+                          Posts.map(post => <PostCard key={post._id} post={post} />)
+                        )
+                  )
+                : <Loading />}
               {totalPosts > Posts.length && <LoadMoreBtn onClick={onClickMore}>더 많은 게시물 보기</LoadMoreBtn>}
             </PostCardList>
           </AppLayout>
