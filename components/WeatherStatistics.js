@@ -12,7 +12,6 @@ const WeatherStatistics = () => {
     rain: Statistics ? Math.round(Statistics.moods.rain / Statistics.total * 100) : 0,
     moon: Statistics ? Math.round(Statistics.moods.moon / Statistics.total * 100) : 0
   }
-
   return (
     <Wrapper>
       {/* TODO: 날씨 통계 제목 */}

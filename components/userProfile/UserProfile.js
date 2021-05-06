@@ -1,11 +1,14 @@
 import styled from 'styled-components'
-import { useState } from 'react'
 import { useSelector } from 'react-redux'
+import { useState } from 'react'
+
 import ProfileEditModal from './ProfileEditModal'
 
 const UserProfile = () => {
   const { me } = useSelector((state) => state.user)
+
   const [showModal, setShowModal] = useState(false)
+
   return (
     <>
       <Wrapper>

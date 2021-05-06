@@ -1,26 +1,26 @@
 import styled from 'styled-components'
-import { useRouter } from 'next/router'
+import { useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useRouter } from 'next/router'
+
 import { getGoogleAuthURLAction } from '../../actions/user'
 
-import { useEffect } from 'react'
-
 const GoogleOAuthSignin = () => {
-  const dispatch = useDispatch()
   const router = useRouter()
 
+  const dispatch = useDispatch()
   const { googleAuthURL } = useSelector((state) => state.user)
-
-  const getGoogleAuthURL = (e) => {
-    e.preventDefault()
-    dispatch(getGoogleAuthURLAction())
-  }
 
   useEffect(() => {
     if (googleAuthURL) {
       router.push(googleAuthURL)
     }
   }, [googleAuthURL])
+
+  const getGoogleAuthURL = useCallback((e) => {
+    e.preventDefault()
+    dispatch(getGoogleAuthURLAction())
+  })
 
   return (
     <GoogleSigninContainer>

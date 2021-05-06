@@ -27,7 +27,7 @@ const Icon = styled.i`
 `
 
 const Menu = styled.i`
-  width: 5rem;
+  width: 6rem;
   color: #848484;
   font-size: 1rem;
   font-style: normal;
