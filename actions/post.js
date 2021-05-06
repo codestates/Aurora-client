@@ -73,7 +73,7 @@ export const firstLoadAllPost = (time, accessToken) => async (dispatch) => {
     const headers = {
       Authorization: accessToken
     }
-    const response = await axios.get(`ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/posts/all?page=${1}&createdAt=${time}`, { headers })
+    const response = await axios.get(`http://ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/posts/all?page=${1}&createdAt=${time}`, { headers })
     dispatch({
       type: FIRST_LOAD_ALL_POST_SUCCESS,
       payload: response.data
@@ -94,7 +94,7 @@ export const moreLoadAllPost = (page, time, accessToken) => async (dispatch) => 
     const headers = {
       Authorization: accessToken
     }
-    const response = await axios.get(`ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/posts/all?page=${page}&createdAt=${time}`, { headers })
+    const response = await axios.get(`http://ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/posts/all?page=${page}&createdAt=${time}`, { headers })
     dispatch({
       type: MORE_LOAD_ALL_POST_SUCCESS,
       payload: response.data
@@ -115,7 +115,7 @@ export const firstLoadPost = (accessToken) => async (dispatch) => {
     const headers = {
       Authorization: accessToken
     }
-    const response = await axios.get(`ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/posts?page=${1}`, { headers })
+    const response = await axios.get(`http://ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/posts?page=${1}`, { headers })
     dispatch({
       type: FIRST_LOAD_POST_SUCCESS,
       payload: response.data
@@ -136,7 +136,7 @@ export const moreLoadPost = (page, accessToken) => async (dispatch) => {
     const headers = {
       Authorization: accessToken
     }
-    const response = await axios.get(`ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/posts?page=${page}`, { headers })
+    const response = await axios.get(`http://ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/posts?page=${page}`, { headers })
     dispatch({
       type: MORE_LOAD_POST_SUCCESS,
       payload: response.data
@@ -157,7 +157,7 @@ export const addPost = (data, accessToken) => async (dispatch) => {
     const headers = {
       Authorization: accessToken
     }
-    const response = await axios.post('ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/post/', data, { headers })
+    const response = await axios.post('http://ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/post/', data, { headers })
     dispatch({
       type: ADD_POST_SUCCESS,
       payload: response.data.post
@@ -178,7 +178,7 @@ export const updatePost = (id, data, accessToken) => async (dispatch) => {
     const headers = {
       Authorization: accessToken
     }
-    const response = await axios.patch(`ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/post/${id}`, data, { headers })
+    const response = await axios.patch(`http://ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/post/${id}`, data, { headers })
     dispatch({
       type: UPDATE_POST_SUCCESS,
       payload: response.data
@@ -199,7 +199,7 @@ export const removePost = (id, accessToken) => async (dispatch) => {
     const headers = {
       Authorization: accessToken
     }
-    await axios.delete(`ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/post/${id}`, { headers })
+    await axios.delete(`http://ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/post/${id}`, { headers })
     dispatch({
       type: REMOVE_POST_SUCCESS,
       payload: id
@@ -220,7 +220,7 @@ export const addComment = (postId, data, accessToken) => async (dispatch) => {
     const headers = {
       Authorization: accessToken
     }
-    const response = await axios.post(`ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/comment/${postId}`, data, { headers })
+    const response = await axios.post(`http://ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/comment/${postId}`, data, { headers })
     dispatch({
       type: ADD_COMMENT_SUCCESS,
       payload: {
@@ -244,7 +244,7 @@ export const updateComment = (postId, commentId, data, accessToken) => async (di
     const headers = {
       Authorization: accessToken
     }
-    await axios.patch(`ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/comment/${commentId}`, data, { headers })
+    await axios.patch(`http://ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/comment/${commentId}`, data, { headers })
     dispatch({
       type: UPDATE_COMMENT_SUCCESS,
       payload: {
@@ -269,7 +269,7 @@ export const removeComment = (postId, commentId, accessToken) => async (dispatch
     const headers = {
       Authorization: accessToken
     }
-    await axios.delete(`ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/post/${postId}/comment/${commentId}`, { headers })
+    await axios.delete(`http://ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/post/${postId}/comment/${commentId}`, { headers })
     dispatch({
       type: REMOVE_COMMENT_SUCCESS,
       payload: {
@@ -290,7 +290,7 @@ export const loadAllStatistics = () => async (dispatch) => {
     dispatch({
       type: LOAD_ALL_STATISTICS_REQUEST
     })
-    const response = await axios.get('ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/all-moods')
+    const response = await axios.get('http://ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/all-moods')
     dispatch({
       type: LOAD_ALL_STATISTICS_SUCCESS,
       payload: response.data
@@ -311,7 +311,7 @@ export const loadStatistics = (accessToken) => async (dispatch) => {
     const headers = {
       Authorization: accessToken
     }
-    const response = await axios.get('ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/moods', { headers })
+    const response = await axios.get('http://ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/moods', { headers })
     dispatch({
       type: LOAD_STATISTICS_SUCCESS,
       payload: response.data
@@ -332,7 +332,7 @@ export const loadLikePost = (accessToken) => async (dispatch) => {
     const headers = {
       Authorization: accessToken
     }
-    const response = await axios.get('ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/like', { headers })
+    const response = await axios.get('http://ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/like', { headers })
     dispatch({
       type: LOAD_LIKE_POST_SUCCESS,
       payload: response.data.likes
@@ -356,7 +356,7 @@ export const likePost = (postId, accessToken) => async (dispatch) => {
     const data = {
       id: postId
     }
-    const response = await axios.post('ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/like', data, { headers })
+    const response = await axios.post('http://ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/like', data, { headers })
     dispatch({
       type: LIKE_POST_SUCCESS,
       payload: postId
@@ -380,7 +380,7 @@ export const unlikePost = (postId, accessToken) => async (dispatch) => {
     const data = {
       id: postId
     }
-    const response = await axios.delete('ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/like', { headers, data })
+    const response = await axios.delete('http://ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/like', { headers, data })
     dispatch({
       type: UNLIKE_POST_SUCCESS,
       payload: postId

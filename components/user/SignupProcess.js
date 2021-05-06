@@ -81,7 +81,7 @@ const SignupProcess = () => {
             </InputContainer>
 
           </>
-          )}
+        )}
     </>
 
   )
@@ -120,10 +120,9 @@ const Input = styled.input`
   font-size: .9rem;
 `
 const NextButton = styled.input`
-  position: absolute;
   display: flex;
   justify-content: center;
-  bottom: 8rem;
+  margin-top: 8rem;
   border-style: none;
   border-radius: 1.5rem;
   height: 2.4rem;

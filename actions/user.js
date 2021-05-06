@@ -21,7 +21,7 @@ export const WITHDRAWAL = 'WITHDRAWAL'
 // signup request
 export const signupRequestAction = (data) => async (dispatch) => {
   try {
-    const response = await axios.post('ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/signup', data)
+    const response = await axios.post('http://ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/signup', data)
     dispatch({ type: SIGN_UP_REQUEST, payload: response })
   } catch (err) {
     dispatch({ type: SIGN_UP_REQUEST, payload: err.response.data })
@@ -32,7 +32,7 @@ export const signupRequestAction = (data) => async (dispatch) => {
 export const signupSuccessAction = (token) => async (dispatch) => {
   // body에 activationToken 정보 담아서 post 요청
   try {
-    const response = await axios.post('ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/activation', { activationToken: `${token}` })
+    const response = await axios.post('http://ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/activation', { activationToken: `${token}` })
     dispatch({ type: SIGN_UP_SUCCESS, payload: response })
   } catch (err) {
     dispatch({ type: SIGN_UP_SUCCESS, payload: err.response.data })
@@ -41,14 +41,14 @@ export const signupSuccessAction = (token) => async (dispatch) => {
 
 // google OAuth
 export const getGoogleAuthURLAction = () => async (dispatch) => {
-  const response = await axios.get('ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/auth/google/url')
+  const response = await axios.get('http://ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/auth/google/url')
   dispatch({ type: GOOGLE_AUTH_URL_REQUEST, payload: response.data })
 }
 
 // login request
 export const signinRequestAction = (data) => async (dispatch) => {
   try {
-    const response = await axios.post('ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/signin', data)
+    const response = await axios.post('http://ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/signin', data)
     dispatch({ type: SIGN_IN_REQUEST, payload: response })
   } catch (err) {
     dispatch({ type: SIGN_IN_REQUEST, payload: err.response.data })
@@ -58,9 +58,10 @@ export const signinRequestAction = (data) => async (dispatch) => {
 // get access token
 export const getAccessTokenAction = () => async (dispatch) => {
   try {
-    const response = await axios.get('ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/access-token')
+    const response = await axios.get('http://ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/access-token')
     dispatch({ type: GET_ACCESS_TOKEN, payload: response })
   } catch (err) {
+    console.log(err.response)
     dispatch({ type: GET_ACCESS_TOKEN, payload: err.response.data })
   }
 }
@@ -68,7 +69,7 @@ export const getAccessTokenAction = () => async (dispatch) => {
 // signin success (get user info)
 export const signinSuccessAction = (token) => async (dispatch) => {
   try {
-    const response = await axios.get('ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/user', {
+    const response = await axios.get('http://ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/user', {
       headers: {
         Authorization: `${token}`
       }
@@ -82,7 +83,7 @@ export const signinSuccessAction = (token) => async (dispatch) => {
 // logout
 export const signoutAction = (token) => async (dispatch) => {
   try {
-    const response = await axios.get('ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/signout')
+    const response = await axios.get('http://ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/signout')
     dispatch({ type: SIGN_OUT, payload: response })
   } catch (err) {
     dispatch({ type: SIGN_OUT, payload: err.response.data })
@@ -91,7 +92,7 @@ export const signoutAction = (token) => async (dispatch) => {
 
 // update user profile
 export const updateUerProfileAction = (data, token) => async (dispatch) => {
-  const response = await axios.patch('ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/user', data, {
+  const response = await axios.patch('http://ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/user', data, {
     headers: {
       Authorization: `${token}`
     }
@@ -105,7 +106,7 @@ export const withdrawal = (accessToken) => async (dispatch) => {
     const headers = {
       Authorization: accessToken
     }
-    const response = await axios.delete('ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/user', { headers })
+    const response = await axios.delete('http://ec2-13-125-227-72.ap-northeast-2.compute.amazonaws.com/api/user', { headers })
     dispatch({ type: WITHDRAWAL, payload: response })
   } catch (err) {
     dispatch({ type: WITHDRAWAL, payload: err.response.data })
