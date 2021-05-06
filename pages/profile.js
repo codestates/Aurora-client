@@ -66,7 +66,7 @@ const Profile = () => {
           <>
             {accessToken ? <Loading /> : <Signin />}
           </>
-        )
+          )
         : (
           <>
             <Head>
@@ -76,23 +76,24 @@ const Profile = () => {
               <UserProfile />
               <Text>나의 포스트</Text>
               <PostCardList onScroll={onScroll}>
-                {firstLoadPostDone &&
-                  (
-                    filterWeather.length > 0
-                      ? (
-                        filterPosts.map(post => <PostCard key={post._id} post={post} />)
-                      )
-                      : (
-                        Posts.map(post => <PostCard key={post._id} post={post} />)
-                      )
-                  )}
+                {firstLoadPostDone
+                  ? (
+                      filterWeather.length > 0
+                        ? (
+                            filterPosts.map(post => <PostCard key={post._id} post={post} />)
+                          )
+                        : (
+                            Posts.map(post => <PostCard key={post._id} post={post} />)
+                          )
+                    )
+                  : <Loading />}
                 {moreLoadPostLoading && <div>불러오는중</div>}
                 <button hidden onClick={onClickMore} ref={moreBtn} />
                 {/* {totalPosts > Posts.length && <button onClick={onClickMore} ref={moreBtn}>더보기</button>} */}
               </PostCardList>
             </AppLayout>
           </>
-        )}
+          )}
     </>
   )
 }
@@ -118,5 +119,21 @@ const Text = styled.div`
   font-size: 1.5rem;
   font-weight: 600;
   color: #424242;
+`
+
+const LoadMoreBtn = styled.button`
+  border: none;
+  background: none;
+  margin: 1rem 0;
+  font-size: 1rem;
+  color: #424242;
+  cursor: pointer;
+  &:hover{
+    color: #A18AFC;
+    font-size: 1.1rem;
+  }
+  &:focus{
+    outline: none;
+  }
 `
 export default Profile

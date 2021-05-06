@@ -71,28 +71,29 @@ const Home = () => {
           <>
             {accessToken ? <Loading /> : <Signin />}
           </>
-        )
+          )
         : (
           <AppLayout filter>
             <PostRegisterBar />
             <PostCardList onScroll={onScroll}>
-              {firstLoadAllPostDone &&
-                (
-                  filterWeather.length > 0
-                    ? (
-                      filterPosts.map(post => <PostCard key={post._id} post={post} />)
-                    )
-                    : (
-                      Posts.map(post => <PostCard key={post._id} post={post} />)
-                    )
-                )}
+              {firstLoadAllPostDone
+                ? (
+                    filterWeather.length > 0
+                      ? (
+                          filterPosts.map(post => <PostCard key={post._id} post={post} />)
+                        )
+                      : (
+                          Posts.map(post => <PostCard key={post._id} post={post} />)
+                        )
+                  )
+                : <Loading />}
               {moreLoadAllPostLoading && <LoadMoreMsg>더 많은 게시물 보기</LoadMoreMsg>}
               <button hidden onClick={onClickMore} ref={moreBtn} />
               {/* {totalPosts > Posts.length && <button onClick={onClickMore} ref={moreBtn}>더보기</button>} */}
               {/* {totalPosts > Posts.length && <LoadMoreBtn onClick={onClickMore}>더 많은 게시물 보기</LoadMoreBtn>} */}
             </PostCardList>
           </AppLayout>
-        )}
+          )}
     </>
   )
 }

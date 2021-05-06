@@ -30,7 +30,7 @@ const Notification = () => {
           <>
             {accessToken ? <Loading /> : <Signin />}
           </>
-        )
+          )
         : (
           <>
             <Head>
@@ -40,7 +40,7 @@ const Notification = () => {
               <NotificationMsg>알림이 없습니다 :(</NotificationMsg>
             </AppLayout>
           </>
-        )}
+          )}
     </>
   )
 }
