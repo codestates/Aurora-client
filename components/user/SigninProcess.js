@@ -2,14 +2,16 @@ import Link from 'next/link'
 import styled from 'styled-components'
 import { useEffect, useState, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useRouter } from 'next/router'
 
+import Loading from '../Loading'
 import useInput from '../../hooks/useInput'
 import { getAccessTokenAction, signinRequestAction, signinSuccessAction } from '../../actions/user'
-import { useRouter } from 'next/router'
+
 const SigninProcess = () => {
   const dispatch = useDispatch()
   const router = useRouter()
-  const { loginError, accessToken, googleLoading, loginLoading, isLoggedIn } = useSelector((state) => state.user)
+  const { loginLoading, loginError, accessToken, isLoggedIn } = useSelector((state) => state.user)
 
   const [email, onChangeEmail] = useInput('')
   const [password, onChangePassword] = useInput('')
@@ -21,9 +23,15 @@ const SigninProcess = () => {
     }
   }, [loginError])
 
+  // google login
   useEffect(() => {
     dispatch(getAccessTokenAction())
   }, [])
+
+  // just login
+  useEffect(() => {
+    dispatch(getAccessTokenAction())
+  }, [loginLoading])
 
   useEffect(() => {
     if (accessToken) {

@@ -1,45 +1,35 @@
 import Head from 'next/head'
 import styled from 'styled-components'
 import { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
+import { useRouter } from 'next/router'
 
 import AppLayout from '../components/AppLayout'
-import Loading from '../components/Loading'
-import Signin from './user/signin'
-import { signinSuccessAction, getAccessTokenAction } from '../actions/user'
 
 const Notification = () => {
-  const dispatch = useDispatch()
-  const { googleLoading, loginLoading, isLoggedIn, accessToken } = useSelector((state) => state.user)
+  const router = useRouter()
+
+  const { isLoggedIn } = useSelector((state) => state.user)
 
   useEffect(() => {
-    dispatch(getAccessTokenAction())
-  }, [googleLoading, loginLoading])
-
-  useEffect(() => {
-    if (accessToken) {
-      dispatch(signinSuccessAction(accessToken))
+    if (!isLoggedIn) {
+      router.push('/user/signin')
     }
-  }, [accessToken])
+  }, [isLoggedIn])
 
   return (
     <>
-      {!isLoggedIn
-        ? (
-          <>
-            {accessToken ? <Loading /> : <Signin />}
-          </>
-          )
-        : (
-          <>
-            <Head>
-              <title>알림 | Aurora</title>
-            </Head>
-            <AppLayout>
-              <NotificationMsg>알림이 없습니다 :(</NotificationMsg>
-            </AppLayout>
-          </>
-          )}
+      {isLoggedIn &&
+      (
+        <>
+          <Head>
+            <title>알림 | Aurora</title>
+          </Head>
+          <AppLayout>
+            <NotificationMsg>알림이 없습니다 :(</NotificationMsg>
+          </AppLayout>
+        </>
+      )}
     </>
   )
 }

@@ -2,6 +2,7 @@ import Head from 'next/head'
 import styled from 'styled-components'
 import { useEffect, useCallback, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useRouter } from 'next/router'
 
 import AppLayout from '../components/AppLayout'
 import Loading from '../components/Loading'
@@ -9,11 +10,12 @@ import PostCard from '../components/home/postCard/PostCard'
 import Signin from './user/signin'
 import UserProfile from '../components/userProfile/UserProfile'
 import { firstLoadPost, moreLoadPost, loadStatistics } from '../actions/post'
-import { signinSuccessAction, getAccessTokenAction } from '../actions/user'
 
 const Profile = () => {
+  const router = useRouter()
+
   const dispatch = useDispatch()
-  const { isLoggedIn, googleLoading, loginLoading, accessToken } = useSelector((state) => state.user)
+  const { isLoggedIn, accessToken } = useSelector((state) => state.user)
   const { Posts, firstLoadPostDone, filterWeather, totalPosts } = useSelector(state => state.post)
 
   const [page, setPage] = useState(2)
@@ -24,22 +26,13 @@ const Profile = () => {
   }
 
   useEffect(() => {
-    dispatch(getAccessTokenAction())
-  }, [googleLoading, loginLoading])
-
-  useEffect(() => {
-    if (accessToken) {
-      dispatch(signinSuccessAction(accessToken))
-    }
-  }, [accessToken])
-
-  useEffect(() => {
     if (isLoggedIn) {
       dispatch(firstLoadPost(accessToken))
+    } else {
+      router.push('/user/signin')
     }
   }, [isLoggedIn])
 
-  // TODO: 날씨 통계 제목 넘겨주기
   useEffect(() => {
     dispatch(loadStatistics(accessToken))
   }, [])
@@ -51,42 +44,37 @@ const Profile = () => {
 
   return (
     <>
-      {!isLoggedIn
-        ? (
-          <>
-            {accessToken ? <Loading /> : <Signin />}
-          </>
-          )
-        : (
-          <>
-            <Head>
-              <title>프로필 | Aurora</title>
-            </Head>
-            <AppLayout filter isMain={false}>
-              <UserProfile />
-              <Text>나의 포스트</Text>
-              {totalPosts !== 0
-                ? (
-                  <PostCardList>
-                    {firstLoadPostDone
-                      ? (
-                          filterWeather.length > 0
-                            ? (
-                                filterPosts.map(post => <PostCard key={post._id} post={post} />)
-                              )
-                            : (
-                                Posts.map(post => <PostCard key={post._id} post={post} />)
-                              )
-                        )
-                      : <Wrapper><Loading /></Wrapper>}
-                    {totalPosts > Posts.length && <LoadMoreBtn onClick={onClickMore}>더 많은 게시물 보기</LoadMoreBtn>}
-                  </PostCardList>
-                  )
-                : <div>첫 게시물을 작성해보세요!</div>}
+      {isLoggedIn &&
+      (
+        <>
+          <Head>
+            <title>프로필 | Aurora</title>
+          </Head>
+          <AppLayout filter isMain={false}>
+            <UserProfile />
+            <Text>나의 포스트</Text>
+            {totalPosts !== 0
+              ? (
+                <PostCardList>
+                  {firstLoadPostDone
+                    ? (
+                        filterWeather.length > 0
+                          ? (
+                              filterPosts.map(post => <PostCard key={post._id} post={post} />)
+                            )
+                          : (
+                              Posts.map(post => <PostCard key={post._id} post={post} />)
+                            )
+                      )
+                    : <Wrapper><Loading /></Wrapper>}
+                  {totalPosts > Posts.length && <LoadMoreBtn onClick={onClickMore}>더 많은 게시물 보기</LoadMoreBtn>}
+                </PostCardList>
+                )
+              : <div>첫 게시물을 작성해보세요!</div>}
 
-            </AppLayout>
-          </>
-          )}
+          </AppLayout>
+        </>
+      )}
     </>
   )
 }

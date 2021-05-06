@@ -6,16 +6,7 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 
 const Signout = () => {
-  const router = useRouter()
-
   const dispatch = useDispatch()
-  const { isLoggedIn } = useSelector(state => state.user)
-
-  useEffect(() => {
-    if (!isLoggedIn) {
-      router.push('../')
-    }
-  }, [isLoggedIn])
 
   const handleLogout = (e) => {
     e.preventDefault()
