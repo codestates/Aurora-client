@@ -14,7 +14,6 @@ const WeatherStatistics = ({ isMain }) => {
     rain: Statistics?.total > 0 ? Math.round(Statistics.moods.rain / Statistics.total * 100) : 0,
     moon: Statistics?.total > 0 ? Math.round(Statistics.moods.moon / Statistics.total * 100) : 0
   }
-
   return (
     <Wrapper>
       {isMain ? <div>전체 날씨 현황</div> : <div>나의 날씨 현황</div>}

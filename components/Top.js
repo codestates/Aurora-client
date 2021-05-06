@@ -26,9 +26,8 @@ const Top = ({ filter }) => {
               ? (
                 <>
                   <Avatar src={`data:image/png;base64,${Buffer.from(me.avatar[0].data.data).toString('base64')}`} alt='avatar' />
-                  <Username>{me.username}</Username>
                 </>
-              )
+                )
               : <Avatar src='/images/profile-thumbnail.jpg' alt='avatar' />}
           </GoToProfile>
         </Link>
@@ -61,14 +60,13 @@ const UserInfo = styled.div`
   display: flex;
   width: 12rem;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   cursor: pointer;
   span {
     text-align: center;
   }
 `
 const GoToProfile = styled.a`
-  margin-left: -2rem;
   cursor: pointer;
   &:hover{
     color: #A18AFC;
@@ -80,9 +78,6 @@ const Avatar = styled.img`
   border-radius: 50%;
   object-fit: cover;
   border: 1px solid #D2D2D2;
-`
-const Username = styled.span`
-  margin-left: 0.5rem;
 `
 Top.prototype = {
   filter: PropTypes.bool

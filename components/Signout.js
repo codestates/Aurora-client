@@ -1,11 +1,13 @@
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
+
 import { signoutAction } from '../actions/user'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 
 const Signout = () => {
   const router = useRouter()
+
   const dispatch = useDispatch()
   const { isLoggedIn } = useSelector(state => state.user)
 

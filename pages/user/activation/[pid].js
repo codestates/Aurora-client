@@ -1,14 +1,16 @@
-import { useRouter } from 'next/router'
-import { useSelector, useDispatch } from 'react-redux'
-import { useEffect } from 'react'
 import Link from 'next/link'
 import styled from 'styled-components'
-import { signupSuccessAction } from '../../../actions/user'
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
+import { useSelector, useDispatch } from 'react-redux'
+
 import AppUserLayout from '../../../components/user/AppUserLayout'
 import EmailVerification from '../../../components/user/EmailVerification'
+import { signupSuccessAction } from '../../../actions/user'
 
 const EmailActivation = () => {
   const router = useRouter()
+  
   const { pid } = router.query
 
   return (
