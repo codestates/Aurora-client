@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { useEffect, useCallback, useState } from 'react'
+import { useEffect, useCallback, useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 
@@ -15,7 +15,7 @@ const Profile = () => {
   const dispatch = useDispatch()
 
   const { isLoggedIn, googleLoading, loginLoading, accessToken } = useSelector((state) => state.user)
-  const { Posts, firstLoadPostDone, filterWeather, totalPosts, Statistics } = useSelector(state => state.post)
+  const { Posts, firstLoadPostDone, filterWeather, totalPosts, moreLoadPostLoading } = useSelector(state => state.post)
 
   useEffect(() => {
     dispatch(getAccessTokenAction())
@@ -49,9 +49,15 @@ const Profile = () => {
 
   // TODO: 날씨 통계 제목 넘겨주기
   useEffect(() => {
-    console.log('PROFILE : loadStatistics')
     dispatch(loadStatistics(accessToken))
   }, [])
+
+  const moreBtn = useRef()
+  const onScroll = useCallback((e) => {
+    if ((e.target.scrollTop + e.target.clientHeight === e.target.scrollHeight) && (Posts.length < totalPosts)) {
+      moreBtn.current.click()
+    }
+  }, [moreBtn.current])
 
   return (
     <>
@@ -60,7 +66,7 @@ const Profile = () => {
           <>
             {accessToken ? <Loading /> : <Signin />}
           </>
-          )
+        )
         : (
           <>
             <Head>
@@ -69,22 +75,24 @@ const Profile = () => {
             <AppLayout filter>
               <UserProfile />
               <Text>나의 포스트</Text>
-              <PostCardList>
+              <PostCardList onScroll={onScroll}>
                 {firstLoadPostDone &&
                   (
                     filterWeather.length > 0
                       ? (
-                          filterPosts.map(post => <PostCard key={post._id} post={post} />)
-                        )
+                        filterPosts.map(post => <PostCard key={post._id} post={post} />)
+                      )
                       : (
-                          Posts.map(post => <PostCard key={post._id} post={post} />)
-                        )
+                        Posts.map(post => <PostCard key={post._id} post={post} />)
+                      )
                   )}
-                {totalPosts > Posts.length && <button onClick={onClickMore}>더보기</button>}
+                {moreLoadPostLoading && <div>불러오는중</div>}
+                <button hidden onClick={onClickMore} ref={moreBtn} />
+                {/* {totalPosts > Posts.length && <button onClick={onClickMore} ref={moreBtn}>더보기</button>} */}
               </PostCardList>
             </AppLayout>
           </>
-          )}
+        )}
     </>
   )
 }

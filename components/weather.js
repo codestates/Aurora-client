@@ -12,16 +12,13 @@ const weather = () => {
   const COORDS = 'coords'
 
   const loadCoords = () => {
-    let loadedCords = localStorage.getItem(COORDS)
-    // 이 부분에 동기로직 필요
+    const loadedCords = localStorage.getItem(COORDS)
     if (loadedCords === null) {
-      askForCoords()
-      loadedCords = localStorage.getItem(COORDS)
+      renderWeatherData()
+    } else {
+      const parsedCoords = JSON.parse(loadedCords)
+      getWeather(parsedCoords.latitude, parsedCoords.longitude)
     }
-    const parseCoords = JSON.parse(loadedCords)
-    console.log('loadedCords : ', loadedCords)
-    console.log('parseCoords : ', parseCoords)
-    return [parseCoords.latitude, parseCoords.longitude]
   }
 
   const handleGeoSucces = (position) => {
@@ -31,28 +28,23 @@ const weather = () => {
       latitude,
       longitude
     }
-    console.log('coordsObj : ', coordsObj)
     localStorage.setItem(COORDS, JSON.stringify(coordsObj))
+    getWeather(latitude, longitude)
   }
 
   const handleGeoError = () => {
     console.log('Cant access geo location')
   }
 
-  const askForCoords = () => {
+  const renderWeatherData = () => {
     navigator.geolocation.getCurrentPosition(handleGeoSucces, handleGeoError)
   }
 
-  const getWeather = async () => {
-    const coords = loadCoords()
-    const lat = coords[0]
-    const lng = coords[1]
-    const API_URL = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${API_KEY}&units=metric`
+  const getWeather = (lat, lon) => {
+    const API_URL = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
     const headers = {
       'Access-Control-Allow-Origin': '*'
     }
-    console.log('API_URL : ', API_URL)
-    // const res = await axios.get(API_URL, { headers }, { withCredentials: true })
     fetch(API_URL)
       .then((res) => res.json())
       .then((data) => {
@@ -61,11 +53,8 @@ const weather = () => {
       })
   }
 
-  console.log('IsData : ', isData)
-  console.log('weatherInfo : ', weatherInfo)
-
   useEffect(() => {
-    getWeather()
+    loadCoords()
   }, [])
 
   return (

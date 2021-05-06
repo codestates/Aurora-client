@@ -52,6 +52,18 @@ export const LOAD_STATISTICS_REQUEST = 'LOAD_STATISTICS_REQUEST'
 export const LOAD_STATISTICS_SUCCESS = 'LOAD_STATISTICS_SUCCESS'
 export const LOAD_STATISTICS_FAILURE = 'LOAD_STATISTICS_FAILURE'
 
+export const LOAD_LIKE_POST_REQUEST = 'LOAD_LIKE_POST_REQUEST'
+export const LOAD_LIKE_POST_SUCCESS = 'LOAD_LIKE_POST_SUCCESS'
+export const LOAD_LIKE_POST_FAILURE = 'LOAD_LIKE_POST_FAILURE'
+
+export const LIKE_POST_REQUEST = 'LIKE_POST_REQUEST'
+export const LIKE_POST_SUCCESS = 'LIKE_POST_SUCCESS'
+export const LIKE_POST_FAILURE = 'LIKE_POST_FAILURE'
+
+export const UNLIKE_POST_REQUEST = 'UNLIKE_POST_REQUEST'
+export const UNLIKE_POST_SUCCESS = 'UNLIKE_POST_SUCCESS'
+export const UNLIKE_POST_FAILURE = 'UNLIKE_POST_FAILURE'
+
 // 액션 크리에이터
 export const firstLoadAllPost = (time, accessToken) => async (dispatch) => {
   try {
@@ -62,6 +74,7 @@ export const firstLoadAllPost = (time, accessToken) => async (dispatch) => {
       Authorization: accessToken
     }
     const response = await axios.get(`http://localhost:5000/api/posts/all?page=${1}&createdAt=${time}`, { headers })
+    console.log('firstLoadAllPost : ', response.data)
     dispatch({
       type: FIRST_LOAD_ALL_POST_SUCCESS,
       payload: response.data
@@ -83,6 +96,7 @@ export const moreLoadAllPost = (page, time, accessToken) => async (dispatch) => 
       Authorization: accessToken
     }
     const response = await axios.get(`http://localhost:5000/api/posts/all?page=${page}&createdAt=${time}`, { headers })
+    console.log('moreLoadAllPost : ', response.data)
     dispatch({
       type: MORE_LOAD_ALL_POST_SUCCESS,
       payload: response.data
@@ -125,6 +139,7 @@ export const moreLoadPost = (page, accessToken) => async (dispatch) => {
       Authorization: accessToken
     }
     const response = await axios.get(`http://localhost:5000/api/posts?page=${page}`, { headers })
+    console.log('moreLoadPost : ', response.data)
     dispatch({
       type: MORE_LOAD_POST_SUCCESS,
       payload: response.data
@@ -279,6 +294,7 @@ export const loadAllStatistics = () => async (dispatch) => {
       type: LOAD_ALL_STATISTICS_REQUEST
     })
     const response = await axios.get('http://localhost:5000/api/today-moods')
+    console.log('loadAllStatistics : ', response.data)
     dispatch({
       type: LOAD_ALL_STATISTICS_SUCCESS,
       payload: response.data
@@ -307,6 +323,76 @@ export const loadStatistics = (accessToken) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: LOAD_STATISTICS_FAILURE,
+      payload: err.response.data
+    })
+  }
+}
+
+export const loadLikePost = (accessToken) => async (dispatch) => {
+  try {
+    dispatch({
+      type: LOAD_LIKE_POST_REQUEST
+    })
+    const headers = {
+      Authorization: accessToken
+    }
+    const response = await axios.get('http://localhost:5000/api/like', { headers })
+    console.log(response.data)
+    dispatch({
+      type: LOAD_LIKE_POST_SUCCESS,
+      payload: response.data.likes
+    })
+  } catch (err) {
+    dispatch({
+      type: LOAD_LIKE_POST_FAILURE,
+      payload: err.response.data
+    })
+  }
+}
+
+export const likePost = (postId, accessToken) => async (dispatch) => {
+  try {
+    dispatch({
+      type: LIKE_POST_REQUEST
+    })
+    const headers = {
+      Authorization: accessToken
+    }
+    const data = {
+      id: postId
+    }
+    const response = await axios.post('http://localhost:5000/api/like', data, { headers })
+    dispatch({
+      type: LIKE_POST_SUCCESS,
+      payload: postId
+    })
+  } catch (err) {
+    dispatch({
+      type: LIKE_POST_FAILURE,
+      payload: err.response.data
+    })
+  }
+}
+
+export const unlikePost = (postId, accessToken) => async (dispatch) => {
+  try {
+    dispatch({
+      type: UNLIKE_POST_REQUEST
+    })
+    const headers = {
+      Authorization: accessToken
+    }
+    const data = {
+      id: postId
+    }
+    const response = await axios.delete('http://localhost:5000/api/like', { headers, data })
+    dispatch({
+      type: UNLIKE_POST_SUCCESS,
+      payload: postId
+    })
+  } catch (err) {
+    dispatch({
+      type: UNLIKE_POST_FAILURE,
       payload: err.response.data
     })
   }
