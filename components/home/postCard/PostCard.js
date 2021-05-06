@@ -2,14 +2,14 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Button, Card, Popover, List, Comment } from 'antd'
 import { HeartTwoTone, HeartOutlined, MessageOutlined, EllipsisOutlined } from '@ant-design/icons'
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import CommentContent from './CommentContent'
 import CommentForm from './CommentForm'
 import PostCardContent from './PostCardContent'
 import PostImages from './PostImages'
-import Theme from '../../Theme'
+import { Theme, Icon } from '../../Theme'
 import { removePost, updatePost, unlikePost, likePost } from '../../../actions/post'
 
 const PostCard = ({ post }) => {
@@ -51,18 +51,30 @@ const PostCard = ({ post }) => {
     setCommentFormOpened((prev) => !prev)
   }, [])
 
+  console.log('post', post)
+
+  const commentStyle = useMemo(() => ({ padding: '0 10px' }), [])
   const liked = likePosts.find((v) => v === post._id)
   return (
-    <Wrapper ThemeColor={Theme[post.mood].color}>
+    <Wrapper ThemeColor={Theme[post.mood]}>
       <Header>
         <Auth>
-          {/* <img src={post.User.avatar} /> */}
+          {post.postedBy.avatar.[0] ?
+            (
+              <img
+                src={`data:image/png;base64,${post.postedBy.avatar[0].data}`} alt='avatar'
+              />
+            ) : (
+              <img
+                src='/images/profile-thumbnail.jpg' alt='avatar'
+              />
+            )}
           <div>
             <span>{post.postedBy.username}</span>
             <span>22 minutes ago</span>
           </div>
         </Auth>
-        {Theme[post.mood].icon}
+        {Icon[post.mood]}
       </Header>
       <Card
         cover={<PostImages images={post.images} />}
@@ -90,12 +102,12 @@ const PostCard = ({ post }) => {
             <Card.Meta
               description={<PostCardContent editMode={editMode} postData={post.content} onChangePost={onChangePost} onCancelUpdate={onCancelUpdate} />}
             />
-            )
+          )
           : (
             <Card.Meta
               description={<PostCardContent postData={post.content} />}
             />
-            )}
+          )}
       </Card>
       {commentFormOpened && (
         <>
@@ -107,7 +119,7 @@ const PostCard = ({ post }) => {
             renderItem={item => (
               <li>
                 <Comment
-                  style={{ padding: '0 10px' }}
+                  style={commentStyle}
                   author={item.commentedBy.username}
                   content={<CommentContent item={item} postId={post._id} />}
                 />

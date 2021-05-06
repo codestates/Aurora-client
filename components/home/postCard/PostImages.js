@@ -1,6 +1,6 @@
 import styled from 'styled-components'
-import { useCallback, useState } from 'react'
 import PropTypes from 'prop-types'
+import { useCallback, useMemo, useState } from 'react'
 
 import ImagesZoom from './ImagesZoom'
 
@@ -15,16 +15,20 @@ const PostImages = ({ images }) => {
     setShowImagesZoom(false)
   }, [])
 
+  const singleImg = useMemo(() => ({ width: '100%', height: '100%', objectFit: 'contain' }), [])
+  const twoImgBox = useMemo(() => ({ width: '100%', height: '100%' }), [])
+  const halfImg = useMemo(() => ({ width: '50%', height: '100%', objectFit: 'contain' }), [])
+  const ImgBox = useMemo(() => ({ display: 'inline-block', width: '50%' }), [])
+  const quarterImg = useMemo(() => ({ display: 'block', width: '100%', height: '50%', objectFit: 'contain' }), [])
+
   if (images.length === 1) {
     return (
       <Wrapper>
-
         <img
-          style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+          style={singleImg}
           src={`data:image/png;base64,${images[0].data}`}
           onClick={onZoom}
         />
-
         {showImagesZoom && <ImagesZoom images={images} onClose={onClose} />}
       </Wrapper>
     )
@@ -32,14 +36,14 @@ const PostImages = ({ images }) => {
   if (images.length === 2) {
     return (
       <Wrapper>
-        <div style={{ width: '100%', height: '100%', }}>
+        <div style={twoImgBox}>
           <img
-            style={{ width: '50%', height: '100%', objectFit: 'contain' }}
+            style={halfImg}
             src={`data:image/png;base64,${images[0].data}`}
             onClick={onZoom}
           />
           <img
-            style={{ width: '50%', height: '100%', objectFit: 'contain' }}
+            style={halfImg}
             src={`data:image/png;base64,${images[1].data}`}
             onClick={onZoom}
           />
@@ -52,18 +56,18 @@ const PostImages = ({ images }) => {
     return (
       <Wrapper>
         <img
-          style={{ width: '50%', height: '100%', objectFit: 'contain' }}
+          style={halfImg}
           src={`data:image/png;base64,${images[0].data}`}
           onClick={onZoom}
         />
-        <div style={{ display: 'inline-block', width: '50%' }}>
+        <div style={ImgBox}>
           <img
-            style={{ display: 'block', width: '100%', height: '50%', objectFit: 'contain' }}
+            style={quarterImg}
             src={`data:image/png;base64,${images[1].data}`}
             onClick={onZoom}
           />
           <img
-            style={{ display: 'block', width: '100%', height: '50%', objectFit: 'contain' }}
+            style={quarterImg}
             src={`data:image/png;base64,${images[2].data}`}
             onClick={onZoom}
           />
@@ -75,25 +79,24 @@ const PostImages = ({ images }) => {
   return (
     <Wrapper>
       <img
-        style={{ width: '50%', height: '100%', objectFit: 'contain' }}
+        style={singleImg}
         src={`data:image/png;base64,${images[0].data}`}
         onClick={onZoom}
       />
-      <div style={{ display: 'inline-block', width: '50%' }}>
+      <div style={ImgBox}>
         <img
-          style={{ display: 'block', width: '100%', height: '50%', objectFit: 'contain' }}
+          style={quarterImg}
           src={`data:image/png;base64,${images[1].data}`}
           onClick={onZoom}
         />
-        <div
-          style={{ display: 'inline-block', width: '100%', height: '50%', textAlign: 'center', verticalAlign: 'middle' }}
+        <More
           onClick={onZoom}
         >
           +
           <br />
           {images.length - 2}
           개의 사진 더보기
-        </div>
+        </More>
       </div>
       {showImagesZoom && <ImagesZoom images={images} onClose={onClose} />}
     </Wrapper>
@@ -107,6 +110,14 @@ const Wrapper = styled.div`
   img {
     padding : 3px;
   }
+`
+
+const More = styled.div`
+  display: inline-block;
+  width: 100%;
+  height: 50%;
+  text-align: center;
+  vertical-align: middle;
 `
 
 PostImages.propTypes = {

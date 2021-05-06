@@ -70,7 +70,7 @@ const Home = () => {
           </>
           )
         : (
-          <AppLayout filter>
+          <AppLayout filter isMain>
             <PostRegisterBar />
             <PostCardList>
               {firstLoadAllPostDone

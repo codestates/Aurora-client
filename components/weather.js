@@ -1,13 +1,15 @@
-// import axios from 'axios'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
-// axios.defaults.withCredentials = true
 
 const weather = () => {
   const API_KEY = process.env.openweatherKey
 
   const [weatherInfo, setWeatherInfo] = useState(null)
   const [isData, setIsData] = useState(false)
+
+  useEffect(() => {
+    loadCoords()
+  }, [])
 
   const COORDS = 'coords'
 
@@ -52,10 +54,6 @@ const weather = () => {
         setIsData(true)
       })
   }
-
-  useEffect(() => {
-    loadCoords()
-  }, [])
 
   return (
     <Wrapper>

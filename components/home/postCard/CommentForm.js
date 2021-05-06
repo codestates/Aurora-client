@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
 import { Form, Input, Button } from 'antd'
-import { useEffect, useCallback } from 'react'
+import { useEffect, useCallback, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import useInput from '../../../hooks/useInput'
@@ -28,20 +29,31 @@ const CommentForm = ({ post }) => {
 
   return (
     <Form onFinish={onSubmitComment}>
-      <Form.Item style={{ position: 'relative', margin: 0 }}>
+      <FormItem>
         <Input.TextArea rows={4} value={commentText} onChange={onChangeCommentText} />
-        <Button
-          style={{ position: 'absolute', right: 0, bottom: -40, zIndex: 1 }}
+        <SubmitBtn
           type='primary'
           htmlType='submit'
           loading={addCommentLoading}
           disabled={commentText.length === 0}
         >댓글 작성
-        </Button>
-      </Form.Item>
+        </SubmitBtn>
+      </FormItem>
     </Form>
   )
 }
+
+const FormItem = styled(Form.Item)`
+  position: relative;
+  margin: 0
+`
+
+const SubmitBtn = styled(Button)`
+  position: absolute;
+  right: 0;
+  bottom: -40;
+  z-index: 1;
+`
 
 CommentForm.propTypes = {
   post: PropTypes.object.isRequired

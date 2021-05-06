@@ -73,3 +73,7 @@ export const ImgWrapper = styled.div`
     max-height: 46.875rem;
   }
 `
+
+export const Img = styled.img`
+  height: 37.5rem
+`

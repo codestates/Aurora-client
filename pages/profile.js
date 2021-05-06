@@ -62,7 +62,7 @@ const Profile = () => {
             <Head>
               <title>프로필 | Aurora</title>
             </Head>
-            <AppLayout filter>
+            <AppLayout filter isMain={false}>
               <UserProfile />
               <Text>나의 포스트</Text>
               <PostCardList>

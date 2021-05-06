@@ -1,11 +1,13 @@
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
+
 import Weather from './weather'
 import WeatherStatistics from './WeatherStatistics'
 
-const RightSideBar = () => {
+const RightSideBar = ({ isMain }) => {
   return (
     <Wrapper>
-      <WeatherStatistics />
+      <WeatherStatistics isMain={isMain} />
       <Weather />
     </Wrapper>
   )
@@ -18,5 +20,9 @@ const Wrapper = styled.div`
     align-items: center;
     justify-content: space-between;
 `
+
+RightSideBar.prototype = {
+  isMain: PropTypes.bool
+}
 
 export default RightSideBar

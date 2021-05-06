@@ -29,7 +29,7 @@ const Global = createGlobalStyle`
   }
 `
 
-const AppLayout = ({ children, filter }) => {
+const AppLayout = ({ children, filter, isMain }) => {
   return (
     <>
       <Global />
@@ -40,7 +40,7 @@ const AppLayout = ({ children, filter }) => {
           <MainComponent>
             {children}
           </MainComponent>
-          <RightSideBar />
+          <RightSideBar isMain={isMain} />
         </Main>
       </Wrapper>
     </>
@@ -70,7 +70,9 @@ const MainComponent = styled.div`
 `
 
 AppLayout.prototype = {
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
+  filter: PropTypes.bool,
+  isMain: PropTypes.bool
 }
 
 export default AppLayout

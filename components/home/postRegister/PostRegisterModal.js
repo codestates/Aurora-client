@@ -1,14 +1,19 @@
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { useMemo } from 'react'
+
 import PostRegisterForm from './PostRegisterForm'
+import { Icon } from '../../Theme'
 
 const PostRegisterModal = ({ onClose }) => {
+  const style = useMemo(() => ({ marginRight: '1rem' }), [])
+
   return (
     <StyledModalOverlay>
       <StyledModal>
         <StyledModalHeader>
           <div>Aurora post</div>
-          <span onClick={onClose}><i className='fas fa-times' style={{ color: '#777', marginRight: '1rem' }} /></span>
+          <span style={style} onClick={onClose}>{Icon.times}</span>
         </StyledModalHeader>
         <StyledModalBody>
           <PostRegisterForm onClose={onClose} />

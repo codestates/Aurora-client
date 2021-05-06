@@ -1,6 +1,6 @@
+import PropTypes from 'prop-types'
 import { useState, useCallback, useEffect } from 'react'
 import { Button, Input } from 'antd'
-import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
 
 const { TextArea } = Input
@@ -16,7 +16,7 @@ const PostCardContent = ({ postData, editMode, onChangePost, onCancelUpdate }) =
 
   const onChangeText = useCallback((e) => {
     setEditText(e.target.value)
-  })
+  }, [])
 
   return (
     <div>

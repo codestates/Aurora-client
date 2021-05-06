@@ -16,10 +16,7 @@ const PostBar = () => {
 
   return (
     <>
-      <Wrapper onClick={() => {
-        setShowModal(true)
-      }}
-      >
+      <Wrapper onClick={onClickModal}>
         <>
           {me.avatar[0]
             ? <Avatar src={`data:image/png;base64,${Buffer.from(me.avatar[0].data.data).toString('base64')}`} alt='avatar' />
