@@ -2,15 +2,13 @@ import styled from 'styled-components'
 import { Checkbox } from 'antd'
 import { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
+
 import { FILTER_WEATHER } from '../../actions/post'
+import { Icon } from '../Theme'
 
 const FilterBar = () => {
   const dispatch = useDispatch()
   const [checkedWeather, setCheckedWeather] = useState([])
-
-  const onChangeWeather = useCallback((checkedValues) => {
-    setCheckedWeather(checkedValues)
-  }, [])
 
   useEffect(() => {
     dispatch({
@@ -19,14 +17,18 @@ const FilterBar = () => {
     })
   }, [checkedWeather])
 
+  const onChangeWeather = useCallback((checkedValues) => {
+    setCheckedWeather(checkedValues)
+  }, [])
+
   return (
     <Wrapper>
       <div>보고싶은 날씨를 선택해보세요</div>
       <Checkbox.Group onChange={onChangeWeather}>
-        <Checkbox value='sun'><i className='fas fa-sun' style={{ color: '#ffbebe' }} /></Checkbox>
-        <Checkbox value='cloud'><i className='fas fa-cloud' style={{ color: '#D4D4D4' }} /></Checkbox>
-        <Checkbox value='rain'><i className='fas fa-cloud-showers-heavy' style={{ color: '#b6d8f8' }} /></Checkbox>
-        <Checkbox value='moon'><i className='fas fa-moon' style={{ color: '#a18afc' }} /></Checkbox>
+        <Checkbox value='sun'>{Icon.sun}</Checkbox>
+        <Checkbox value='cloud'>{Icon.cloud}</Checkbox>
+        <Checkbox value='rain'>{Icon.rain}</Checkbox>
+        <Checkbox value='moon'>{Icon.moon}</Checkbox>
       </Checkbox.Group>
     </Wrapper>
   )

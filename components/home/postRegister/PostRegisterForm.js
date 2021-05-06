@@ -1,12 +1,13 @@
-import { useCallback, useState, useRef, useEffect } from 'react'
-import styled from 'styled-components'
-import useInput from '../../../hooks/useInput'
 import PropTypes from 'prop-types'
-
+import styled from 'styled-components'
+import { useCallback, useState, useRef, useEffect } from 'react'
 import { Button, Radio } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { addPost } from '../../../actions/post'
+import { Icon } from '../../Theme'
+
+import useInput from '../../../hooks/useInput'
 
 const PostRegisterForm = ({ onClose }) => {
   const dispatch = useDispatch()
@@ -19,14 +20,13 @@ const PostRegisterForm = ({ onClose }) => {
 
   useEffect(() => {
     if (content.length > 0 && addPostDone) {
-      // onClose()
       window.location.replace('/')
     }
   }, [addPostDone])
 
-  const onChangeMood = (e) => {
+  const onChangeMood = useCallback((e) => {
     setMood(e.target.value)
-  }
+  }, [])
 
   const imageInput = useRef()
   const onClickImageUpload = useCallback(() => {
@@ -35,7 +35,7 @@ const PostRegisterForm = ({ onClose }) => {
 
   const onChangeImage = useCallback((e) => {
     setImages((prev) => [...prev, ...e.target.files])
-  })
+  }, [])
 
   const removeImage = useCallback((name) => {
     const newImages = images.filter((v) => v.name !== name)
@@ -61,24 +61,31 @@ const PostRegisterForm = ({ onClose }) => {
       <div>
         <input type='file' accept='image/*' multiple hidden ref={imageInput} onChange={onChangeImage} />
         <Button onClick={onClickImageUpload}>이미지 업로드</Button>
-        <div style={{ color: '#777', fontSize: '15px', height: '150px', padding: '10px' }}>
+        <ImagesWrapper>
           {images.map((ele) => (
             <div key={ele.name}>{ele.name}
-              <DeleteBtn type='button' style={{ marginLeft: '5px', cursor: 'pointer' }} onClick={() => removeImage(ele.name)}><i className='fas fa-times' style={{ color: '#777', fontSize: '1rem' }} /></DeleteBtn>
+              <DeleteBtn type='button' onClick={() => removeImage(ele.name)}>{Icon.times}</DeleteBtn>
             </div>
           ))}
-        </div>
+        </ImagesWrapper>
       </div>
       <RadioWrapper onChange={onChangeMood}>
-        <Radio value='sun'><i className='fas fa-sun' style={{ color: '#ffbebe' }} /></Radio>
-        <Radio value='cloud'><i className='fas fa-cloud' style={{ color: '#D4D4D4' }} /></Radio>
-        <Radio value='rain'><i className='fas fa-cloud-showers-heavy' style={{ color: '#b6d8f8' }} /></Radio>
-        <Radio value='moon'><i className='fas fa-moon' style={{ color: '#a18afc' }} /></Radio>
+        <Radio value='sun'>{Icon.sun}</Radio>
+        <Radio value='cloud'>{Icon.cloud}</Radio>
+        <Radio value='rain'>{Icon.rain}</Radio>
+        <Radio value='moon'>{Icon.moon}</Radio>
       </RadioWrapper>
       <CustomBtn htmlType='submit' loading={addPostLoading} disabled={content.length === 0 || mood.length === 0 || images.length === 0}>등록</CustomBtn>
     </PostForm>
   )
 }
+
+const ImagesWrapper = styled.div`
+  color: #777;
+  font-size: 1rem;
+  height: 9.375rem;
+  padding: 0.625rem;
+`
 
 const RadioWrapper = styled(Radio.Group)`
   margin: 50px auto 50px auto;
@@ -107,6 +114,9 @@ const PostForm = styled.form`
 const DeleteBtn = styled.button`
   border: none;
   background: none;
+  margin-left: 5px;
+  cursor: pointer;
+  font-size: 1rem;
 `
 
 const CustomBtn = styled(Button)`

@@ -55,7 +55,7 @@ const CommentContent = ({ item, postId }) => {
               <Button type='danger' onClick={onCancelUpdate}>취소</Button>
             </Button.Group>
           </>
-        )
+          )
         : (
           <>
             <span> {item.content}</span>
@@ -70,7 +70,7 @@ const CommentContent = ({ item, postId }) => {
               <EllipsisOutlined />
             </Popover>
           </>
-        )}
+          )}
     </div>
   )
 }
