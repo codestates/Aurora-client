@@ -1,21 +1,27 @@
 import Head from 'next/head'
-import { useEffect, useCallback, useState, useRef } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
+import { useEffect, useCallback, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 import AppLayout from '../components/AppLayout'
-import Signin from './user/signin'
 import Loading from '../components/Loading'
-import UserProfile from '../components/userProfile/UserProfile'
 import PostCard from '../components/home/postCard/PostCard'
+import Signin from './user/signin'
+import UserProfile from '../components/userProfile/UserProfile'
 import { firstLoadPost, moreLoadPost, loadStatistics } from '../actions/post'
 import { signinSuccessAction, getAccessTokenAction } from '../actions/user'
 
 const Profile = () => {
   const dispatch = useDispatch()
-
   const { isLoggedIn, googleLoading, loginLoading, accessToken } = useSelector((state) => state.user)
-  const { Posts, firstLoadPostDone, filterWeather, totalPosts, moreLoadPostLoading } = useSelector(state => state.post)
+  const { Posts, firstLoadPostDone, filterWeather, totalPosts } = useSelector(state => state.post)
+
+  const [page, setPage] = useState(2)
+
+  let filterPosts = []
+  if (filterWeather.length > 0) {
+    filterPosts = Posts.filter((ele) => (filterWeather.includes(ele.mood)))
+  }
 
   useEffect(() => {
     dispatch(getAccessTokenAction())
@@ -33,31 +39,15 @@ const Profile = () => {
     }
   }, [isLoggedIn])
 
-  const [page, setPage] = useState(2)
-
-  const onClickMore = useCallback(() => {
-    // dispatch(moreLoadPost(page, accessToken))
-    dispatch(moreLoadPost(page, accessToken))
-    setPage((prev) => prev + 1)
-  })
-
-  let filterPosts = []
-
-  if (filterWeather.length > 0) {
-    filterPosts = Posts.filter((ele) => (filterWeather.includes(ele.mood)))
-  }
-
   // TODO: 날씨 통계 제목 넘겨주기
   useEffect(() => {
     dispatch(loadStatistics(accessToken))
   }, [])
 
-  const moreBtn = useRef()
-  const onScroll = useCallback((e) => {
-    if ((e.target.scrollTop + e.target.clientHeight === e.target.scrollHeight) && (Posts.length < totalPosts)) {
-      moreBtn.current.click()
-    }
-  }, [moreBtn.current])
+  const onClickMore = useCallback(() => {
+    dispatch(moreLoadPost(page, accessToken))
+    setPage((prev) => prev + 1)
+  }, [page])
 
   return (
     <>
@@ -75,7 +65,7 @@ const Profile = () => {
             <AppLayout filter>
               <UserProfile />
               <Text>나의 포스트</Text>
-              <PostCardList onScroll={onScroll}>
+              <PostCardList>
                 {firstLoadPostDone
                   ? (
                       filterWeather.length > 0
@@ -87,9 +77,7 @@ const Profile = () => {
                           )
                     )
                   : <Loading />}
-                {moreLoadPostLoading && <div>불러오는중</div>}
-                <button hidden onClick={onClickMore} ref={moreBtn} />
-                {/* {totalPosts > Posts.length && <button onClick={onClickMore} ref={moreBtn}>더보기</button>} */}
+                {totalPosts > Posts.length && <LoadMoreBtn onClick={onClickMore}>더 많은 게시물 보기</LoadMoreBtn>}
               </PostCardList>
             </AppLayout>
           </>
@@ -104,7 +92,7 @@ const PostCardList = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 10px;
+  padding-top: 0.625rem;
   overflow: auto;
   -ms-overflow-style:none;
   &::-webkit-scrollbar{ 

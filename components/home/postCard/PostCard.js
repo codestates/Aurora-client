@@ -1,25 +1,25 @@
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
 import { Button, Card, Popover, List, Comment } from 'antd'
 import { HeartTwoTone, HeartOutlined, MessageOutlined, EllipsisOutlined } from '@ant-design/icons'
-
 import { useCallback, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
-import styled from 'styled-components'
+import CommentContent from './CommentContent'
+import CommentForm from './CommentForm'
+import PostCardContent from './PostCardContent'
 import PostImages from './PostImages'
 import Theme from '../../Theme'
-import CommentForm from './CommentForm'
 import { removePost, updatePost, unlikePost, likePost } from '../../../actions/post'
-import PostCardContent from './PostCardContent'
-import CommentContent from './CommentContent'
 
 const PostCard = ({ post }) => {
   const dispatch = useDispatch()
   const { likePosts, removePostLoading } = useSelector((state) => state.post)
   const { me, accessToken } = useSelector(state => state.user)
 
-  // 포스트 수정
   const [editMode, setEditMode] = useState(false)
+
+  // 포스트 수정
   const onClickUpdate = useCallback(() => {
     setEditMode(true)
   }, [])
@@ -29,7 +29,6 @@ const PostCard = ({ post }) => {
   const onChangePost = useCallback((editText) => () => {
     const data = new FormData()
     data.append('content', editText)
-
     dispatch(updatePost(post._id, data, accessToken))
   }, [post])
 

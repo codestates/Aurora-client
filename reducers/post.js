@@ -165,13 +165,12 @@ const reducer = (state = initialState, action) => Produce(state, (draft) => {
       draft.addCommentDone = false
       draft.addCommentError = null
       break
-    case ADD_COMMENT_SUCCESS: {
+    case ADD_COMMENT_SUCCESS:
       draft.addCommentLoading = false
       draft.addCommentDone = true
       const addPost_ = draft.Posts.find((v) => v._id === action.payload.postId)
       addPost_.comments.push(action.payload.data)
       break
-    }
     case ADD_COMMENT_FAILURE:
       draft.addCommentLoading = false
       draft.addCommentError = action.payload.message
@@ -181,13 +180,12 @@ const reducer = (state = initialState, action) => Produce(state, (draft) => {
       draft.updateCommentDone = false
       draft.updateCommentError = null
       break
-    case UPDATE_COMMENT_SUCCESS: {
+    case UPDATE_COMMENT_SUCCESS:
       draft.updateCommentLoading = false
       draft.updateCommentDone = true
       const updatePost_ = draft.Posts.find((v) => v._id === action.payload.postId)
       updatePost_.comments.find((v) => v._id === action.payload.commentId).content = action.payload.content
       break
-    }
     case UPDATE_COMMENT_FAILURE:
       draft.updateCommentLoading = false
       draft.updateCommentError = action.payload.message
@@ -197,13 +195,12 @@ const reducer = (state = initialState, action) => Produce(state, (draft) => {
       draft.removeCommentDone = false
       draft.removeCommentError = null
       break
-    case REMOVE_COMMENT_SUCCESS: {
+    case REMOVE_COMMENT_SUCCESS:
       draft.removeCommentLoading = false
       draft.removeCommentDone = true
       const removePost_ = draft.Posts.find((v) => v._id === action.payload.postId)
       removePost_.comments = removePost_.comments.filter((v) => v._id !== action.payload.commentId)
       break
-    }
     case REMOVE_COMMENT_FAILURE:
       draft.removeCommentLoading = false
       draft.removeCommentError = action.payload.message
