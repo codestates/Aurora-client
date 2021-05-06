@@ -6,7 +6,6 @@ import { useSelector, useDispatch } from 'react-redux'
 import AppLayout from '../components/AppLayout'
 import Loading from '../components/Loading'
 import Signin from './user/signin'
-
 import { signinSuccessAction, getAccessTokenAction } from '../actions/user'
 
 const Notification = () => {

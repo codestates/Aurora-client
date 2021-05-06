@@ -1,6 +1,6 @@
-import { useCallback, useState, useRef } from 'react'
 import styled from 'styled-components'
 import { Button } from 'antd'
+import { useCallback, useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import useInput from '../../hooks/useInput'
@@ -20,19 +20,18 @@ const ProfileEditForm = ({ onClose }) => {
   }, [imageInput.current])
 
   const onChangeImage = useCallback((e) => {
-    console.log('전송 전 이미지 : ', e.target.files[0])
     setImage(...e.target.files)
-  })
+  }, [image])
 
-  const removeImage = (name) => {
+  const removeImage = useCallback((name) => {
     setImage('')
-  }
+  }, [image])
 
-  const onClickWithdrawal = () => {
+  const onClickWithdrawal = useCallback(() => {
     if (confirm('정말 탈퇴하시겠습니까??') === true) {
       dispatch(withdrawal(accessToken))
     }
-  }
+  })
 
   const onSubmit = (e) => {
     e.preventDefault()
@@ -41,8 +40,6 @@ const ProfileEditForm = ({ onClose }) => {
     bodyFormData.append('username', username)
     bodyFormData.append('image', image)
     bodyFormData.append('bio', bio)
-
-    console.log(typeof bodyFormData)
 
     dispatch(updateUerProfileAction(bodyFormData, accessToken))
     onClose()
@@ -57,16 +54,16 @@ const ProfileEditForm = ({ onClose }) => {
         <Input value={username} onChange={onChangeUsername} placeholder='새 유저네임' />
         <Input value={bio} onChange={onChangeBio} placeholder='새 소개글' />
         <UploadImage>
-          <div style={{ margin: '0 0 1rem 1rem', fontSize: '1.1rem' }}>프로필 이미지 업로드</div>
+          <Text>프로필 이미지 업로드</Text>
           <input type='file' accept='image/*' hidden ref={imageInput} onChange={onChangeImage} />
-          <Button style={{ marginLeft: '1rem', width: '9rem' }} onClick={onClickImageUpload}>파일 선택</Button>
+          <ChooseButton onClick={onClickImageUpload}>파일 선택</ChooseButton>
           <div> {image
             ? (
               <ImageWrapper>
                 <Image src={URL.createObjectURL(image)} />
                 <CloseButton type='button' onClick={() => removeImage(image)}>지우기</CloseButton>
               </ImageWrapper>
-            )
+              )
             : ''}
           </div>
         </UploadImage>
@@ -86,7 +83,6 @@ const Input = styled.input`
   font-size: 1rem;
   padding : 1rem;
   width: 90%;
-  /* height: 10rem; */
   border: none;
   margin-left: 1rem;
   resize: none;
@@ -94,12 +90,19 @@ const Input = styled.input`
     outline:none;
   }
 `
-
+const Text = styled.div`
+  margin: 0 0 1rem 1rem;
+  font-size: 1.1rem;
+`
 const ImageWrapper = styled.div`
   margin-top: 1rem;
   display: flex;
   align-items: flex-end;
 
+`
+const ChooseButton = styled(Button)`
+  margin-left: 1rem;
+  width: 9rem;
 `
 const CloseButton = styled.button`
   border-style: none;

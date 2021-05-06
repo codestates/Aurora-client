@@ -1,20 +1,22 @@
-import styled from 'styled-components'
 import Link from 'next/link'
+import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
-import { signupRequestAction } from '../../actions/user'
 import { useEffect, useState, useCallback } from 'react'
+
 import useInput from '../../hooks/useInput'
+import { signupRequestAction } from '../../actions/user'
 
 const SignupProcess = () => {
   const dispatch = useDispatch()
   const { signupError, signupRequest } = useSelector((state) => state.user)
+
   const [email, onChangeEmail] = useInput('')
   const [username, onChangeUsername] = useInput('')
   const [password, onChangePassword] = useInput('')
-  const [signupErrorMsg, setSignupErrorMsg] = useState('')
 
   const [passwordconfirm, setpasswordconfirm] = useState('')
   const [passwordconfirmMsg, setpasswordconfirmMsg] = useState('')
+  const [signupErrorMsg, setSignupErrorMsg] = useState('')
 
   useEffect(() => {
     if (signupError) {

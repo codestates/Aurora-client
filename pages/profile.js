@@ -76,7 +76,7 @@ const Profile = () => {
                             Posts.map(post => <PostCard key={post._id} post={post} />)
                           )
                     )
-                  : <Loading />}
+                  : <Wrapper><Loading /></Wrapper>}
                 {totalPosts > Posts.length && <LoadMoreBtn onClick={onClickMore}>더 많은 게시물 보기</LoadMoreBtn>}
               </PostCardList>
             </AppLayout>
@@ -108,7 +108,9 @@ const Text = styled.div`
   font-weight: 600;
   color: #424242;
 `
-
+const Wrapper = styled.div`
+  margin-top: -50%;
+`
 const LoadMoreBtn = styled.button`
   border: none;
   background: none;

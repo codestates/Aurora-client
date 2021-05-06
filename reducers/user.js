@@ -1,8 +1,8 @@
 import { GET_ACCESS_TOKEN, GET_USER, GOOGLE_AUTH_URL_REQUEST, SIGN_IN_REQUEST, SIGN_OUT, SIGN_UP_REQUEST, SIGN_UP_SUCCESS, UPDATE_USER_PROFILE, WITHDRAWAL } from '../actions/user'
 
-/* ------- initial state ------ */
+// initial state
 export const initialState = {
-  signupRequest: false, // 회원가입 시도중
+  signupRequest: false,
   signedUp: false,
   signupError: null,
   isLoggedIn: false,
@@ -17,9 +17,7 @@ export const initialState = {
   googleAuthURL: ''
 }
 
-/* ------- reducer ------ */
 const reducer = (state = initialState, action) => {
-  // const { statusText, message, accessToken, data } = action.payload
   switch (action.type) {
     case SIGN_UP_REQUEST:
       if (action.payload.statusText === 'OK') {
@@ -48,7 +46,6 @@ const reducer = (state = initialState, action) => {
         return {
           ...state,
           signupRequest: false,
-          // error message
           signupError: action.payload.message
         }
       }
@@ -68,7 +65,6 @@ const reducer = (state = initialState, action) => {
       } else {
         return {
           ...state,
-          // error message
           loginError: action.payload.message
         }
       }
@@ -82,7 +78,6 @@ const reducer = (state = initialState, action) => {
       } else {
         return {
           ...state,
-          // error message
           accessTokenError: action.payload.message,
           isLoggedIn: false
         }
@@ -100,7 +95,6 @@ const reducer = (state = initialState, action) => {
       } else {
         return {
           ...state,
-          // error message
           loginError: action.payload,
           isLoggedIn: false
         }
@@ -122,7 +116,6 @@ const reducer = (state = initialState, action) => {
         }
       }
     case UPDATE_USER_PROFILE:
-      console.log('UPDATE USER', action.payload)
       if (action.payload.statusText === 'OK') {
         return {
           ...state,

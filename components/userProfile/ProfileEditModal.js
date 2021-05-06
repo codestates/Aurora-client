@@ -7,7 +7,7 @@ const ProfileEditModal = ({ User, onClose }) => {
       <StyledModal>
         <StyledModalHeader>
           <div>Profile Update</div>
-          <span onClick={onClose}><i className='fas fa-times' style={{ color: '#777', marginRight: '1rem' }} /></span>
+          <span onClick={onClose}><i className='fas fa-times' /></span>
         </StyledModalHeader>
         <StyledModalBody>
           <ProfileEditForm onClose={onClose} />
@@ -54,6 +54,10 @@ const StyledModalHeader = styled.div`
   }
   span{
     cursor: pointer;
+  }
+  i{
+    color: #777;
+    margin-right: 1rem;
   }
 `
 
