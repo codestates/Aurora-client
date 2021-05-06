@@ -65,20 +65,25 @@ const Profile = () => {
             <AppLayout filter isMain={false}>
               <UserProfile />
               <Text>나의 포스트</Text>
-              <PostCardList>
-                {firstLoadPostDone
-                  ? (
-                      filterWeather.length > 0
-                        ? (
-                            filterPosts.map(post => <PostCard key={post._id} post={post} />)
-                          )
-                        : (
-                            Posts.map(post => <PostCard key={post._id} post={post} />)
-                          )
-                    )
-                  : <Wrapper><Loading /></Wrapper>}
-                {totalPosts > Posts.length && <LoadMoreBtn onClick={onClickMore}>더 많은 게시물 보기</LoadMoreBtn>}
-              </PostCardList>
+              {totalPosts !== 0
+                ? (
+                  <PostCardList>
+                    {firstLoadPostDone
+                      ? (
+                          filterWeather.length > 0
+                            ? (
+                                filterPosts.map(post => <PostCard key={post._id} post={post} />)
+                              )
+                            : (
+                                Posts.map(post => <PostCard key={post._id} post={post} />)
+                              )
+                        )
+                      : <Wrapper><Loading /></Wrapper>}
+                    {totalPosts > Posts.length && <LoadMoreBtn onClick={onClickMore}>더 많은 게시물 보기</LoadMoreBtn>}
+                  </PostCardList>
+                  )
+                : <div>첫 게시물을 작성해보세요!</div>}
+
             </AppLayout>
           </>
           )}

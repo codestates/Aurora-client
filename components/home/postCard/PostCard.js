@@ -59,16 +59,17 @@ const PostCard = ({ post }) => {
     <Wrapper ThemeColor={Theme[post.mood]}>
       <Header>
         <Auth>
-          {post.postedBy.avatar.[0] ?
-            (
+          {post.postedBy.avatar[0]
+            ? (
               <img
                 src={`data:image/png;base64,${post.postedBy.avatar[0].data}`} alt='avatar'
               />
-            ) : (
+              )
+            : (
               <img
                 src='/images/profile-thumbnail.jpg' alt='avatar'
               />
-            )}
+              )}
           <div>
             <span>{post.postedBy.username}</span>
             <span>22 minutes ago</span>
@@ -102,12 +103,12 @@ const PostCard = ({ post }) => {
             <Card.Meta
               description={<PostCardContent editMode={editMode} postData={post.content} onChangePost={onChangePost} onCancelUpdate={onCancelUpdate} />}
             />
-          )
+            )
           : (
             <Card.Meta
               description={<PostCardContent postData={post.content} />}
             />
-          )}
+            )}
       </Card>
       {commentFormOpened && (
         <>

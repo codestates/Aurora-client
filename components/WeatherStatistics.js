@@ -16,7 +16,7 @@ const WeatherStatistics = ({ isMain }) => {
   }
   return (
     <Wrapper>
-      {isMain ? <div>전체 날씨 현황</div> : <div>나의 날씨 현황</div>}
+      {isMain ? <Title>전체 날씨 현황</Title> : <Title>나의 날씨 현황</Title>}
       <Progress type='circle' width={60} percent={statistic.sun} format={() => (Icon.sun)} />{statistic.sun}%
       <Progress type='circle' width={60} percent={statistic.cloud} format={() => (Icon.cloud)} />{statistic.cloud}%
       <Progress type='circle' width={60} percent={statistic.rain} format={() => (Icon.rain)} />{statistic.rain}%
@@ -34,7 +34,9 @@ const Wrapper = styled.div`
     margin: 10px;
   }
 `
-
+const Title = styled.div`
+  margin-top: 2rem;
+`
 WeatherStatistics.prototype = {
   isMain: PropTypes.bool
 }

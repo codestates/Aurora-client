@@ -21,11 +21,11 @@ const ProfileEditForm = ({ onClose }) => {
 
   const onChangeImage = useCallback((e) => {
     setImage(...e.target.files)
-  }, [image])
+  }, [])
 
   const removeImage = useCallback((name) => {
     setImage('')
-  }, [image])
+  })
 
   const onClickWithdrawal = useCallback(() => {
     if (confirm('정말 탈퇴하시겠습니까??') === true) {
@@ -33,7 +33,7 @@ const ProfileEditForm = ({ onClose }) => {
     }
   })
 
-  const onSubmit = (e) => {
+  const onSubmit = useCallback((e) => {
     e.preventDefault()
 
     const bodyFormData = new FormData()
@@ -43,7 +43,7 @@ const ProfileEditForm = ({ onClose }) => {
 
     dispatch(updateUerProfileAction(bodyFormData, accessToken))
     onClose()
-  }
+  })
 
   return (
     <>
