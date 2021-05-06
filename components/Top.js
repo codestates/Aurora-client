@@ -1,6 +1,8 @@
 import Link from 'next/link'
-import { useSelector } from 'react-redux'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { useSelector } from 'react-redux'
+
 import FilterBar from './home/FilterBar'
 import Signout from './Signout'
 
@@ -26,7 +28,7 @@ const Top = ({ filter }) => {
                   <Avatar src={`data:image/png;base64,${Buffer.from(me.avatar[0].data.data).toString('base64')}`} alt='avatar' />
                   <Username>{me.username}</Username>
                 </>
-                )
+              )
               : <Avatar src='/images/profile-thumbnail.jpg' alt='avatar' />}
           </GoToProfile>
         </Link>
@@ -82,5 +84,8 @@ const Avatar = styled.img`
 const Username = styled.span`
   margin-left: 0.5rem;
 `
+Top.prototype = {
+  filter: PropTypes.bool
+}
 
 export default Top

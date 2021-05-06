@@ -1,13 +1,12 @@
 import PropTypes from 'prop-types'
+import TextArea from 'antd/lib/input/TextArea'
 import { Button, Popover } from 'antd'
 import { EllipsisOutlined } from '@ant-design/icons'
 import { useState, useCallback, useEffect } from 'react'
-import TextArea from 'antd/lib/input/TextArea'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { updateComment, removeComment } from '../../../actions/post'
-
 import useInput from '../../../hooks/useInput'
+import { updateComment, removeComment } from '../../../actions/post'
 
 const CommentContent = ({ item, postId }) => {
   const dispatch = useDispatch()
@@ -16,8 +15,13 @@ const CommentContent = ({ item, postId }) => {
 
   const [editMode, setEditMode] = useState(false)
   const [editText, changeEditText, setEditText] = useInput(item.content)
-  console.log('item.content : ', item.content)
-  console.log('editText : ', editText)
+
+  useEffect(() => {
+    if (editMode && updateCommentDone) {
+      onCancelUpdate()
+    }
+  }, [updateCommentDone])
+
   // 수정 모드 설정
   const onClickUpdate = useCallback(() => {
     setEditMode(true)
@@ -33,18 +37,12 @@ const CommentContent = ({ item, postId }) => {
       content: editText
     }
     dispatch(updateComment(postId, item._id, data, accessToken))
-  }, [item, postId, editText])
-
-  useEffect(() => {
-    if (editMode && updateCommentDone) {
-      onCancelUpdate()
-    }
-  }, [updateCommentDone])
+  }, [postId, item, editText])
 
   // 댓글 삭제
-  const onRemoveComment = () => {
+  const onRemoveComment = useCallback(() => {
     dispatch(removeComment(postId, item._id, accessToken))
-  }
+  }, [postId, item])
 
   return (
     <div>

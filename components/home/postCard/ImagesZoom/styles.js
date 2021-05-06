@@ -20,7 +20,7 @@ export const Overlay = styled.div`
 `
 
 export const Header = styled.header`
-  height: 44px;
+  height: 2.75rem;
   background: white;
   position: relative;
   padding: 0;
@@ -28,14 +28,14 @@ export const Header = styled.header`
   
   & h1 {
     margin: 0;
-    font-size: 17px;
+    font-size: 1.063rem;
     color: #333;
-    line-height: 44px;
+    line-height: 2.75rem;
   }
 `
 
 export const SlickWrapper = styled.div`
-  height: calc(100% - 44px);
+  height: calc(100% - 2.75rem);
   background: #090909;
 `
 
@@ -43,8 +43,8 @@ export const CloseBtn = styled(CloseOutlined)`
   position: absolute;
   right: 0;
   top: 0;
-  padding: 15px;
-  line-height: 14px;
+  padding: 0.938rem;
+  line-height: 0.875rem;
   cursor: pointer;
 `
 
@@ -52,24 +52,24 @@ export const Indicator = styled.div`
   text-align: center;
   
   & > div {
-    width: 75px;
-    height: 30px;
-    line-height: 30px;
-    border-radius: 15px;
+    width: 4.688rem;
+    height: 1.875rem;
+    line-height: 1.875rem;
+    border-radius: 0.938rem;
     background: #313131;
     display: inline-block;
     text-align: center;
     color: white;
-    font-size: 15px;
+    font-size: 0.938rem;
   }
 `
 
 export const ImgWrapper = styled.div`
-  padding: 32px;
+  padding: 2rem;
   text-align: center;
   
   & img {
     margin: 0 auto;
-    max-height: 750px;
+    max-height: 46.875rem;
   }
 `

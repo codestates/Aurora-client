@@ -4,12 +4,17 @@ axios.defaults.withCredentials = true
 /* ------- action 상수 ------ */
 export const SIGN_UP_REQUEST = 'SIGN_UP_REQUEST'
 export const SIGN_UP_SUCCESS = 'SIGN_UP_SUCCESS'
+
 export const GOOGLE_AUTH_URL_REQUEST = 'GOOGLE_AUTH_URL_REQUEST'
+
 export const SIGN_IN_REQUEST = 'SIGN_IN_REQUEST'
 export const GET_ACCESS_TOKEN = 'GET_ACCESS_TOKEN'
 export const GET_USER = 'GET_USER'
+
 export const SIGN_OUT = 'LOG_OUT'
+
 export const UPDATE_USER_PROFILE = 'UPDATE_USER_PROFILE'
+
 export const WITHDRAWAL = 'WITHDRAWAL'
 
 /* ------- dispatch 함수 ------ */
@@ -101,7 +106,6 @@ export const withdrawal = (accessToken) => async (dispatch) => {
       Authorization: accessToken
     }
     const response = await axios.delete('http://localhost:5000/api/user', { headers })
-    console.log('withdrawal : ', response)
     dispatch({ type: WITHDRAWAL, payload: response })
   } catch (err) {
     dispatch({ type: WITHDRAWAL, payload: err.response.data })

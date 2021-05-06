@@ -1,6 +1,7 @@
-import { useState } from 'react'
 import PropTypes from 'prop-types'
 import Slick from 'react-slick'
+import { useState } from 'react'
+
 import { Overlay, Header, CloseBtn, SlickWrapper, ImgWrapper, Indicator, Global } from './styles'
 
 const ImagesZoom = ({ images, onClose }) => {
@@ -25,7 +26,7 @@ const ImagesZoom = ({ images, onClose }) => {
           >
             {images.map((v) => (
               <ImgWrapper key={v._id}>
-                <img style={{ height: '600px' }} src={`data:image/png;base64,${v.data}`} />
+                <img style={{ height: '37.5rem' }} src={`data:image/png;base64,${v.data}`} />
               </ImgWrapper>
             ))}
           </Slick>
@@ -44,9 +45,7 @@ const ImagesZoom = ({ images, onClose }) => {
 }
 
 ImagesZoom.propTypes = {
-  images: PropTypes.arrayOf(PropTypes.shape({
-    src: PropTypes.string
-  })).isRequired,
+  images: PropTypes.arrayOf(PropTypes.object).isRequired,
   onClose: PropTypes.func.isRequired
 }
 

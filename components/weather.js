@@ -62,7 +62,7 @@ const weather = () => {
       {isData && (
         <>
           <Header>
-            <span>A real weather</span>
+            <span>현재 날씨</span>
           </Header>
           <Body>
             <img

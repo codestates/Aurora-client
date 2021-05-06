@@ -74,7 +74,6 @@ export const firstLoadAllPost = (time, accessToken) => async (dispatch) => {
       Authorization: accessToken
     }
     const response = await axios.get(`http://localhost:5000/api/posts/all?page=${1}&createdAt=${time}`, { headers })
-    console.log('firstLoadAllPost : ', response.data)
     dispatch({
       type: FIRST_LOAD_ALL_POST_SUCCESS,
       payload: response.data
@@ -96,7 +95,6 @@ export const moreLoadAllPost = (page, time, accessToken) => async (dispatch) => 
       Authorization: accessToken
     }
     const response = await axios.get(`http://localhost:5000/api/posts/all?page=${page}&createdAt=${time}`, { headers })
-    console.log('moreLoadAllPost : ', response.data)
     dispatch({
       type: MORE_LOAD_ALL_POST_SUCCESS,
       payload: response.data
@@ -139,7 +137,6 @@ export const moreLoadPost = (page, accessToken) => async (dispatch) => {
       Authorization: accessToken
     }
     const response = await axios.get(`http://localhost:5000/api/posts?page=${page}`, { headers })
-    console.log('moreLoadPost : ', response.data)
     dispatch({
       type: MORE_LOAD_POST_SUCCESS,
       payload: response.data
@@ -293,8 +290,7 @@ export const loadAllStatistics = () => async (dispatch) => {
     dispatch({
       type: LOAD_ALL_STATISTICS_REQUEST
     })
-    const response = await axios.get('http://localhost:5000/api/today-moods')
-    console.log('loadAllStatistics : ', response.data)
+    const response = await axios.get('http://localhost:5000/api/all-moods')
     dispatch({
       type: LOAD_ALL_STATISTICS_SUCCESS,
       payload: response.data
@@ -337,7 +333,6 @@ export const loadLikePost = (accessToken) => async (dispatch) => {
       Authorization: accessToken
     }
     const response = await axios.get('http://localhost:5000/api/like', { headers })
-    console.log(response.data)
     dispatch({
       type: LOAD_LIKE_POST_SUCCESS,
       payload: response.data.likes
