@@ -7,10 +7,10 @@ const WeatherStatistics = () => {
   const { Statistics } = useSelector(state => state.post)
 
   const statistic = {
-    sun: Statistics.total ? Math.round(Statistics.moods.sun / Statistics.total * 100) : 0,
-    cloud: Statistics.total ? Math.round(Statistics.moods.cloud / Statistics.total * 100) : 0,
-    rain: Statistics.total ? Math.round(Statistics.moods.rain / Statistics.total * 100) : 0,
-    moon: Statistics.total ? Math.round(Statistics.moods.moon / Statistics.total * 100) : 0
+    sun: Statistics ? Math.round(Statistics.moods.sun / Statistics.total * 100) : 0,
+    cloud: Statistics ? Math.round(Statistics.moods.cloud / Statistics.total * 100) : 0,
+    rain: Statistics ? Math.round(Statistics.moods.rain / Statistics.total * 100) : 0,
+    moon: Statistics ? Math.round(Statistics.moods.moon / Statistics.total * 100) : 0
   }
   return (
     <Wrapper>
