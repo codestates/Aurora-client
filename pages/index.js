@@ -54,12 +54,15 @@ const Home = () => {
     dispatch(loadAllStatistics())
   }, [])
 
-  // const moreBtn = useRef()
-  // const onScroll = useCallback((e) => {
-  //   if ((e.target.scrollTop + e.target.clientHeight === e.target.scrollHeight) && (totalPosts > Posts.length)) {
-  //     moreBtn.current.click()
-  //   }
-  // }, [moreBtn.current])
+  console.log(Posts.length)
+  console.log(totalPosts)
+
+  const moreBtn = useRef()
+  const onScroll = useCallback((e) => {
+    if ((e.target.scrollTop + e.target.clientHeight === e.target.scrollHeight) && (Posts.length < totalPosts)) {
+      moreBtn.current.click()
+    }
+  }, [moreBtn.current])
 
   return (
     <>
@@ -72,7 +75,7 @@ const Home = () => {
         : (
           <AppLayout filter>
             <PostRegisterBar />
-            <PostCardList>
+            <PostCardList onScroll={onScroll}>
               {firstLoadAllPostDone &&
                 (
                   filterWeather.length > 0
@@ -83,8 +86,8 @@ const Home = () => {
                       Posts.map(post => <PostCard key={post._id} post={post} />)
                     )
                 )}
-              {/* {moreLoadAllPostLoading && <div>불러오는중</div>} */}
-              {/* <button hidden onClick={onClickMore} ref={moreBtn} /> */}
+              {moreLoadAllPostLoading && <LoadMoreMsg>더 많은 게시물 보기</LoadMoreMsg>}
+              <button hidden onClick={onClickMore} ref={moreBtn} />
               {/* {totalPosts > Posts.length && <button onClick={onClickMore} ref={moreBtn}>더보기</button>} */}
               {/* {totalPosts > Posts.length && <LoadMoreBtn onClick={onClickMore}>더 많은 게시물 보기</LoadMoreBtn>} */}
             </PostCardList>
@@ -108,20 +111,12 @@ const PostCardList = styled.div`
   }
 `
 
-const LoadMoreBtn = styled.button`
+const LoadMoreMsg = styled.div`
   border: none;
   background: none;
   margin: 1rem 0;
   font-size: 1rem;
   color: #424242;
-  cursor: pointer;
-  &:hover{
-    color: #A18AFC;
-    font-size: 1.1rem;
-  }
-  &:focus{
-    outline: none;
-  }
 `
 
 export default Home

@@ -294,6 +294,7 @@ export const loadAllStatistics = () => async (dispatch) => {
       type: LOAD_ALL_STATISTICS_REQUEST
     })
     const response = await axios.get('http://localhost:5000/api/today-moods')
+    console.log('loadAllStatistics : ', response.data)
     dispatch({
       type: LOAD_ALL_STATISTICS_SUCCESS,
       payload: response.data

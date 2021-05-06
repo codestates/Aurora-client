@@ -15,7 +15,7 @@ const Profile = () => {
   const dispatch = useDispatch()
 
   const { isLoggedIn, googleLoading, loginLoading, accessToken } = useSelector((state) => state.user)
-  const { Posts, firstLoadPostDone, filterWeather, totalPosts } = useSelector(state => state.post)
+  const { Posts, firstLoadPostDone, filterWeather, totalPosts, moreLoadPostLoading } = useSelector(state => state.post)
 
   useEffect(() => {
     dispatch(getAccessTokenAction())
@@ -53,11 +53,11 @@ const Profile = () => {
   }, [])
 
   const moreBtn = useRef()
-  // const onScroll = useCallback((e) => {
-  //   if ((e.target.scrollTop + e.target.clientHeight === e.target.scrollHeight) && (totalPosts > Posts.length)) {
-  //     moreBtn.current.click()
-  //   }
-  // }, [moreBtn.current])
+  const onScroll = useCallback((e) => {
+    if ((e.target.scrollTop + e.target.clientHeight === e.target.scrollHeight) && (Posts.length < totalPosts)) {
+      moreBtn.current.click()
+    }
+  }, [moreBtn.current])
 
   return (
     <>
@@ -66,7 +66,7 @@ const Profile = () => {
           <>
             {accessToken ? <Loading /> : <Signin />}
           </>
-          )
+        )
         : (
           <>
             <Head>
@@ -75,24 +75,24 @@ const Profile = () => {
             <AppLayout filter>
               <UserProfile />
               <Text>나의 포스트</Text>
-              <PostCardList>
+              <PostCardList onScroll={onScroll}>
                 {firstLoadPostDone &&
                   (
                     filterWeather.length > 0
                       ? (
-                          filterPosts.map(post => <PostCard key={post._id} post={post} />)
-                        )
+                        filterPosts.map(post => <PostCard key={post._id} post={post} />)
+                      )
                       : (
-                          Posts.map(post => <PostCard key={post._id} post={post} />)
-                        )
+                        Posts.map(post => <PostCard key={post._id} post={post} />)
+                      )
                   )}
-                {/* {moreLoadPostLoading && <div>불러오는중</div>} */}
-                {/* <button hidden onClick={onClickMore} ref={moreBtn} /> */}
-                {totalPosts > Posts.length && <button onClick={onClickMore} ref={moreBtn}>더보기</button>}
+                {moreLoadPostLoading && <div>불러오는중</div>}
+                <button hidden onClick={onClickMore} ref={moreBtn} />
+                {/* {totalPosts > Posts.length && <button onClick={onClickMore} ref={moreBtn}>더보기</button>} */}
               </PostCardList>
             </AppLayout>
           </>
-          )}
+        )}
     </>
   )
 }
