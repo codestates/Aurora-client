@@ -4,11 +4,12 @@ import { useEffect, useState, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import useInput from '../../hooks/useInput'
-import { signinRequestAction } from '../../actions/user'
-
+import { getAccessTokenAction, signinRequestAction, signinSuccessAction } from '../../actions/user'
+import { useRouter } from 'next/router'
 const SigninProcess = () => {
   const dispatch = useDispatch()
-  const { loginError } = useSelector((state) => state.user)
+  const router = useRouter()
+  const { loginError, accessToken, googleLoading, loginLoading, isLoggedIn } = useSelector((state) => state.user)
 
   const [email, onChangeEmail] = useInput('')
   const [password, onChangePassword] = useInput('')
@@ -19,6 +20,22 @@ const SigninProcess = () => {
       setLoginErrorMsg(loginError)
     }
   }, [loginError])
+
+  useEffect(() => {
+    dispatch(getAccessTokenAction())
+  }, [])
+
+  useEffect(() => {
+    if (accessToken) {
+      dispatch(signinSuccessAction(accessToken))
+    }
+  }, [accessToken])
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      router.push('/')
+    }
+  }, [isLoggedIn])
 
   const handleLogin = useCallback((e) => {
     e.preventDefault()

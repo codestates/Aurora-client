@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { useCallback, useEffect, useState, useRef } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import AppLayout from '../components/AppLayout'
@@ -9,10 +9,13 @@ import PostRegisterBar from '../components/home/postRegister/PostRegisterBar'
 import Signin from './user/signin'
 import { firstLoadAllPost, moreLoadAllPost, CHANGE_TIME, loadAllStatistics, loadLikePost } from '../actions/post'
 import { signinSuccessAction, getAccessTokenAction } from '../actions/user'
+import { useRouter } from 'next/router'
 
 const Home = () => {
   const dispatch = useDispatch()
-  const { Time, Posts, firstLoadAllPostDone, filterWeather, totalPosts, moreLoadAllPostLoading } = useSelector(state => state.post)
+
+  const router = useRouter()
+  const { Time, Posts, firstLoadAllPostDone, filterWeather, totalPosts } = useSelector(state => state.post)
   const { googleLoading, loginLoading, isLoggedIn, accessToken } = useSelector((state) => state.user)
 
   const [page, setPage] = useState(2)
@@ -21,6 +24,15 @@ const Home = () => {
   if (filterWeather.length > 0) {
     filterPosts = Posts.filter((ele) => (filterWeather.includes(ele.mood)))
   }
+
+  console.log("isLoggedIn : ", isLoggedIn)
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      console.log('DDDD')
+      router.push('/user/signin')
+    }
+  }, [])
 
   useEffect(() => {
     dispatch(getAccessTokenAction())
@@ -52,15 +64,6 @@ const Home = () => {
     setPage((prev) => prev + 1)
   }, [page])
 
-  // const moreBtn = useRef()
-  // const onScroll = (e) => {
-  //   console.log(e.target.scrollTop + e.target.clientHeight === e.target.scrollHeight)
-  //   console.log(Posts.length, totalPosts)
-  //   if ((e.target.scrollTop + e.target.clientHeight === e.target.scrollHeight) && (Posts.length < totalPosts)) {
-  //     moreBtn.current.click()
-  //   }
-  // }
-
   return (
     <>
       {!isLoggedIn
@@ -68,29 +71,26 @@ const Home = () => {
           <>
             {accessToken ? <Loading /> : <Signin />}
           </>
-          )
+        )
         : (
           <AppLayout filter isMain>
             <PostRegisterBar />
             <PostCardList>
               {firstLoadAllPostDone
                 ? (
-                    filterWeather.length > 0
-                      ? (
-                          filterPosts.map(post => <PostCard key={post._id} post={post} />)
-                        )
-                      : (
-                          Posts.map(post => <PostCard key={post._id} post={post} />)
-                        )
-                  )
+                  filterWeather.length > 0
+                    ? (
+                      filterPosts.map(post => <PostCard key={post._id} post={post} />)
+                    )
+                    : (
+                      Posts.map(post => <PostCard key={post._id} post={post} />)
+                    )
+                )
                 : <Loading />}
-              {/* {moreLoadAllPostLoading && <LoadMoreMsg>불러오는중...</LoadMoreMsg>} */}
-              {/* <button hidden onClick={onClickMore} ref={moreBtn} /> */}
-              {/* {totalPosts > Posts.length && <button onClick={onClickMore} ref={moreBtn}>더보기</button>} */}
               {totalPosts > Posts.length && <LoadMoreBtn onClick={onClickMore}>더 많은 게시물 보기</LoadMoreBtn>}
             </PostCardList>
           </AppLayout>
-          )}
+        )}
     </>
   )
 }
