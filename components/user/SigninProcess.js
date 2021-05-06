@@ -4,7 +4,6 @@ import { useEffect, useState, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 
-import Loading from '../Loading'
 import useInput from '../../hooks/useInput'
 import { getAccessTokenAction, signinRequestAction, signinSuccessAction } from '../../actions/user'
 

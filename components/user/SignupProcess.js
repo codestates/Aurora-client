@@ -76,12 +76,13 @@ const SignupProcess = () => {
                 {signupErrorMsg
                   ? <ErrorMessage>{signupErrorMsg}</ErrorMessage>
                   : ''}
+                <div />
                 <NextButton type='submit' value='가입하기' />
               </form>
             </InputContainer>
 
           </>
-        )}
+          )}
     </>
 
   )
