@@ -1,3 +1,4 @@
+import moment from 'moment'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Button, Card, Popover, List, Comment } from 'antd'
@@ -51,7 +52,45 @@ const PostCard = ({ post }) => {
     setCommentFormOpened((prev) => !prev)
   }, [])
 
-  console.log('post', post)
+  const minutesGap = Math.floor(moment.duration(moment().diff(post.updatedAt)).asMinutes())
+  let timeMsg = ''
+  switch (true) {
+    // ~ 1 min
+    case minutesGap < 1:
+      timeMsg = 'Now'
+      break
+    // ~ 1 hour
+    case minutesGap < 1 * 60:
+      timeMsg = `${minutesGap} ${minutesGap === 1 ? 'min' : 'mins'} ago`
+      break
+    // ~ 1 day
+    case minutesGap < 1 * 60 * 24: {
+      const hour = Math.trunc(minutesGap / 60)
+      timeMsg = `${hour} ${hour === 1 ? 'hour' : 'hours'} ago`
+      break
+    }
+
+    // ~ 2 day (yesterday)
+    case minutesGap < 1 * 60 * 24 * 2:
+      timeMsg = '어제'
+      break
+    // ~ 7 days
+    case minutesGap < 1 * 60 * 24 * 7:
+      {
+        const day = Math.trunc(minutesGap / 60 / 24)
+        timeMsg = `${day} ${day === 1 ? 'day' : 'days'} ago`
+        break
+      }
+    // ex) 2021/1/20
+    default: {
+      const createdDate = new Date(twitt.createdAt)
+      const year = createdDate.getFullYear()
+      const month = createdDate.getMonth()
+      const days = createdDate.getDate()
+      timeMsg = `${year} /${month + 1}/${days}`
+      break
+    }
+  }
 
   const commentStyle = useMemo(() => ({ padding: '0 10px' }), [])
   const liked = likePosts.find((v) => v === post._id)
@@ -64,15 +103,15 @@ const PostCard = ({ post }) => {
               <img
                 src={`data:image/png;base64,${post.postedBy.avatar[0].data}`} alt='avatar'
               />
-              )
+            )
             : (
               <img
                 src='/images/profile-thumbnail.jpg' alt='avatar'
               />
-              )}
+            )}
           <div>
             <span>{post.postedBy.username}</span>
-            <span>22 minutes ago</span>
+            <span>{timeMsg}</span>
           </div>
         </Auth>
         {Icon[post.mood]}
@@ -103,12 +142,12 @@ const PostCard = ({ post }) => {
             <Card.Meta
               description={<PostCardContent editMode={editMode} postData={post.content} onChangePost={onChangePost} onCancelUpdate={onCancelUpdate} />}
             />
-            )
+          )
           : (
             <Card.Meta
               description={<PostCardContent postData={post.content} />}
             />
-            )}
+          )}
       </Card>
       {commentFormOpened && (
         <>
