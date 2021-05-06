@@ -44,9 +44,6 @@ const weather = () => {
 
   const getWeather = (lat, lon) => {
     const API_URL = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
-    const headers = {
-      'Access-Control-Allow-Origin': '*'
-    }
     fetch(API_URL)
       .then((res) => res.json())
       .then((data) => {

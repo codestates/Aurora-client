@@ -76,11 +76,11 @@ const PostCard = ({ post }) => {
       break
     // ~ 7 days
     case minutesGap < 1 * 60 * 24 * 7:
-      {
-        const day = Math.trunc(minutesGap / 60 / 24)
-        timeMsg = `${day} ${day === 1 ? 'day' : 'days'} ago`
-        break
-      }
+    {
+      const day = Math.trunc(minutesGap / 60 / 24)
+      timeMsg = `${day} ${day === 1 ? 'day' : 'days'} ago`
+      break
+    }
     // ex) 2021/1/20
     default: {
       const createdDate = new Date(twitt.createdAt)
@@ -103,12 +103,12 @@ const PostCard = ({ post }) => {
               <img
                 src={`data:image/png;base64,${post.postedBy.avatar[0].data}`} alt='avatar'
               />
-            )
+              )
             : (
               <img
                 src='/images/profile-thumbnail.jpg' alt='avatar'
               />
-            )}
+              )}
           <div>
             <span>{post.postedBy.username}</span>
             <span>{timeMsg}</span>
@@ -142,12 +142,12 @@ const PostCard = ({ post }) => {
             <Card.Meta
               description={<PostCardContent editMode={editMode} postData={post.content} onChangePost={onChangePost} onCancelUpdate={onCancelUpdate} />}
             />
-          )
+            )
           : (
             <Card.Meta
               description={<PostCardContent postData={post.content} />}
             />
-          )}
+            )}
       </Card>
       {commentFormOpened && (
         <>

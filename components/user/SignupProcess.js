@@ -70,18 +70,20 @@ const SignupProcess = () => {
                   value={passwordconfirm}
                   onChange={onChangepasswordconfirm} required
                 />
-                {passwordconfirmMsg
-                  ? <PasswordconfirmMessage>비밀번호가 일치하지 않아요!</PasswordconfirmMessage>
-                  : ''}
-                {signupErrorMsg
-                  ? <ErrorMessage>{signupErrorMsg}</ErrorMessage>
-                  : ''}
+                <EmptyBox>
+                  {passwordconfirmMsg
+                    ? <PasswordconfirmMessage>비밀번호가 일치하지 않아요!</PasswordconfirmMessage>
+                    : ''}
+                  {signupErrorMsg
+                    ? <ErrorMessage>{signupErrorMsg}</ErrorMessage>
+                    : ''}
+                </EmptyBox>
                 <NextButton type='submit' value='가입하기' />
               </form>
             </InputContainer>
 
           </>
-        )}
+          )}
     </>
 
   )
@@ -119,10 +121,14 @@ const Input = styled.input`
   width: 23rem;
   font-size: .9rem;
 `
+const EmptyBox = styled.div`
+  height: 8rem;
+  margin-top: 1rem;
+`
+
 const NextButton = styled.input`
   display: flex;
   justify-content: center;
-  margin-top: 8rem;
   border-style: none;
   border-radius: 1.5rem;
   height: 2.4rem;
