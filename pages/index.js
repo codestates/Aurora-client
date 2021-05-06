@@ -1,22 +1,20 @@
 import styled from 'styled-components'
 import { useCallback, useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { useRouter } from 'next/router'
 
 import AppLayout from '../components/AppLayout'
 import Loading from '../components/Loading'
 import PostCard from '../components/home/postCard/PostCard'
 import PostRegisterBar from '../components/home/postRegister/PostRegisterBar'
-import Signin from './user/signin'
 import { firstLoadAllPost, moreLoadAllPost, CHANGE_TIME, loadAllStatistics, loadLikePost } from '../actions/post'
-import { signinSuccessAction, getAccessTokenAction } from '../actions/user'
-import { useRouter } from 'next/router'
 
 const Home = () => {
-  const dispatch = useDispatch()
-
   const router = useRouter()
+
+  const dispatch = useDispatch()
   const { Time, Posts, firstLoadAllPostDone, filterWeather, totalPosts } = useSelector(state => state.post)
-  const { googleLoading, loginLoading, isLoggedIn, accessToken } = useSelector((state) => state.user)
+  const { isLoggedIn, accessToken } = useSelector((state) => state.user)
 
   const [page, setPage] = useState(2)
 
@@ -25,29 +23,12 @@ const Home = () => {
     filterPosts = Posts.filter((ele) => (filterWeather.includes(ele.mood)))
   }
 
-  console.log("isLoggedIn : ", isLoggedIn)
-
-  useEffect(() => {
-    if (!isLoggedIn) {
-      console.log('DDDD')
-      router.push('/user/signin')
-    }
-  }, [])
-
-  useEffect(() => {
-    dispatch(getAccessTokenAction())
-  }, [googleLoading, loginLoading])
-
-  useEffect(() => {
-    if (accessToken) {
-      dispatch(signinSuccessAction(accessToken))
-    }
-  }, [accessToken])
-
   useEffect(() => {
     if (isLoggedIn) {
       dispatch(firstLoadAllPost(Time, accessToken))
       dispatch(loadLikePost(accessToken))
+    } else {
+      router.push('/user/signin')
     }
   }, [isLoggedIn])
 
@@ -66,31 +47,26 @@ const Home = () => {
 
   return (
     <>
-      {!isLoggedIn
-        ? (
-          <>
-            {accessToken ? <Loading /> : <Signin />}
-          </>
-        )
-        : (
-          <AppLayout filter isMain>
-            <PostRegisterBar />
-            <PostCardList>
-              {firstLoadAllPostDone
-                ? (
+      {isLoggedIn &&
+      (
+        <AppLayout filter isMain>
+          <PostRegisterBar />
+          <PostCardList>
+            {firstLoadAllPostDone
+              ? (
                   filterWeather.length > 0
                     ? (
-                      filterPosts.map(post => <PostCard key={post._id} post={post} />)
-                    )
+                        filterPosts.map(post => <PostCard key={post._id} post={post} />)
+                      )
                     : (
-                      Posts.map(post => <PostCard key={post._id} post={post} />)
-                    )
+                        Posts.map(post => <PostCard key={post._id} post={post} />)
+                      )
                 )
-                : <Loading />}
-              {totalPosts > Posts.length && <LoadMoreBtn onClick={onClickMore}>더 많은 게시물 보기</LoadMoreBtn>}
-            </PostCardList>
-          </AppLayout>
-        )}
+              : <Loading />}
+            {totalPosts > Posts.length && <LoadMoreBtn onClick={onClickMore}>더 많은 게시물 보기</LoadMoreBtn>}
+          </PostCardList>
+        </AppLayout>
+      )}
     </>
   )
 }
