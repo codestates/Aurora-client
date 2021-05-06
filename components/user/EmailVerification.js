@@ -10,11 +10,9 @@ const EmailVerification = ({ token }) => {
   const { signedUp } = useSelector((state) => state.user)
 
   useEffect(() => {
-    handleEmailVerification()
-  }, [token])
-
-  const handleEmailVerification = useCallback(() => {
-    dispatch(signupSuccessAction(token))
+    if (token) {
+      dispatch(signupSuccessAction(token))
+    }
   }, [token])
 
   return (
