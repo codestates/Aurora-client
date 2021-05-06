@@ -7,8 +7,6 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import useInput from '../../../hooks/useInput'
 import { updateComment, removeComment } from '../../../actions/post'
-import styled from 'styled-components'
-
 const CommentContent = ({ item, postId }) => {
   const dispatch = useDispatch()
   const { accessToken } = useSelector(state => state.user)

@@ -7,7 +7,6 @@ import { useRouter } from 'next/router'
 import AppLayout from '../components/AppLayout'
 import Loading from '../components/Loading'
 import PostCard from '../components/home/postCard/PostCard'
-import Signin from './user/signin'
 import UserProfile from '../components/userProfile/UserProfile'
 import { firstLoadPost, moreLoadPost, loadStatistics } from '../actions/post'
 
