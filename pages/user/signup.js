@@ -1,5 +1,12 @@
+import AppUserLayout from '../../components/user/AppUserLayout'
+import SignupProcess from '../../components/user/SignupProcess'
+
 const Signup = () => {
-  return <div>Signup</div>
+  return (
+    <AppUserLayout>
+      <SignupProcess />
+    </AppUserLayout>
+  )
 }
 
 export default Signup
