@@ -1,34 +1,48 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+<br/><br/>
+<p align="center"><img src="https://ifh.cc/g/KRGncH.png" width="500px">
+ <h3 align="center"> 오늘 당신의 날씨는 어떤가요? <br/><br/>
+Aurora에서 당신의 기분을 날씨로 마음껏 표현해보세요. <br/><br/><br/> </h3>
+ 
+-------------------------------------    
+<br/><br/>    
 
-First, run the development server:
+#### 오늘따라 기분이 유독 좋아 어딘가에 이 기분을 기록해두고 싶은 적이 있나요?
+#### 아니면 기분이 좋지 않아서 위로를 받고 싶은 적이 있나요?
+#### Aurora에서는 여러분의 기분을 날씨로 담아 게시물을 올릴 수 있어요.
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+<br/><br/>  
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+-------------------------------------    
+    
+### 주요 기능
+#### 1. 인증
+![Aurora Auth](https://ifh.cc/g/pgdT5J.png)
+#### 2. 게시물 피드, 작성
+![WISE Post](https://ifh.cc/g/MaQHUF.png)
+#### 3. 수정/삭제, 날씨 필터 기능
+![WISE Weather filter](https://ifh.cc/g/hVgj1W.png)
+#### 4. 마이 페이지 프로필
+![WISE_Mypage](https://ifh.cc/g/yvirzb.png)
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+<br/><br/>
+-------------------------------------
+### 사용 스택
+<img src="https://ifh.cc/g/3C1eVU.png">
+<br/><br/>
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+-------------------------------------
+## Team Member
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+팀원| 담당 | 
+--- | ---|
+[이종석](https://github.com/Jace9519/) | &#128150; Backend |  
+[하진우](https://github.com/ha-jinwoo/) | &#128150; Backend |  
+[김성현](https://github.com/tjdgus3160/) |&#128155; Frontend |  
+[김가희](https://github.com/rkgml981105/) |&#128155; Frontend |  
 
-## Learn More
+<br/>
 
-To learn more about Next.js, take a look at the following resources:
+## [WIKI 구경하러 가기](https://github.com/codestates/Aurora-client/wiki)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
